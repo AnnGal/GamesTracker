@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Games Calendar Tracker</string>
+    <string name="tab_text_1">Almost there</string>
+    <string name="tab_text_2">Waiting</string>
+    <string name="tab_text_3">Announced</string>
+
+</resources>
