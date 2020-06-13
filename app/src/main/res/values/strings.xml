@@ -6,4 +6,5 @@
     <string name="category_favorite">Favorite</string>
     <string name="category_archive">Archive</string>
     <string name="game_cover">Game Cover</string>
+    <string name="label_game_title">TextView</string>
 </resources>
