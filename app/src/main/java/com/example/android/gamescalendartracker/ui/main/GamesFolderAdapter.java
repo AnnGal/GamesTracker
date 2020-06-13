@@ -17,7 +17,8 @@ import com.example.android.gamescalendartracker.R;
 public class GamesFolderAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
+    private static final int[] TAB_TITLES = new int[]{R.string.category_near_release, R.string.category_in_progress,
+            R.string.category_announced};
     private final Context mContext;
 
     public GamesFolderAdapter(Context context, FragmentManager fm) {
@@ -40,7 +41,6 @@ public class GamesFolderAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        // Show 2 total pages.
-        return 2;
+        return TAB_TITLES.length;
     }
 }

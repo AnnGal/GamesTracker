@@ -16,13 +16,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //make an adapter
         GamesFolderAdapter gamesFolderAdapter = new GamesFolderAdapter(this, getSupportFragmentManager());
+        // add the adapter to ViewPager
         ViewPager viewPager = findViewById(R.id.view_pager);
-
         viewPager.setAdapter(gamesFolderAdapter);
+
+        // connect Tabs to ViewPager
         TabLayout tabs = findViewById(R.id.tabs);
-
-
+        tabs.setupWithViewPager(viewPager);
 
     }
 }
