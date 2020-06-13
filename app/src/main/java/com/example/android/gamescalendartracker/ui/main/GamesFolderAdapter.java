@@ -11,8 +11,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.example.android.gamescalendartracker.R;
 
 /**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
+ * returns a fragment corresponding to one of the sections/tabs/pages
  */
 public class GamesFolderAdapter extends FragmentPagerAdapter {
 

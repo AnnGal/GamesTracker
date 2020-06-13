@@ -5,4 +5,5 @@
     <string name="category_announced">Announced</string>
     <string name="category_favorite">Favorite</string>
     <string name="category_archive">Archive</string>
+    <string name="game_cover">Game Cover</string>
 </resources>
