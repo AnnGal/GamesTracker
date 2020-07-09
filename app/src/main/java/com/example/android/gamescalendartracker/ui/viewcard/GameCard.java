@@ -12,7 +12,7 @@ public class GameCard {
     private ArrayList<String> platforms = new ArrayList<>();
 
 
-    public GameCard(int cover, String title, String developer, String publisher, Date release, ArrayList<String> platforms) {
+    public GameCard(int cover, String title, String developer, String publisher, Date release/*, ArrayList<String> platforms*/) {
         //TODO: if not specified, then set 'Unknown'
         this.cover = cover;
         this.title = title;

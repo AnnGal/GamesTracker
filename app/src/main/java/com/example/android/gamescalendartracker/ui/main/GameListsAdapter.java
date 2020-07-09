@@ -13,14 +13,14 @@ import com.example.android.gamescalendartracker.R;
 /**
  * returns a fragment corresponding to one of the sections/tabs/pages
  */
-public class GamesFolderAdapter extends FragmentPagerAdapter {
+public class GameListsAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.category_near_release, R.string.category_in_progress,
+    private static final int[] TAB_TITLES = new int[]{R.string.waiting_list, R.string.category_near_release,
             R.string.category_announced};
     private final Context mContext;
 
-    public GamesFolderAdapter(Context context, FragmentManager fm) {
+    public GameListsAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }
@@ -29,7 +29,10 @@ public class GamesFolderAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+
+        if (position == 1) {
+            return new ExpectedGamesFragment();
+        } else return PlaceholderFragment.newInstance(position + 1);
     }
 
     @Nullable

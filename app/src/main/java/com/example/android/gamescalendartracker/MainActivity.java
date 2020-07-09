@@ -7,7 +7,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.android.gamescalendartracker.ui.main.GamesFolderAdapter;
+import com.example.android.gamescalendartracker.ui.main.GameListsAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,14 +17,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //make an adapter
-        GamesFolderAdapter gamesFolderAdapter = new GamesFolderAdapter(this, getSupportFragmentManager());
+        GameListsAdapter gameListsAdapter = new GameListsAdapter(this, getSupportFragmentManager());
         // add the adapter to ViewPager
         ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(gamesFolderAdapter);
+        viewPager.setAdapter(gameListsAdapter);
 
         // connect Tabs to ViewPager
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-
     }
 }
