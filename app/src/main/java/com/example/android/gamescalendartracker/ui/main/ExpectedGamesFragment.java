@@ -40,8 +40,8 @@ public class ExpectedGamesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.games_list, container, false);
 
         final ArrayList<GameCard> games = new ArrayList<>();
-        games.add(new GameCard(0,"title",  "developer", "publisher", new Date()));
-        games.add(new GameCard(0,"title2",  "developer2", "publisher2", new Date()));
+        games.add(new GameCard(0,"title", "desc1", "developer", "publisher", new Date()));
+        games.add(new GameCard(0,"title2", "desc2", "developer2", "publisher2", new Date()));
 
         GameCardAdapter adapter = new GameCardAdapter(getActivity(), games);
         ListView listView = rootView.findViewById(R.id.list);

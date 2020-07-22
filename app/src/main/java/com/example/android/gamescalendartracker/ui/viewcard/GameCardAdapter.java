@@ -47,16 +47,20 @@ public class GameCardAdapter extends ArrayAdapter<GameCard> {
         }
         GameCard currentGame = getItem(position);
 
-        TextView title = (TextView) viewItem.findViewById(R.id.game_card_title);
-        title.setText("Unknown");
+        if (currentGame != null) {
+            ((TextView) viewItem.findViewById(R.id.title)).setText(currentGame.getTitle());
 
-        ImageView iconView = (ImageView) viewItem.findViewById(R.id.cover);
+            ((TextView) viewItem.findViewById(R.id.description)).setText(currentGame.getDescription());
+        }
+
+
+        //ImageView iconView = (ImageView) viewItem.findViewById(R.id.cover);
         // Get the image resource ID from the current AndroidFlavor object and
         // set the image to iconView
         //if (currentGame.getImage() > 0) {
-            iconView.setImageResource(R.drawable.ic_launcher_foreground);
+         //   iconView.setImageResource(R.drawable.ic_launcher_foreground);
         //} else iconView.setVisibility(View.GONE);
-
+        //listItemView = game_card
         //return super.getView(position, convertView, parent);
         return viewItem;
         /*
