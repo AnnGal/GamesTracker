@@ -49,7 +49,6 @@ public class GameCardAdapter extends ArrayAdapter<GameCard> {
 
         if (currentGame != null) {
             ((TextView) viewItem.findViewById(R.id.title)).setText(currentGame.getTitle());
-
             ((TextView) viewItem.findViewById(R.id.description)).setText(currentGame.getDescription());
         }
 
