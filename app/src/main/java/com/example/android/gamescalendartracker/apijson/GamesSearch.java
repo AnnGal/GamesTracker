@@ -50,7 +50,8 @@ public class GamesSearch {
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
-            String url = "https://api.androidhive.info/contacts/";
+            //String url = "https://api.androidhive.info/contacts/";
+            String url = "https://api.rawg.io/api/games?page_size=5&search=dishonored";
             String jsonStr = sh.makeServiceCall(url);
 
             Log.e(TAG, "Response from url: " + jsonStr);
@@ -59,19 +60,17 @@ public class GamesSearch {
                     JSONObject jsonObj = new JSONObject(jsonStr);
 
                     // Getting JSON Array node
-                    JSONArray contacts = jsonObj.getJSONArray("contacts");
+                    JSONArray contacts = jsonObj.getJSONArray("results");
 
                     // looping through All Contacts
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
-                        String id = c.getString("id");
+                        //String id = c.getString("id");
                         String name = c.getString("name");
-                        String email = c.getString("email");
-                        String address = c.getString("address");
-                        String gender = c.getString("gender");
+                        String released = c.getString("released");
 
                         // adding contact to contact list
-                        games_list.add(new GameCard(name, email));
+                        games_list.add(new GameCard(name, released));
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());

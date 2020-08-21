@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         final ArrayList<GameCard> games = new ArrayList<>();
-        games.add(new GameCard(0,"RimWorld",  "RimWorld is a sci-fi colony sim driven by an intelligent AI storyteller","developer", "publisher", new Date()));
-        games.add(new GameCard(0,"Dishonored",  "You play as Corvo Attano, Empress bodyguard, a masterful assassin and a combat specialist. The game reacts to your choices - grim atmosphere by itself can be turned even darker by killing people or slightly lighter by not doing so. It is only a player&#39;s choice what to do with his abilities. Basing on these actions the game will give you with two different endings of the story. Dishonored is the game about stealth. Or action and killing people.","developer2", "publisher2", new Date()));
-        games.add(new GameCard("RimWorld",  "RimWorld is a sci-fi colony sim driven by an intelligent AI storyteller"));
-        games.add(new GameCard("Dishonored",  "You play as Corvo Attano, Empress bodyguard, a masterful assassin and a combat specialist"));
+//        games.add(new GameCard(0,"RimWorld",  "RimWorld is a sci-fi colony sim driven by an intelligent AI storyteller","developer", "publisher", new Date()));
+//        games.add(new GameCard(0,"Dishonored",  "You play as Corvo Attano, Empress bodyguard, a masterful assassin and a combat specialist. The game reacts to your choices - grim atmosphere by itself can be turned even darker by killing people or slightly lighter by not doing so. It is only a player&#39;s choice what to do with his abilities. Basing on these actions the game will give you with two different endings of the story. Dishonored is the game about stealth. Or action and killing people.","developer2", "publisher2", new Date()));
+//        games.add(new GameCard("RimWorld",  "RimWorld is a sci-fi colony sim driven by an intelligent AI storyteller"));
+//        games.add(new GameCard("Dishonored",  "You play as Corvo Attano, Empress bodyguard, a masterful assassin and a combat specialist"));
 
         ArrayList<GameCard> games_from_web = (new GamesSearch()).makeSearch();
         try {
