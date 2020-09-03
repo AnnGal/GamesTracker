@@ -25,6 +25,11 @@ public class GameCard {
         this.platforms = platforms;
     }
 
+    public GameCard(String title, String description) {
+        this.description = description;
+        this.title = title;
+    }
+
 
     public int getCover() {
         return cover;
