@@ -1,5 +1,6 @@
 package com.example.android.gamescalendartracker;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = findViewById(R.id.list);
         listView.setAdapter(adapter);
+
 
     }
 }

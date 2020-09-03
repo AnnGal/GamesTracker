@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Games Calendar Tracker</string>
+    <string name="app_name">Games Calendar</string>
     <string name="category_near_release">Soon</string>
     <string name="waiting_list">Waiting</string>
     <string name="category_announced">Announced</string>
@@ -7,4 +7,6 @@
     <string name="category_archive">Archive</string>
     <string name="game_cover">Game Cover</string>
     <string name="label_game_title">TextView</string>
+    <string name="game_title">Game: </string>
+    <string name="start_search">start search</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.android.gamescalendartracker.apijson;
 
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -10,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URI;
 import java.net.URL;
 
 public class HttpHandler {
@@ -24,6 +26,7 @@ public class HttpHandler {
         if (reqUrl == null){
             return null;
         }
+
 
         try {
             URL url = new URL(reqUrl);
