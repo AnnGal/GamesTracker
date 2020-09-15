@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Games Calendar</string>
-    <string name="category_near_release">Soon</string>
-    <string name="waiting_list">Waiting</string>
-    <string name="category_announced">Announced</string>
+    <string name="category_hot">Hot</string>
+    <string name="category_search">Search</string>
     <string name="category_favorite">Favorite</string>
     <string name="category_archive">Archive</string>
     <string name="game_cover">Game Cover</string>

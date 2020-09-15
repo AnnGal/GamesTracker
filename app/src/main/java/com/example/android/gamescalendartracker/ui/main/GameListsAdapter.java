@@ -16,8 +16,8 @@ import com.example.android.gamescalendartracker.R;
 public class GameListsAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.waiting_list, R.string.category_near_release,
-            R.string.category_announced};
+    private static final int[] TAB_TITLES = new int[]{R.string.category_search, R.string.category_hot,
+            R.string.category_favorite};
     private final Context mContext;
 
     public GameListsAdapter(Context context, FragmentManager fm) {
