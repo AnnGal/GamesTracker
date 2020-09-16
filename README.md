@@ -1,2 +1,2 @@
-# GameReleaseCalendar
-App that allow to track game releases
+# GameSearch
+App that allows to search and track games
