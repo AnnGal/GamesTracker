@@ -8,4 +8,7 @@
     <string name="label_game_title">TextView</string>
     <string name="game_title">Game: </string>
     <string name="start_search">start search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_write_game">Name of the game</string>
 </resources>
