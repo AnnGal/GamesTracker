@@ -1,12 +1,14 @@
 <resources>
     <string name="app_name">Games Calendar</string>
-    <string name="category_near_release">Soon</string>
-    <string name="waiting_list">Waiting</string>
-    <string name="category_announced">Announced</string>
+    <string name="category_hot">Hot</string>
+    <string name="category_search">Search</string>
     <string name="category_favorite">Favorite</string>
     <string name="category_archive">Archive</string>
     <string name="game_cover">Game Cover</string>
     <string name="label_game_title">TextView</string>
     <string name="game_title">Game: </string>
     <string name="start_search">start search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_write_game">Name of the game</string>
 </resources>
