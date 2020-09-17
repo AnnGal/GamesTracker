@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -27,47 +28,46 @@ import static art.manguste.android.gamesearch.get.URLMaker.formURL;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link GameSearchFragment#newInstance} factory method to
+ * Use the {@link GamesListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GameSearchFragment extends Fragment
+public class GamesListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<ArrayList<GameCard>> {
 
-    private static final int GAME_LOADER_ID = 1;
+    private static final String SEARCH_TYPE = "search_type";
+    private static final int LOADER_BY_NAME_ID = 1;
+    private static final int LOADER_HOT_ID = 2;
 
     private ProgressBar progressBar;
     private GameCardRVAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private SearchType searchType;
 
-    public GameSearchFragment() {
+    public GamesListFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
+     * New instance via factory method
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GameSearchFragment.
+     * @param searchType - determines what kind of search and API request to use
+     * @return new instance of fragment GamesListFragment.
      */
-    public static GameSearchFragment newInstance(String param1, String param2) {
-        GameSearchFragment fragment = new GameSearchFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
+    public static GamesListFragment newInstance(SearchType searchType) {
+        GamesListFragment fragment = new GamesListFragment();
+        Bundle args = new Bundle();
+        args.putString(SEARCH_TYPE, String.valueOf(searchType));
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
+        if (getArguments() != null) {
+            searchType = SearchType.valueOf(getArguments().getString(SEARCH_TYPE));
+        }
     }
 
     @Override
@@ -83,6 +83,13 @@ public class GameSearchFragment extends Fragment
         // connect data and view
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
+        //
+        if (SearchType.HOT.equals(searchType)){
+            ((LinearLayout) view.findViewById(R.id.ll_search_by_name)).setVisibility(View.GONE);
+            // TODO and start search immediately
+            //startGameSearch();
+        }
+
         // on click "start search" button
         (view.findViewById(R.id.btn_start_search)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,37 +101,35 @@ public class GameSearchFragment extends Fragment
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (SearchType.HOT.equals(searchType)){
+
+            // TODO and start search immediately
+            startGameSearch();
+        }
+    }
+
     /**
      * Go to API and get data
      * */
     private void startGameSearch() {
-        //LoaderManager loaderManager = getFragmentManager().getSupportLoaderManager();
+        LoaderManager loaderManager = LoaderManager.getInstance(this);
 
-        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-        // because this activity implements the LoaderCallbacks interface).
-        //loaderManager.initLoader(GAME_LOADER_ID, null, this);
-
-        // TODO (2) solve getLoaderManager()
-        if (getLoaderManager().getLoader(GAME_LOADER_ID) == null){
-            getLoaderManager().initLoader(GAME_LOADER_ID, null, this);
-        } else {
-            getLoaderManager().restartLoader(GAME_LOADER_ID, null, this);
+        if (SearchType.HOT.equals(searchType)) {
+            if (loaderManager.getLoader(LOADER_HOT_ID) == null){
+                loaderManager.initLoader(LOADER_HOT_ID, null, this);
+            } else {
+                loaderManager.restartLoader(LOADER_HOT_ID, null, this);
+            }
+        } else if (SearchType.GAMES.equals(searchType)){
+            if (loaderManager.getLoader(LOADER_BY_NAME_ID) == null){
+                loaderManager.initLoader(LOADER_BY_NAME_ID, null, this);
+            } else {
+                loaderManager.restartLoader(LOADER_BY_NAME_ID, null, this);
+            }
         }
-        //ArrayList<GameCard> games_from_web = (new GamesSearch()).makeSearch();
-
-        //ArrayList<GameCard> games_list  = new ArrayList<>();
-        //new GamesLoader(getContext(), "https://api.rawg.io/api/games?page_size=5&search=dishonored").execute();
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        Toast.makeText(getContext(), "Got "+(games_list.size() + " games"), Toast.LENGTH_LONG).show();
-        // get data
-        // place to RV
     }
 
     //********* Loader begin *********//
@@ -137,7 +142,7 @@ public class GameSearchFragment extends Fragment
         progressBar.setVisibility(View.VISIBLE);
 
         String searchTxt = String.valueOf(((EditText) getView().findViewById(R.id.et_search_by_name)).getText());
-        String urlString = formURL(SearchType.HOT, searchTxt);
+        String urlString = formURL(this.searchType, searchTxt);
 
         return new GamesLoader(getContext(), urlString);
     }
