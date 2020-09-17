@@ -1,35 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="100dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginHorizontal="4dp">
 
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:paddingBottom="@dimen/list_item_padding_vertical"
+        android:paddingLeft="@dimen/list_item_padding_horizontal"
+        android:paddingRight="@dimen/list_item_padding_horizontal"
+        android:paddingTop="@dimen/list_item_padding_vertical"
+        >
+
+        <ImageView
+            android:id="@+id/game_icon"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent"
+            card_view:layout_constraintVertical_bias="0.0"
+            tools:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="0dp"
-            android:layout_weight="10"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:textColor="@color/primary_text"
+            android:paddingHorizontal="@dimen/activity_horizontal_padding"
+            card_view:layout_constraintBottom_toTopOf="@+id/guideline_main"
+            card_view:layout_constraintLeft_toRightOf="@+id/game_icon"
+            tools:text="RimWorld"/>
 
         <TextView
             android:id="@+id/description"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:paddingHorizontal="@dimen/activity_horizontal_padding"
+            android:textColor="@color/secondary_text"
+            card_view:layout_constraintBottom_toTopOf="@+id/release_date"
+            card_view:layout_constraintEnd_toStartOf="@+id/favorite"
+            card_view:layout_constraintStart_toEndOf="@+id/game_icon"
+            card_view:layout_constraintTop_toTopOf="@+id/guideline_main"
+            tools:text="Description" />
+
+        <ImageButton
+            android:id="@+id/favorite"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/primary_text"
+            android:src="@drawable/ic_action_star_empty"
+            android:background="@color/white"
+            android:paddingHorizontal="@dimen/activity_horizontal_padding"
+            android:paddingVertical="@dimen/activity_vertical_padding"
+            card_view:layout_constraintBottom_toTopOf="@+id/guideline_main"
+            card_view:layout_constraintRight_toRightOf="parent"
+            card_view:layout_constraintTop_toTopOf="@+id/guideline_main"
+
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            card_view:layout_constraintGuide_percent="0.18"/>
+
 
         <TextView
             android:id="@+id/release_date"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="" />
-    </LinearLayout>
+            android:paddingHorizontal="@dimen/activity_horizontal_padding"
+            android:textColor="@color/primary_text"
+            card_view:layout_constraintStart_toEndOf="@+id/game_icon"
+            card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+            tools:text="11 Okt, 2011" />
+
+        <TextView
+            android:id="@+id/rate"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingHorizontal="@dimen/activity_horizontal_padding"
+            android:textColor="@color/primary_text"
+            android:gravity="right"
+            card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+            card_view:layout_constraintEnd_toStartOf="@+id/favorite"
+            card_view:layout_constraintStart_toEndOf="@+id/release_date"
+            card_view:layout_constraintTop_toBottomOf="@+id/description"
+            tools:text="Rate: 77.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            card_view:layout_constraintGuide_percent="1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_weight="10"
+
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/release_date"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </LinearLayout>-->
 
 </com.google.android.material.card.MaterialCardView>

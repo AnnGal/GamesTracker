@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.ui.viewcard.GameCard;
 
-public class ParseJson {
+public class JsonParser {
 
-    private static final String TAG = ParseJson.class.getSimpleName();
+    private static final String TAG = JsonParser.class.getSimpleName();
 
     public static ArrayList<GameCard> extractData(String jsonStr) {
         ArrayList<GameCard> cardList = new ArrayList<>();

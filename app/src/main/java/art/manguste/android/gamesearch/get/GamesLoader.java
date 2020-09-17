@@ -1,7 +1,6 @@
 package art.manguste.android.gamesearch.get;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
@@ -36,7 +35,7 @@ public class GamesLoader extends AsyncTaskLoader<ArrayList<GameCard>> {
         HttpHandler sh = new HttpHandler();
         String jsonStr = sh.makeServiceCall(mUrl);
         // parse response
-        ArrayList<GameCard> gameCards = ParseJson.extractData(jsonStr);
+        ArrayList<GameCard> gameCards = JsonParser.extractData(jsonStr);
 
         return gameCards;
     }

@@ -1,6 +1,8 @@
 package art.manguste.android.gamesearch.get;
 
 import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -25,11 +27,11 @@ public class HttpHandler {
             return null;
         }
 
-
         try {
             URL url = new URL(reqUrl);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("http.agent","GameTrackerApp");
             conn.setRequestMethod("GET");
 
             if (conn.getResponseCode() == 200){

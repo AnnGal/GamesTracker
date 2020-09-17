@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import art.manguste.android.gamesearch.GameSearchFragment;
+import art.manguste.android.gamesearch.GamesListFragment;
 import art.manguste.android.gamesearch.R;
+import art.manguste.android.gamesearch.get.SearchType;
 
 
 /**
@@ -18,7 +19,8 @@ import art.manguste.android.gamesearch.R;
 public class MainTabsAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.category_search, R.string.category_hot,
+    private static final int[] TAB_TITLES = new int[]{R.string.category_hot,
+            R.string.category_search,
             R.string.category_favorite};
     private final Context mContext;
 
@@ -29,16 +31,13 @@ public class MainTabsAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        // TODO make fragment for game search
-        if (position == 0) {
-            return new GameSearchFragment();
-        } else if (position == 1) {
-            return new ExpectedGamesFragment();
-        } else return PlaceholderFragment.newInstance(position + 1);
-        // TODO make fragment fo favorite games
-        // TODO make DB for saving favorite games and info
+        switch (position) {
+            case 0: return GamesListFragment.newInstance(SearchType.HOT);
+            case 1: return GamesListFragment.newInstance(SearchType.SEARCH);
+            // TODO make fragment fo favorite games
+            // TODO make DB for saving favorite games and info
+            default: return PlaceholderFragment.newInstance(position + 1);
+        }
     }
 
     @Nullable
