@@ -11,7 +11,11 @@ import android.widget.TextView;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class TestConnectionActivity extends AppCompatActivity {
+import art.manguste.android.gamesearch.get.SearchType;
+
+import static art.manguste.android.gamesearch.get.URLMaker.formURL;
+
+public class TestURLActivity extends AppCompatActivity {
 
     EditText mGameForSearchEditText;
     TextView mSearchResultTextView;
@@ -24,13 +28,13 @@ public class TestConnectionActivity extends AppCompatActivity {
         mGameForSearchEditText = findViewById(R.id.ed_game_title);
         mGameForSearchEditText.setText("Dishonored");
 
-        mSearchResultTextView = findViewById(R.id.tv_result_search);
+        mSearchResultTextView = findViewById(R.id.tv_request_txt);
         mSearchResultTextView.setText("");
     }
 
     public void onStartSearch(View view) {
         String searchTxt = String.valueOf(mGameForSearchEditText.getText());
-        mSearchResultTextView.setText(getURL_1(searchTxt));
+        mSearchResultTextView.setText(formURL(SearchType.HOT, searchTxt));
     }
 
     public String getURL_1(String searchWord){

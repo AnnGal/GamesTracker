@@ -18,10 +18,12 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
-import art.manguste.android.gamesearch.R;
 import art.manguste.android.gamesearch.get.GamesLoader;
+import art.manguste.android.gamesearch.get.SearchType;
 import art.manguste.android.gamesearch.ui.viewcard.GameCard;
 import art.manguste.android.gamesearch.ui.viewcard.GameCardRVAdapter;
+
+import static art.manguste.android.gamesearch.get.URLMaker.formURL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,7 +51,6 @@ public class GameSearchFragment extends Fragment
      * @param param2 Parameter 2.
      * @return A new instance of fragment GameSearchFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static GameSearchFragment newInstance(String param1, String param2) {
         GameSearchFragment fragment = new GameSearchFragment();
 //        Bundle args = new Bundle();
@@ -104,7 +105,7 @@ public class GameSearchFragment extends Fragment
         // because this activity implements the LoaderCallbacks interface).
         //loaderManager.initLoader(GAME_LOADER_ID, null, this);
 
-        // TODO solve getLoaderManager()
+        // TODO (2) solve getLoaderManager()
         if (getLoaderManager().getLoader(GAME_LOADER_ID) == null){
             getLoaderManager().initLoader(GAME_LOADER_ID, null, this);
         } else {
@@ -127,18 +128,23 @@ public class GameSearchFragment extends Fragment
     }
 
     //********* Loader begin *********//
+    /**
+     * Start search
+     * */
     @NonNull
     @Override
     public Loader<ArrayList<GameCard>> onCreateLoader(int id, @Nullable Bundle args) {
         progressBar.setVisibility(View.VISIBLE);
 
-        // TODO Uri.Builder
-        String urlString = "https://api.rawg.io/api/games?page_size=5&search="
-                +((EditText) getView().findViewById(R.id.et_search_by_name)).getText();
+        String searchTxt = String.valueOf(((EditText) getView().findViewById(R.id.et_search_by_name)).getText());
+        String urlString = formURL(SearchType.HOT, searchTxt);
 
         return new GamesLoader(getContext(), urlString);
     }
 
+    /**
+     * After search ended
+     * */
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<GameCard>> loader, ArrayList<GameCard> data) {
         progressBar.setVisibility(View.GONE);
@@ -153,6 +159,9 @@ public class GameSearchFragment extends Fragment
         }
     }
 
+    /**
+     * Reset data
+     * */
     @Override
     public void onLoaderReset(@NonNull Loader<ArrayList<GameCard>> loader) {
         mRecyclerView.setAdapter(new GameCardRVAdapter(new ArrayList<GameCard>()));
