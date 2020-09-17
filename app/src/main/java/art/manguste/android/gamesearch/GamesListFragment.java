@@ -86,11 +86,9 @@ public class GamesListFragment extends Fragment
         //
         if (SearchType.HOT.equals(searchType)){
             ((LinearLayout) view.findViewById(R.id.ll_search_by_name)).setVisibility(View.GONE);
-            // TODO and start search immediately
-            //startGameSearch();
         }
 
-        // on click "start search" button
+        // on a click "start search" button
         (view.findViewById(R.id.btn_start_search)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,8 +103,6 @@ public class GamesListFragment extends Fragment
     public void onResume() {
         super.onResume();
         if (SearchType.HOT.equals(searchType)){
-
-            // TODO and start search immediately
             startGameSearch();
         }
     }
@@ -123,7 +119,7 @@ public class GamesListFragment extends Fragment
             } else {
                 loaderManager.restartLoader(LOADER_HOT_ID, null, this);
             }
-        } else if (SearchType.GAMES.equals(searchType)){
+        } else if (SearchType.SEARCH.equals(searchType)){
             if (loaderManager.getLoader(LOADER_BY_NAME_ID) == null){
                 loaderManager.initLoader(LOADER_BY_NAME_ID, null, this);
             } else {

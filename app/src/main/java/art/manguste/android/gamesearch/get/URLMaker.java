@@ -1,11 +1,9 @@
 package art.manguste.android.gamesearch.get;
 
 import android.net.Uri;
-import android.text.format.DateUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +23,7 @@ public class URLMaker {
     public static String formURL(SearchType search, String searchText){
         URL url = null;
 
-        if (SearchType.GAMES.equals(search)){
+        if (SearchType.SEARCH.equals(search)){
             url = createGameSearchURL(searchText);
         } else if (SearchType.HOT.equals(search)){
             url = createHotSearchURL();
