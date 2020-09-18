@@ -10,6 +10,7 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,6 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.get.GamesLoader;
 import art.manguste.android.gamesearch.get.SearchType;
-import art.manguste.android.gamesearch.ui.viewcard.GameCard;
-import art.manguste.android.gamesearch.ui.viewcard.GameCardRVAdapter;
 
 import static art.manguste.android.gamesearch.get.URLMaker.formURL;
 
@@ -33,7 +32,7 @@ import static art.manguste.android.gamesearch.get.URLMaker.formURL;
  * create an instance of this fragment.
  */
 public class GamesListFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<ArrayList<GameCard>> {
+        implements LoaderManager.LoaderCallbacks<ArrayList<Game>> {
 
     private static final String TAG = GamesListFragment.class.getSimpleName();
 
@@ -82,15 +81,13 @@ public class GamesListFragment extends Fragment
 
         // Recycler view stuff
         mRecyclerView = view.findViewById(R.id.rv_games_list);
-        mAdapter = new GameCardRVAdapter();
+        int imageSize = getResources().getDimensionPixelSize(R.dimen.icon_size) * 2;
+        mAdapter = new GameCardRVAdapter(getContext(), imageSize);
         mRecyclerView.setAdapter(mAdapter);
 
         // connect data and view
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
-        Log.d(TAG, "onCreateView "+searchType.toString());
-
-        //
         if (SearchType.HOT.equals(searchType)){
             ((LinearLayout) view.findViewById(R.id.ll_search_by_name)).setVisibility(View.GONE);
         }
@@ -103,6 +100,7 @@ public class GamesListFragment extends Fragment
             }
         });
 
+        Log.d(TAG, "onCreateView " + searchType.toString());
         return view;
     }
 
@@ -140,7 +138,7 @@ public class GamesListFragment extends Fragment
      * */
     @NonNull
     @Override
-    public Loader<ArrayList<GameCard>> onCreateLoader(int id, @Nullable Bundle args) {
+    public Loader<ArrayList<Game>> onCreateLoader(int id, @Nullable Bundle args) {
         progressBar.setVisibility(View.VISIBLE);
 
         String searchTxt = String.valueOf(((EditText) getView().findViewById(R.id.et_search_by_name)).getText());
@@ -153,7 +151,7 @@ public class GamesListFragment extends Fragment
      * After search ended
      * */
     @Override
-    public void onLoadFinished(@NonNull Loader<ArrayList<GameCard>> loader, ArrayList<GameCard> data) {
+    public void onLoadFinished(@NonNull Loader<ArrayList<Game>> loader, ArrayList<Game> data) {
         progressBar.setVisibility(View.GONE);
 
         //TODO if none games found - set text about it
@@ -168,7 +166,7 @@ public class GamesListFragment extends Fragment
      * Reset data
      * */
     @Override
-    public void onLoaderReset(@NonNull Loader<ArrayList<GameCard>> loader) {
+    public void onLoaderReset(@NonNull Loader<ArrayList<Game>> loader) {
         //mRecyclerView.setAdapter(new GameCardRVAdapter(new ArrayList<GameCard>()));
     }
     //********* Loader end *********//

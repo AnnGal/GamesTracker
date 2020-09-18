@@ -7,6 +7,9 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+
+import art.manguste.android.gamesearch.R;
 
 public class URLMaker {
     //TODO (1) API request should have a User-Agent header with your app name
@@ -16,7 +19,7 @@ public class URLMaker {
     private final static String PARAM_PAGE_SIZE = "page_size";
     private final static String PARAM_SORT = "ordering";
     private final static String PARAM_DATE_RANGE = "dates";
-    private final static String rowNum = "20";  // how many rows in query
+    private final static String rowNum = "10";  // how many rows in query
     private final static String orderBy = "-added";  // sort query by
 
 
@@ -76,7 +79,7 @@ public class URLMaker {
     }
 
     private static String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         return dateFormat.format(dateObject);
     }
 
