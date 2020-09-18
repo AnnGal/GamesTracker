@@ -10,7 +10,6 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +40,7 @@ public class GamesListFragment extends Fragment
     private static final int LOADER_HOT_ID = 2;
 
     private ProgressBar progressBar;
-    private GameCardRVAdapter mAdapter;
+    private GameCardAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private SearchType searchType;
 
@@ -82,7 +81,7 @@ public class GamesListFragment extends Fragment
         // Recycler view stuff
         mRecyclerView = view.findViewById(R.id.rv_games_list);
         int imageSize = getResources().getDimensionPixelSize(R.dimen.icon_size) * 2;
-        mAdapter = new GameCardRVAdapter(getContext(), imageSize);
+        mAdapter = new GameCardAdapter(getContext(), imageSize);
         mRecyclerView.setAdapter(mAdapter);
 
         // connect data and view

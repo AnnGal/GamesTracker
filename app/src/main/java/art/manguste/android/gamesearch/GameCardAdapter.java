@@ -1,6 +1,8 @@
 package art.manguste.android.gamesearch;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +20,17 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
-public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.GameViewHolder>
+public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
         implements ListItemClickListener {
 
     private ArrayList<Game> games = new ArrayList<>();
     private Context mContext;
     private int mImageSize;
 
-
-
-    public GameCardRVAdapter(Context context, int imageSize) {
+    public GameCardAdapter(Context context, int imageSize) {
         super();
         mContext = context;
         mImageSize = imageSize;
-
     }
 
     @NonNull
@@ -58,7 +57,10 @@ public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.Ga
 
     @Override
     public void onListItemClick(Game game) {
-        Toast.makeText(mContext, "get \""+game.getName()+"\" detail info", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mContext, "get \""+game.getName()+"\" detail info", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(mContext, GameDetailActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT, game.getSiteName());
+        mContext.startActivity(intent);
     }
 
     @Override
@@ -67,7 +69,6 @@ public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.Ga
     }
 
     class GameViewHolder extends RecyclerView.ViewHolder{
-        private MaterialCardView item;
         private Game game;
 
         private TextView mTitleTextView;
@@ -80,15 +81,14 @@ public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.Ga
 
         public GameViewHolder(@NonNull MaterialCardView itemView, ListItemClickListener listItemClickListener) {
             super(itemView);
-            item = itemView;
             mListItemClickListener = listItemClickListener;
 
-            mTitleTextView = (TextView) itemView.findViewById(R.id.title);
-            mDescriptionTextView = (TextView) itemView.findViewById(R.id.description);
-            mReleaseTextView = (TextView) itemView.findViewById(R.id.release_date);
-            mRateTextView = (TextView) itemView.findViewById(R.id.rate);
-            mFavoriteImageButton = (ImageButton) itemView.findViewById(R.id.favorite);
-            mGameIconImageView = (ImageView) itemView.findViewById(R.id.game_icon);
+            mTitleTextView = itemView.findViewById(R.id.title);
+            mDescriptionTextView = itemView.findViewById(R.id.description);
+            mReleaseTextView = itemView.findViewById(R.id.release_date);
+            mRateTextView = itemView.findViewById(R.id.rate);
+            mFavoriteImageButton = itemView.findViewById(R.id.favorite);
+            mGameIconImageView = itemView.findViewById(R.id.game_icon);
 
             mFavoriteImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
