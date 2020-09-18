@@ -22,9 +22,7 @@ public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.Ga
         void onViewClick(View v, int position, GameCard gameCard);
     }
 
-    public GameCardRVAdapter(ArrayList<GameCard> gamesList) {
-        super();
-        games = gamesList;
+    public GameCardRVAdapter() {
     }
 
     @NonNull
@@ -44,6 +42,10 @@ public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.Ga
         return games.size();
     }
 
+    public void setGames(ArrayList<GameCard> games) {
+        this.games = games;
+        notifyDataSetChanged();
+    }
 
     class GameCardViewHolder extends RecyclerView.ViewHolder{
         private MaterialCardView item;

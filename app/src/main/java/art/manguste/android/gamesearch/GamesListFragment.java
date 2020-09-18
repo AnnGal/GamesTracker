@@ -10,6 +10,7 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ import static art.manguste.android.gamesearch.get.URLMaker.formURL;
  */
 public class GamesListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<ArrayList<GameCard>> {
+
+    private static final String TAG = GamesListFragment.class.getSimpleName();
 
     private static final String SEARCH_TYPE = "search_type";
     private static final int LOADER_BY_NAME_ID = 1;
@@ -79,9 +82,13 @@ public class GamesListFragment extends Fragment
 
         // Recycler view stuff
         mRecyclerView = view.findViewById(R.id.rv_games_list);
-        mRecyclerView.setAdapter(new GameCardRVAdapter(new ArrayList<GameCard>()));
+        mAdapter = new GameCardRVAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
         // connect data and view
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+
+        Log.d(TAG, "onCreateView "+searchType.toString());
 
         //
         if (SearchType.HOT.equals(searchType)){
@@ -92,7 +99,7 @@ public class GamesListFragment extends Fragment
         (view.findViewById(R.id.btn_start_search)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startGameSearch();
+                startGameSearch(true);
             }
         });
 
@@ -100,29 +107,28 @@ public class GamesListFragment extends Fragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         if (SearchType.HOT.equals(searchType)){
-            startGameSearch();
+            startGameSearch(false);
         }
     }
 
     /**
-     * Go to API and get data
+     * Go to API and grab data
      * */
-    private void startGameSearch() {
+    private void startGameSearch(boolean forceNewRequest) {
         LoaderManager loaderManager = LoaderManager.getInstance(this);
 
         if (SearchType.HOT.equals(searchType)) {
             if (loaderManager.getLoader(LOADER_HOT_ID) == null){
                 loaderManager.initLoader(LOADER_HOT_ID, null, this);
-            } else {
-                loaderManager.restartLoader(LOADER_HOT_ID, null, this);
             }
         } else if (SearchType.SEARCH.equals(searchType)){
             if (loaderManager.getLoader(LOADER_BY_NAME_ID) == null){
                 loaderManager.initLoader(LOADER_BY_NAME_ID, null, this);
-            } else {
+            } else if (forceNewRequest){
                 loaderManager.restartLoader(LOADER_BY_NAME_ID, null, this);
             }
         }
@@ -154,9 +160,7 @@ public class GamesListFragment extends Fragment
 
         // change data in view
         if (data != null && !data.isEmpty()) {
-            //mAdapter.add(data);
-            mRecyclerView.setAdapter(new GameCardRVAdapter(data));
-            //Toast.makeText(getContext(), "Got "+(data.size() + " games"), Toast.LENGTH_LONG).show();
+            mAdapter.setGames(data);
         }
     }
 
@@ -165,7 +169,7 @@ public class GamesListFragment extends Fragment
      * */
     @Override
     public void onLoaderReset(@NonNull Loader<ArrayList<GameCard>> loader) {
-        mRecyclerView.setAdapter(new GameCardRVAdapter(new ArrayList<GameCard>()));
+        //mRecyclerView.setAdapter(new GameCardRVAdapter(new ArrayList<GameCard>()));
     }
     //********* Loader end *********//
 }
