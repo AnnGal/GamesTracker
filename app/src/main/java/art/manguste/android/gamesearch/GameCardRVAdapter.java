@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,16 +18,14 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
-public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.GameViewHolder> {
+public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.GameViewHolder>
+        implements ListItemClickListener {
 
     private ArrayList<Game> games = new ArrayList<>();
     private Context mContext;
     private int mImageSize;
 
-    interface ListItemClickListener{
-        void onListItemClick(int position, Game game);
-        void onViewClick(View v, int position, Game game);
-    }
+
 
     public GameCardRVAdapter(Context context, int imageSize) {
         super();
@@ -39,7 +38,7 @@ public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.Ga
     @Override
     public GameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         MaterialCardView cv = (MaterialCardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.card_view_game, parent, false);
-        return new GameViewHolder(cv);
+        return new GameViewHolder(cv, this);
     }
 
     @Override
@@ -57,25 +56,55 @@ public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.Ga
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onListItemClick(Game game) {
+        Toast.makeText(mContext, "get \""+game.getName()+"\" detail info", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFavoriteBtnClick(Game game) {
+        Toast.makeText(mContext, "add to favorite", Toast.LENGTH_SHORT).show();
+    }
+
     class GameViewHolder extends RecyclerView.ViewHolder{
         private MaterialCardView item;
         private Game game;
-        TextView mTitleTextView;
-        TextView mDescriptionTextView;
-        TextView mReleaseTextView;
-        TextView mRateTextView;
-        ImageButton mFavoriteImageButton;
-        ImageView mGameIconImageView;
 
-        public GameViewHolder(@NonNull MaterialCardView itemView) {
+        private TextView mTitleTextView;
+        private TextView mDescriptionTextView;
+        private TextView mReleaseTextView;
+        private TextView mRateTextView;
+        private ImageButton mFavoriteImageButton;
+        private ImageView mGameIconImageView;
+        private ListItemClickListener mListItemClickListener;
+
+        public GameViewHolder(@NonNull MaterialCardView itemView, ListItemClickListener listItemClickListener) {
             super(itemView);
             item = itemView;
+            mListItemClickListener = listItemClickListener;
+
             mTitleTextView = (TextView) itemView.findViewById(R.id.title);
             mDescriptionTextView = (TextView) itemView.findViewById(R.id.description);
             mReleaseTextView = (TextView) itemView.findViewById(R.id.release_date);
             mRateTextView = (TextView) itemView.findViewById(R.id.rate);
             mFavoriteImageButton = (ImageButton) itemView.findViewById(R.id.favorite);
             mGameIconImageView = (ImageView) itemView.findViewById(R.id.game_icon);
+
+            mFavoriteImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListItemClickListener != null)
+                        mListItemClickListener.onFavoriteBtnClick(game);
+                }
+            });
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListItemClickListener != null)
+                        mListItemClickListener.onListItemClick(game);
+                }
+            });
         }
 
         void bind(Game game) {
@@ -94,5 +123,12 @@ public class GameCardRVAdapter extends RecyclerView.Adapter<GameCardRVAdapter.Ga
                         .into(mGameIconImageView);
             }
         }
+
     }
+
+}
+
+interface ListItemClickListener{
+    void onListItemClick(Game game);
+    void onFavoriteBtnClick(Game game);
 }
