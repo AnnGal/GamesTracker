@@ -6,9 +6,9 @@ import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
-import art.manguste.android.gamesearch.ui.viewcard.GameCard;
+import art.manguste.android.gamesearch.Game;
 
-public class GamesLoader extends AsyncTaskLoader<ArrayList<GameCard>> {
+public class GamesLoader extends AsyncTaskLoader<ArrayList<Game>> {
 
     //private static final String TAG = GamesLoader.class.getSimpleName();
 
@@ -27,7 +27,7 @@ public class GamesLoader extends AsyncTaskLoader<ArrayList<GameCard>> {
 
     @Nullable
     @Override
-    public ArrayList<GameCard> loadInBackground() {
+    public ArrayList<Game> loadInBackground() {
         if (mUrl == null) {
             return null;
         }
@@ -35,8 +35,8 @@ public class GamesLoader extends AsyncTaskLoader<ArrayList<GameCard>> {
         HttpHandler sh = new HttpHandler();
         String jsonStr = sh.makeServiceCall(mUrl);
         // parse response
-        ArrayList<GameCard> gameCards = JsonParser.extractData(jsonStr);
+        ArrayList<Game> games = JsonParser.extractData(jsonStr);
 
-        return gameCards;
+        return games;
     }
 }
