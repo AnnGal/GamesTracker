@@ -1,6 +1,5 @@
-package art.manguste.android.gamesearch;
+package art.manguste.android.gamesearch.core;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -19,6 +18,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
+
+import art.manguste.android.gamesearch.GameDetailActivity;
+import art.manguste.android.gamesearch.R;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
         implements ListItemClickListener {
@@ -128,7 +130,4 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
 
 }
 
-interface ListItemClickListener{
-    void onListItemClick(Game game);
-    void onFavoriteBtnClick(Game game);
-}
+

@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
+import art.manguste.android.gamesearch.core.Game;
+import art.manguste.android.gamesearch.core.GameCardAdapter;
 import art.manguste.android.gamesearch.get.GamesLoader;
 import art.manguste.android.gamesearch.get.SearchType;
 

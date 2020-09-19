@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import art.manguste.android.gamesearch.Game;
+import art.manguste.android.gamesearch.core.Game;
 
 public class JsonParser {
 

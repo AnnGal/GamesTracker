@@ -4,6 +4,95 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context="art.manguste.android.gamesearch.GameDetailActivity">
+
+
+    <ImageView
+        android:id="@+id/game_icon"
+        android:layout_width="@dimen/picture_size"
+        android:layout_height="@dimen/picture_size"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintVertical_bias="0.0"
+        android:scaleType="centerCrop"
+        android:src="@drawable/empty_photo" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/activity_horizontal_padding"
+        android:textColor="@color/primary_text"
+        card_view:layout_constraintBottom_toTopOf="@+id/guideline_main"
+        card_view:layout_constraintLeft_toRightOf="@+id/game_icon"
+        tools:text="RimWorld" />
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_padding"
+        android:textColor="@color/secondary_text"
+        card_view:layout_constraintBottom_toTopOf="@+id/release_date"
+        card_view:layout_constraintEnd_toStartOf="@+id/favorite"
+        card_view:layout_constraintStart_toEndOf="@+id/game_icon"
+        card_view:layout_constraintTop_toTopOf="@+id/guideline_main"
+        tools:text="Description" />
+
+    <ImageButton
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/primary_text"
+        android:src="@drawable/ic_action_star_empty"
+        android:background="@color/white"
+        android:paddingHorizontal="@dimen/activity_horizontal_padding"
+        android:paddingVertical="@dimen/activity_vertical_padding"
+        card_view:layout_constraintBottom_toTopOf="@+id/guideline_main"
+        card_view:layout_constraintRight_toRightOf="parent"
+        card_view:layout_constraintTop_toTopOf="@+id/guideline_main"
+
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        card_view:layout_constraintGuide_percent="0.50"/>
+
+
+    <TextView
+        android:id="@+id/release_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/activity_horizontal_padding"
+        android:textColor="@color/primary_text"
+        card_view:layout_constraintStart_toEndOf="@+id/game_icon"
+        card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+        tools:text="11 Okt, 2011" />
+
+    <TextView
+        android:id="@+id/rate"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="@dimen/activity_horizontal_padding"
+        android:textColor="@color/primary_text"
+        android:gravity="right"
+        card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+        card_view:layout_constraintEnd_toStartOf="@+id/favorite"
+        card_view:layout_constraintStart_toEndOf="@+id/release_date"
+        card_view:layout_constraintTop_toBottomOf="@+id/description"
+        tools:text="Rate: 77.2" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        card_view:layout_constraintGuide_percent="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

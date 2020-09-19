@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
-import art.manguste.android.gamesearch.Game;
+import art.manguste.android.gamesearch.core.Game;
 
 public class GamesLoader extends AsyncTaskLoader<ArrayList<Game>> {
 
