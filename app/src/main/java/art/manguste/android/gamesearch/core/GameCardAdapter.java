@@ -61,7 +61,7 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
     public void onListItemClick(Game game) {
         //Toast.makeText(mContext, "get \""+game.getName()+"\" detail info", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(mContext, GameDetailActivity.class);
-        intent.putExtra(Intent.EXTRA_TEXT, game.getSiteName());
+        intent.putExtra(GameDetailActivity.EXTRA_GAME_CODE, game.getSiteName());
         mContext.startActivity(intent);
     }
 

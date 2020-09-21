@@ -11,7 +11,7 @@ import java.util.Locale;
 public class Game {
 
     private static final String DELIMITER = ", ";
-    
+    private Integer id;
     private String siteName;
     private String name;
     private String description;
@@ -19,14 +19,58 @@ public class Game {
     private String imgHttp;
     private String rating;
     private String metacritic;
+    private String website;
     private String[] genresList;
     private String[] platformsList;
     private String[] developersList;
     private String[] publishersList;
-    
 
-    public Game(String siteName, String name, String description, Date releaseDate, String imgHttp, String rating, String metacritic,
+    /**
+     * Constructor for short game info
+     * @param siteName - site code name - used to find game via https request
+     * @param name - name of the game
+     * @param releaseDate - when game will or was released
+     * @param imgHttp - games cover image
+     * @param rating - site rating
+     * @param metacritic - metacritic rating
+     * @param genresList - list of genres
+     * @param platformsList  - which platforms can launch
+     */
+    public Game(String siteName, String name, Date releaseDate, String imgHttp, String rating, String metacritic,
+                String[] genresList, String[] platformsList) {
+        this.siteName = siteName;
+        this.name = name;
+        this.releaseDate = releaseDate;
+        this.imgHttp = imgHttp;
+        this.rating = rating;
+        this.metacritic = metacritic;
+        this.genresList = genresList;
+        this.platformsList = platformsList;
+        this.developersList = developersList;
+        this.publishersList = publishersList;
+    }
+
+
+    /**
+     * Constructor for full game info (+ id, website)
+     * @param id - game id
+     * @param siteName - site code name - used to find game via https request
+     * @param name - name of the game
+     * @param description - description with html tags
+     * @param releaseDate - when game will or was released
+     * @param imgHttp - games cover image
+     * @param rating - site rating
+     * @param metacritic - metacritic rating
+     * @param website - game official website
+     * @param genresList - list of genres
+     * @param platformsList  - which platforms can launch
+     * @param developersList - who developed
+     * @param publishersList - who published
+     */
+    public Game(Integer id, String siteName, String name, String description, Date releaseDate,
+                String imgHttp, String rating, String metacritic, String website,
                 String[] genresList, String[] platformsList, String[] developersList, String[] publishersList) {
+        this.id = id;
         this.siteName = siteName;
         this.name = name;
         this.description = description;
@@ -34,6 +78,7 @@ public class Game {
         this.imgHttp = imgHttp;
         this.rating = rating;
         this.metacritic = metacritic;
+        this.website = website;
         this.genresList = genresList;
         this.platformsList = platformsList;
         this.developersList = developersList;
@@ -95,8 +140,11 @@ public class Game {
     }
 
     private String makeString(String[] list){
-        StringBuilder result = new StringBuilder();
+        if (list == null || list.length == 0){
+            return null;
+        }
 
+        StringBuilder result = new StringBuilder();
         for (String s : list) {
             if (result.length() == 0) {
                 result.append(s);
@@ -114,12 +162,16 @@ public class Game {
         String info =
                 "siteName="+siteName+"\n"+
                 "name="+name+"\n"+
+                "description"+description+"\n"+
                 "released="+getReleaseStr()+"\n"+
                 "imgHttp="+imgHttp+"\n"+
                 "rating="+rating+"\n"+
                 "metacritic="+metacritic+"\n"+
                 "genres="+getGenresList()+"\n"+
-                "platforms="+getPlatformsList();
+                "platforms="+getPlatformsList()+"\n"+
+                "developers="+getDevelopersList()+"\n"+
+                "publisher="+getPublishersList()
+                ;
         return info;
     }
 }

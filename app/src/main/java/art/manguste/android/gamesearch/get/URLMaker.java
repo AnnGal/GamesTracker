@@ -19,6 +19,7 @@ public class URLMaker {
     private final static String PARAM_DATE_RANGE = "dates";
     private final static String rowNum = "10";  // how many rows in query
     private final static String orderBy = "-added";  // sort query by
+    private static final int MONTH_GAP = -6;
 
 
     public static String formURL(SearchType search, String searchText){
@@ -70,7 +71,7 @@ public class URLMaker {
         // example: https://api.rawg.io/api/games?dates=2020-06-01,2020-09-15&ordering=-added
 
         // set last 3 month
-        String dates = getDatesRange(-3);
+        String dates = getDatesRange(MONTH_GAP);
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(PARAM_DATE_RANGE, dates)

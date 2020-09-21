@@ -18,114 +18,134 @@ public class JsonParser {
 
     private static final String TAG = JsonParser.class.getSimpleName();
 
-    public static ArrayList<Game> extractData(String jsonStr) {
+    public static ArrayList<Game> extractData(String jsonStr, SearchType searchType) {
         ArrayList<Game> game = new ArrayList<>();
 
         if (jsonStr != null) {
-            try {
-                JSONObject jsonObj = new JSONObject(jsonStr);
-                // getting json array node
-                JSONArray gamesArray = jsonObj.getJSONArray("results");
-                // looping through
-                for (int i = 0; i < gamesArray.length(); i++) {
-                    // common info
-                    JSONObject gameJson = gamesArray.getJSONObject(i);
-                    String slug = gameJson.getString("slug");
-                    String name = gameJson.getString("name");
-                    String releasedTmp = gameJson.getString("released");
-                    Date released = null;
-                    try {
-                        released = (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).parse(releasedTmp);
-                    } catch (ParseException ex) {
-                        Log.e(TAG, "Exception "+ex.getLocalizedMessage());
-                    }
-                    String imgHttp =  gameJson.getString("background_image");
-                    String rating = gameJson.getString("rating");
-                    String metacritic = gameJson.getString("metacritic");
-
-                    // genres
-                    JSONArray genresArray = gameJson.getJSONArray("genres");
-                    String[] genres = new String[genresArray.length()];
-                    for (int j = 0; j < genresArray.length(); j++){
-                        JSONObject genreJson = genresArray.getJSONObject(j);
-                        genres[j] = genreJson.getString("name");
-                    }
-
-                    // platforms
-                    JSONArray platformsArray = gameJson.getJSONArray("platforms");
-                    String[] platforms = new String[platformsArray.length()];
-                    for (int j = 0; j < platformsArray.length(); j++){
-                        JSONObject tmpJson = platformsArray.getJSONObject(j);
-                        JSONObject platformJson = tmpJson.getJSONObject("platform");
-                        platforms[j] = platformJson.getString("name");
-                    }
-
-                    game.add(new Game(slug, name, null, released, imgHttp, rating, metacritic, genres, platforms, null, null));
-                    Log.d(TAG, "Game: \n"+((Game) game.get(game.size()-1)).toString());
-                }
-            } catch (final JSONException e) {
-                Log.e(TAG, "Json parsing error: " + e.getMessage());
+            if (SearchType.GAME.equals(searchType)) {
+                parseGameData(jsonStr, game);
+            } else  {
+                parseDateFromMassiveRequest(jsonStr, game);
             }
         }
 
+        //parseDateFromMassiveRequest(jsonStr, game);
         return game;
     }
 
-    /*
-    slug
-name
-released 2020-11-19
-background_image https://media.rawg.io/media/games/26d/26d4437715bee60138dab4a7c8c59c92.jpg
-rating :4.33,
-metacritic:null,
-genres":[
-            {
-               "id":4,
-               "name":"Action",
-               "slug":"action"
-            },
-            {
-               "id":5,
-               "name":"RPG",
-               "slug":"role-playing-games-rpg"
+    private static void parseGameData(String jsonStr, ArrayList<Game> game) {
+
+        try {
+            JSONObject gameJson = new JSONObject(jsonStr);
+
+/*
+            String result = "";
+            result += "id="+gameJson.getString("id");
+            Log.d(TAG, "Result: "+result);*/
+
+            Integer id = gameJson.getInt("id");
+            String slug = gameJson.getString("slug");
+            String description = gameJson.getString("description");  //exists also "description_raw"
+            String name = gameJson.getString("name");
+            String releasedTmp = gameJson.getString("released");
+            Date released = null;
+            try {
+                released = (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).parse(releasedTmp);
+            } catch (ParseException ex) {
+                Log.e(TAG, "Exception "+ex.getLocalizedMessage());
             }
-platforms:[
-            {
-               "platform":{
-                  "id":4,
-                  "name":"PC",
-                  "slug":"pc"
-               }
-            },
-            {
-               "platform":{
-                  "id":187,
-                  "name":"PlayStation 5",
-                  "slug":"playstation5"
-               }
-            },
-            {
-               "platform":{
-                  "id":1,
-                  "name":"Xbox One",
-                  "slug":"xbox-one"
-               }
-            },
-            {
-               "platform":{
-                  "id":18,
-                  "name":"PlayStation 4",
-                  "slug":"playstation4"
-               }
-            },
-            {
-               "platform":{
-                  "id":186,
-                  "name":"Xbox Series S/X",
-                  "slug":"xbox-series-x"
-               }
+            String imgHttp =  gameJson.getString("background_image");
+            String rating = gameJson.getString("rating");
+            String metacritic = gameJson.getString("metacritic");
+            String website = gameJson.getString("website");
+
+            // genres
+            JSONArray genresArray = gameJson.getJSONArray("genres");
+            String[] genres = new String[genresArray.length()];
+            for (int j = 0; j < genresArray.length(); j++){
+                JSONObject genreJson = genresArray.getJSONObject(j);
+                genres[j] = genreJson.getString("name");
             }
-         ]*
-    * */
+
+            // platforms
+            JSONArray platformsArray = gameJson.getJSONArray("platforms");
+            String[] platforms = new String[platformsArray.length()];
+            for (int j = 0; j < platformsArray.length(); j++){
+                JSONObject tmpJson = platformsArray.getJSONObject(j);
+                JSONObject platformJson = tmpJson.getJSONObject("platform");
+                platforms[j] = platformJson.getString("name");
+            }
+
+            // developers
+            JSONArray developersArray = gameJson.getJSONArray("developers");
+            String[] developers = new String[developersArray.length()];
+            for (int j = 0; j < developersArray.length(); j++){
+                JSONObject developersJson = developersArray.getJSONObject(j);
+                developers[j] = developersJson.getString("name");
+            }
+
+            // publishers
+            JSONArray publishersArray = gameJson.getJSONArray("publishers");
+            String[] publishers = new String[publishersArray.length()];
+            for (int j = 0; j < publishersArray.length(); j++){
+                JSONObject publishersJson = publishersArray.getJSONObject(j);
+                publishers[j] = publishersJson.getString("name");
+            }
+
+            game.add(new Game(id, slug, name, description, released, imgHttp, rating, metacritic, website, genres, platforms , developers, publishers));
+            Log.d(TAG, "Game: \n"+((Game) game.get(0)).toString());
+        } catch (final JSONException e) {
+            Log.e(TAG, "Json parsing error: " + e.getMessage());
+        }
+
+
+    }
+
+    private static void parseDateFromMassiveRequest(String jsonStr, ArrayList<Game> game) {
+        try {
+            JSONObject jsonObj = new JSONObject(jsonStr);
+            // getting json array node
+            JSONArray gamesArray = jsonObj.getJSONArray("results");
+            // looping through
+            for (int i = 0; i < gamesArray.length(); i++) {
+                // common info
+                JSONObject gameJson = gamesArray.getJSONObject(i);
+                String slug = gameJson.getString("slug");
+                String name = gameJson.getString("name");
+                String releasedTmp = gameJson.getString("released");
+                Date released = null;
+                try {
+                    released = (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).parse(releasedTmp);
+                } catch (ParseException ex) {
+                    Log.e(TAG, "Exception "+ex.getLocalizedMessage());
+                }
+                String imgHttp =  gameJson.getString("background_image");
+                String rating = gameJson.getString("rating");
+                String metacritic = gameJson.getString("metacritic");
+
+                // genres
+                JSONArray genresArray = gameJson.getJSONArray("genres");
+                String[] genres = new String[genresArray.length()];
+                for (int j = 0; j < genresArray.length(); j++){
+                    JSONObject genreJson = genresArray.getJSONObject(j);
+                    genres[j] = genreJson.getString("name");
+                }
+
+                // platforms
+                JSONArray platformsArray = gameJson.getJSONArray("platforms");
+                String[] platforms = new String[platformsArray.length()];
+                for (int j = 0; j < platformsArray.length(); j++){
+                    JSONObject tmpJson = platformsArray.getJSONObject(j);
+                    JSONObject platformJson = tmpJson.getJSONObject("platform");
+                    platforms[j] = platformJson.getString("name");
+                }
+
+                game.add(new Game(slug, name, released, imgHttp, rating, metacritic, genres, platforms));
+                Log.d(TAG, "Game: \n"+((Game) game.get(game.size()-1)).toString());
+            }
+        } catch (final JSONException e) {
+            Log.e(TAG, "Json parsing error: " + e.getMessage());
+        }
+    }
 
 }

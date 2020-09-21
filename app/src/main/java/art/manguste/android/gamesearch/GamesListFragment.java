@@ -145,7 +145,8 @@ public class GamesListFragment extends Fragment
         String searchTxt = String.valueOf(((EditText) getView().findViewById(R.id.et_search_by_name)).getText());
         String urlString = formURL(this.searchType, searchTxt);
 
-        return new GamesLoader(getContext(), urlString);
+        Log.d(TAG, "onCreateLoader " + searchType.toString());
+        return new GamesLoader(getContext(), urlString, this.searchType);
     }
 
     /**
@@ -161,6 +162,7 @@ public class GamesListFragment extends Fragment
         if (data != null && !data.isEmpty()) {
             mAdapter.setGames(data);
         }
+        Log.d(TAG, "onLoadFinished " + searchType.toString());
     }
 
     /**
