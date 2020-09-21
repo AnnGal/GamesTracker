@@ -7,8 +7,6 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import art.manguste.android.gamesearch.core.MainTabsAdapter;
-
 public class MainActivity extends AppCompatActivity {
 
     private int[] icons = {

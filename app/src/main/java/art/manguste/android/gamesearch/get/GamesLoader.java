@@ -11,11 +11,11 @@ import art.manguste.android.gamesearch.core.Game;
 
 public class GamesLoader extends AsyncTaskLoader<ArrayList<Game>> {
 
-    private static final String TAG = GamesLoader.class.getSimpleName();
+    private static final String TAG = GamesLoader.class.getSimpleName()+"CheckLoader";
 
     private String mUrl;
     private SearchType mSearchType;
-
+    private Boolean alreadyAsked = false;
 
     public GamesLoader(Context context, String url, SearchType searchType) {
         super(context);
@@ -25,7 +25,16 @@ public class GamesLoader extends AsyncTaskLoader<ArrayList<Game>> {
 
     @Override
     protected void onStartLoading() {
-        forceLoad();
+        Log.d(TAG, "onStartLoading: " + mSearchType.toString());
+
+        // Loader not synchronized with fragment lifestyle and repeat same requests when going back from Detail Activity
+        // or I miss something :-/
+        // Anyway stay with this fix until I understand what's going out and solve it
+        if (!alreadyAsked){
+            alreadyAsked = true;
+            forceLoad();
+        }
+        //forceLoad();
     }
 
     @Nullable

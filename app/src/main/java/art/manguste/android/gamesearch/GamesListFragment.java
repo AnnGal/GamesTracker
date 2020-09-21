@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -35,16 +34,18 @@ import static art.manguste.android.gamesearch.get.URLMaker.formURL;
 public class GamesListFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<ArrayList<Game>> {
 
-    private static final String TAG = GamesListFragment.class.getSimpleName();
+    private static final String TAG = GamesListFragment.class.getSimpleName()+"CheckLoader";
 
     private static final String SEARCH_TYPE = "search_type";
     private static final int LOADER_BY_NAME_ID = 1;
     private static final int LOADER_HOT_ID = 2;
 
-    private ProgressBar progressBar;
+    private ProgressBar mProgressBar;
+    private EditText mSearchByNameTextView;
     private GameCardAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private SearchType searchType;
+    LoaderManager mLoaderManager;
 
     public GamesListFragment() {
         // Required empty public constructor
@@ -71,6 +72,7 @@ public class GamesListFragment extends Fragment
         if (getArguments() != null) {
             searchType = SearchType.valueOf(getArguments().getString(SEARCH_TYPE));
         }
+        mLoaderManager = /*LoaderManager.getInstance(this);  */this.getLoaderManager();
     }
 
     @Override
@@ -78,7 +80,8 @@ public class GamesListFragment extends Fragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_game_search, container, false);
-        progressBar = view.findViewById(R.id.pb_loading);
+        mProgressBar = view.findViewById(R.id.pb_loading);
+        mSearchByNameTextView = view.findViewById(R.id.et_search_by_name);
 
         // Recycler view stuff
         mRecyclerView = view.findViewById(R.id.rv_games_list);
@@ -90,7 +93,7 @@ public class GamesListFragment extends Fragment
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
         if (SearchType.HOT.equals(searchType)){
-            ((LinearLayout) view.findViewById(R.id.ll_search_by_name)).setVisibility(View.GONE);
+            (view.findViewById(R.id.ll_search_by_name)).setVisibility(View.GONE);
         }
 
         // on a click "start search" button
@@ -102,13 +105,16 @@ public class GamesListFragment extends Fragment
         });
 
         Log.d(TAG, "onCreateView " + searchType.toString());
+
+        //mLoaderManager.initLoader(LOADER_HOT_ID, null, this);
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d(TAG, "onViewCreated " + searchType.toString());
         if (SearchType.HOT.equals(searchType)){
             startGameSearch(false);
         }
@@ -118,17 +124,15 @@ public class GamesListFragment extends Fragment
      * Go to API and grab data
      * */
     private void startGameSearch(boolean forceNewRequest) {
-        LoaderManager loaderManager = LoaderManager.getInstance(this);
-
         if (SearchType.HOT.equals(searchType)) {
-            if (loaderManager.getLoader(LOADER_HOT_ID) == null){
-                loaderManager.initLoader(LOADER_HOT_ID, null, this);
+            if (mLoaderManager.getLoader(LOADER_HOT_ID) == null){
+                mLoaderManager.initLoader(LOADER_HOT_ID, null, this);
             }
         } else if (SearchType.SEARCH.equals(searchType)){
-            if (loaderManager.getLoader(LOADER_BY_NAME_ID) == null){
-                loaderManager.initLoader(LOADER_BY_NAME_ID, null, this);
+            if (mLoaderManager.getLoader(LOADER_BY_NAME_ID) == null){
+                mLoaderManager.initLoader(LOADER_BY_NAME_ID, null, this);
             } else if (forceNewRequest){
-                loaderManager.restartLoader(LOADER_BY_NAME_ID, null, this);
+                mLoaderManager.restartLoader(LOADER_BY_NAME_ID, null, this);
             }
         }
     }
@@ -140,12 +144,12 @@ public class GamesListFragment extends Fragment
     @NonNull
     @Override
     public Loader<ArrayList<Game>> onCreateLoader(int id, @Nullable Bundle args) {
-        progressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        Log.d(TAG, "onCreateLoader " + searchType.toString() +" with Context="+getContext());
 
-        String searchTxt = String.valueOf(((EditText) getView().findViewById(R.id.et_search_by_name)).getText());
+        String searchTxt = String.valueOf(mSearchByNameTextView.getText());
         String urlString = formURL(this.searchType, searchTxt);
 
-        Log.d(TAG, "onCreateLoader " + searchType.toString());
         return new GamesLoader(getContext(), urlString, this.searchType);
     }
 
@@ -154,7 +158,7 @@ public class GamesListFragment extends Fragment
      * */
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<Game>> loader, ArrayList<Game> data) {
-        progressBar.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
 
         //TODO if none games found - set text about it
 
@@ -170,6 +174,7 @@ public class GamesListFragment extends Fragment
      * */
     @Override
     public void onLoaderReset(@NonNull Loader<ArrayList<Game>> loader) {
+        Log.d(TAG, "onLoaderReset " + searchType.toString());
         //mRecyclerView.setAdapter(new GameCardRVAdapter(new ArrayList<GameCard>()));
     }
     //********* Loader end *********//
