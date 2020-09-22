@@ -47,13 +47,8 @@ public class JsonParser {
             String slug = gameJson.getString("slug");
             String description = gameJson.getString("description");  //exists also "description_raw"
             String name = gameJson.getString("name");
-            String releasedTmp = gameJson.getString("released");
-            Date released = null;
-            try {
-                released = (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).parse(releasedTmp);
-            } catch (ParseException ex) {
-                Log.e(TAG, "Exception "+ex.getLocalizedMessage());
-            }
+            String releaseDateStr = gameJson.getString("released");
+            Date released = DateToStr(releaseDateStr);
             String imgHttp =  gameJson.getString("background_image");
             String rating = gameJson.getString("rating");
             String metacritic = gameJson.getString("metacritic");
@@ -112,13 +107,8 @@ public class JsonParser {
                 JSONObject gameJson = gamesArray.getJSONObject(i);
                 String slug = gameJson.getString("slug");
                 String name = gameJson.getString("name");
-                String releasedTmp = gameJson.getString("released");
-                Date released = null;
-                try {
-                    released = (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).parse(releasedTmp);
-                } catch (ParseException ex) {
-                    Log.e(TAG, "Exception "+ex.getLocalizedMessage());
-                }
+                String releaseDateStr = gameJson.getString("released");
+                Date released = DateToStr(releaseDateStr);
                 String imgHttp =  gameJson.getString("background_image");
                 String rating = gameJson.getString("rating");
                 String metacritic = gameJson.getString("metacritic");
@@ -141,11 +131,23 @@ public class JsonParser {
                 }
 
                 game.add(new Game(slug, name, released, imgHttp, rating, metacritic, genres, platforms));
-                Log.d(TAG, "Game: \n"+((Game) game.get(game.size()-1)).toString());
+                //Log.d(TAG, "Game: \n"+((Game) game.get(game.size()-1)).toString());
             }
         } catch (final JSONException e) {
             Log.e(TAG, "Json parsing error: " + e.getMessage());
         }
     }
 
+
+    private static Date DateToStr(String dateStr){
+        Date date = null;
+        if (dateStr != null){
+            try {
+                date = (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).parse(dateStr);
+            } catch (ParseException ex) {
+                Log.e(TAG, "Exception "+ex.getLocalizedMessage());
+            }
+        }
+        return date;
+    }
 }

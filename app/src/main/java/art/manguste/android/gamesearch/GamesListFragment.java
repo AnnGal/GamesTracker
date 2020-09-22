@@ -72,7 +72,7 @@ public class GamesListFragment extends Fragment
         if (getArguments() != null) {
             searchType = SearchType.valueOf(getArguments().getString(SEARCH_TYPE));
         }
-        mLoaderManager = /*LoaderManager.getInstance(this);  */this.getLoaderManager();
+        mLoaderManager = LoaderManager.getInstance(this);
     }
 
     @Override

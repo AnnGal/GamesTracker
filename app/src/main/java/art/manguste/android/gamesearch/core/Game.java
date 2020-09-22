@@ -46,8 +46,6 @@ public class Game {
         this.metacritic = metacritic;
         this.genresList = genresList;
         this.platformsList = platformsList;
-        this.developersList = developersList;
-        this.publishersList = publishersList;
     }
 
 
@@ -108,7 +106,11 @@ public class Game {
     }
 
     public String getReleaseStr() {
-        return (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).format(releaseDate);
+        String dateStr = "";
+        if (releaseDate != null){
+            dateStr = (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).format(releaseDate);
+        }
+        return dateStr;
     }
 
     public String getImgHttp() {

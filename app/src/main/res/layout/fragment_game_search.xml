@@ -24,7 +24,7 @@
             android:ems="10"
             android:hint="@string/hint_write_game"
             android:inputType="textPersonName"
-            android:text="dishonored" />
+            android:text="rimworld" />
 
         <ImageButton
             android:id="@+id/btn_start_search"

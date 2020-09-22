@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
 
@@ -31,8 +33,12 @@ import static art.manguste.android.gamesearch.get.URLMaker.formURL;
 public class GameDetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<ArrayList<Game>>{
 
+
+
     private static final String EXTRA_GAME_CODE = "game_site_code";
+    private static final String EXTRA_GAME_NAME = "game_name";
     private String gameCode = null;
+    private String gameName = null;
     private static final int LOADER_GAME_ID = 3;
     private int mImageSize = 0;
 
@@ -47,16 +53,18 @@ public class GameDetailFragment extends Fragment
     TextView mPlatform;
     TextView mPublisher;
     TextView mWebsite;
+    CollapsingToolbarLayout mToolbarLayout;
 
 
     public GameDetailFragment() {
         // Required empty public constructor
     }
 
-    public static GameDetailFragment createInstance(String gameCode) {
+    public static GameDetailFragment createInstance(String gameCode, String gameName) {
         GameDetailFragment fragment = new GameDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_GAME_CODE, gameCode);
+        bundle.putString(EXTRA_GAME_NAME, gameName);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -67,6 +75,7 @@ public class GameDetailFragment extends Fragment
 
         if (getArguments() != null) {
             gameCode = getArguments().getString(EXTRA_GAME_CODE);
+            gameName = getArguments().getString(EXTRA_GAME_NAME);
         }
     }
 
@@ -90,11 +99,13 @@ public class GameDetailFragment extends Fragment
         mWebsite = view.findViewById(R.id.tv_game_website);
 
         // toolbar and return button
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        AppCompatActivity toolbarActivity = ((AppCompatActivity) getActivity());
-        toolbarActivity.setSupportActionBar(toolbar);
-        toolbarActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbarActivity.getSupportActionBar().setTitle("");
+        AppCompatActivity mActivity = ((AppCompatActivity) getActivity());
+        mActivity.setSupportActionBar((Toolbar)view.findViewById(R.id.toolbar));
+        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mToolbarLayout = view.findViewById(R.id.toolbar_collapsing);
+        mToolbarLayout.setTitle(gameName);
+        mToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
         // start Loader
         LoaderManager loaderManager = LoaderManager.getInstance(this);
@@ -122,7 +133,7 @@ public class GameDetailFragment extends Fragment
 
         // change data in view
         if (data != null && !data.isEmpty()) {
-            setInfoOnCard(data);
+            setGameInfo(data);
         }
     }
 
@@ -133,7 +144,7 @@ public class GameDetailFragment extends Fragment
     // Loader end
 
 
-    private void setInfoOnCard(ArrayList<Game> data) {
+    private void setGameInfo(ArrayList<Game> data) {
         Game game = data.get(0);
 
         Glide.with(getContext())
@@ -145,11 +156,13 @@ public class GameDetailFragment extends Fragment
 
         mTitle.setText(game.getName());
         mRelease.setText(game.getReleaseStr());
-        mDescription.setText(game.getDescription());
+        mDescription.setText(Html.fromHtml(game.getDescription()));
         mGenre.setText(game.getGenresList());
         mDeveloper.setText(game.getDevelopersList());
         mPlatform.setText(game.getPlatformsList());
         mPublisher.setText(game.getPublishersList());
         mWebsite.setText(game.getWebsite());
     }
+
+
 }
