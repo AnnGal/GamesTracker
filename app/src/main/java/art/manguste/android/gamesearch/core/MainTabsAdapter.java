@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch;
+package art.manguste.android.gamesearch.core;
 
 import android.content.Context;
 

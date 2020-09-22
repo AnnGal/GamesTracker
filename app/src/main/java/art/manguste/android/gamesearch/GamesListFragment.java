@@ -178,4 +178,6 @@ public class GamesListFragment extends Fragment
         //mRecyclerView.setAdapter(new GameCardRVAdapter(new ArrayList<GameCard>()));
     }
     //********* Loader end *********//
+
+
 }

@@ -174,4 +174,8 @@ public class Game {
                 ;
         return info;
     }
+
+    public String getWebsite() {
+        return website;
+    }
 }
