@@ -24,6 +24,7 @@ public class Game {
     private String[] platformsList;
     private String[] developersList;
     private String[] publishersList;
+    private String jsonString;
 
     /**
      * Constructor for short game info
@@ -67,7 +68,8 @@ public class Game {
      */
     public Game(Integer id, String siteName, String name, String description, Date releaseDate,
                 String imgHttp, String rating, String metacritic, String website,
-                String[] genresList, String[] platformsList, String[] developersList, String[] publishersList) {
+                String[] genresList, String[] platformsList, String[] developersList, String[] publishersList,
+                String jsonString) {
         this.id = id;
         this.siteName = siteName;
         this.name = name;
@@ -81,6 +83,7 @@ public class Game {
         this.platformsList = platformsList;
         this.developersList = developersList;
         this.publishersList = publishersList;
+        this.jsonString = jsonString;
     }
 
     // the shot version for tests only
@@ -179,5 +182,9 @@ public class Game {
 
     public String getWebsite() {
         return website;
+    }
+
+    public String getJsonString() {
+        return jsonString;
     }
 }

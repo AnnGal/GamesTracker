@@ -1,8 +1,6 @@
-package art.manguste.android.gamesearch.get;
+package art.manguste.android.gamesearch.api;
 
 import android.util.Log;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

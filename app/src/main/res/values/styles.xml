@@ -14,7 +14,9 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+        <item name="colorControlNormal">@color/colorTab</item>
+    </style>
 
     <style name="AppText" parent="TextAppearance.AppCompat">
 
@@ -28,6 +30,12 @@
     <style name="AppTextSubTitle" parent="AppText">
         <item name="fontFamily">@font/roboto_thin</item>
     </style>
+
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">@color/colorTab</item>
+    </style>
+
 
 
 </resources>

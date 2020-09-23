@@ -21,18 +21,17 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.core.GameCardAdapter;
-import art.manguste.android.gamesearch.get.GamesLoader;
-import art.manguste.android.gamesearch.get.SearchType;
+import art.manguste.android.gamesearch.api.GamesLoader;
+import art.manguste.android.gamesearch.core.SearchType;
 
-import static art.manguste.android.gamesearch.get.URLMaker.formURL;
+import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link GamesListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GamesListFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<ArrayList<Game>> {
+public class GamesListFragment extends Fragment {
 
     private static final String TAG = GamesListFragment.class.getSimpleName()+"CheckLoader";
 
@@ -126,58 +125,49 @@ public class GamesListFragment extends Fragment
     private void startGameSearch(boolean forceNewRequest) {
         if (SearchType.HOT.equals(searchType)) {
             if (mLoaderManager.getLoader(LOADER_HOT_ID) == null){
-                mLoaderManager.initLoader(LOADER_HOT_ID, null, this);
+                mLoaderManager.initLoader(LOADER_HOT_ID, null, mLoaderCallbacks);
             }
         } else if (SearchType.SEARCH.equals(searchType)){
             if (mLoaderManager.getLoader(LOADER_BY_NAME_ID) == null){
-                mLoaderManager.initLoader(LOADER_BY_NAME_ID, null, this);
+                mLoaderManager.initLoader(LOADER_BY_NAME_ID, null, mLoaderCallbacks);
             } else if (forceNewRequest){
-                mLoaderManager.restartLoader(LOADER_BY_NAME_ID, null, this);
+                mLoaderManager.restartLoader(LOADER_BY_NAME_ID, null, mLoaderCallbacks);
             }
         }
     }
 
-    //********* Loader begin *********//
-    /**
-     * Start search
-     * */
-    @NonNull
-    @Override
-    public Loader<ArrayList<Game>> onCreateLoader(int id, @Nullable Bundle args) {
-        mProgressBar.setVisibility(View.VISIBLE);
-        Log.d(TAG, "onCreateLoader " + searchType.toString() +" with Context="+getContext());
+    private final LoaderManager.LoaderCallbacks<ArrayList<Game>> mLoaderCallbacks =
+            new LoaderManager.LoaderCallbacks<ArrayList<Game>>() {
 
-        String searchTxt = String.valueOf(mSearchByNameTextView.getText());
-        String urlString = formURL(this.searchType, searchTxt);
+                @Override
+                @NonNull
+                public Loader<ArrayList<Game>> onCreateLoader(int id, @Nullable Bundle args) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "onCreateLoader " + searchType.toString() +" with Context="+getContext());
 
-        return new GamesLoader(getContext(), urlString, this.searchType);
-    }
+                    String searchTxt = String.valueOf(mSearchByNameTextView.getText());
+                    String urlString = formURL(searchType, searchTxt);
 
-    /**
-     * After search ended
-     * */
-    @Override
-    public void onLoadFinished(@NonNull Loader<ArrayList<Game>> loader, ArrayList<Game> data) {
-        mProgressBar.setVisibility(View.GONE);
+                    return new GamesLoader(getContext(), urlString, searchType);
+                }
 
-        //TODO if none games found - set text about it
+                @Override
+                public void onLoadFinished(@NonNull Loader<ArrayList<Game>> loader, ArrayList<Game> data) {
+                    mProgressBar.setVisibility(View.GONE);
 
-        // change data in view
-        if (data != null && !data.isEmpty()) {
-            mAdapter.setGames(data);
-        }
-        Log.d(TAG, "onLoadFinished " + searchType.toString());
-    }
+                    //TODO if none games found - set text about it
 
-    /**
-     * Reset data
-     * */
-    @Override
-    public void onLoaderReset(@NonNull Loader<ArrayList<Game>> loader) {
-        Log.d(TAG, "onLoaderReset " + searchType.toString());
-        //mRecyclerView.setAdapter(new GameCardRVAdapter(new ArrayList<GameCard>()));
-    }
-    //********* Loader end *********//
+                    // change data in view
+                    if (data != null && !data.isEmpty()) {
+                        mAdapter.setGames(data);
+                    }
+                    Log.d(TAG, "onLoadFinished " + searchType.toString());
+                }
 
-
+                @Override
+                public void onLoaderReset(@NonNull Loader<ArrayList<Game>> loader) {
+                    Log.d(TAG, "onLoaderReset " + searchType.toString());
+                    mAdapter.setGames(null);
+                }
+            };
 }

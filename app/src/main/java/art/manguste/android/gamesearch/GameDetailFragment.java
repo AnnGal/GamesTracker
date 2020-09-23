@@ -25,10 +25,10 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.core.Game;
-import art.manguste.android.gamesearch.get.GamesLoader;
-import art.manguste.android.gamesearch.get.SearchType;
+import art.manguste.android.gamesearch.api.GamesLoader;
+import art.manguste.android.gamesearch.core.SearchType;
 
-import static art.manguste.android.gamesearch.get.URLMaker.formURL;
+import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
 public class GameDetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<ArrayList<Game>>{
@@ -105,6 +105,7 @@ public class GameDetailFragment extends Fragment
 
         mToolbarLayout = view.findViewById(R.id.toolbar_collapsing);
         mToolbarLayout.setTitle(gameName);
+        mToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorTab));
         mToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
         // start Loader

@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.get;
+package art.manguste.android.gamesearch.api;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,8 @@ import androidx.loader.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
 import art.manguste.android.gamesearch.core.Game;
+import art.manguste.android.gamesearch.core.JsonParser;
+import art.manguste.android.gamesearch.core.SearchType;
 
 public class GamesLoader extends AsyncTaskLoader<ArrayList<Game>> {
 

@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.get;
+package art.manguste.android.gamesearch.core;
 
 public enum SearchType {
     SEARCH,

@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.get;
+package art.manguste.android.gamesearch.core;
 
 import android.util.Log;
 
@@ -11,8 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-
-import art.manguste.android.gamesearch.core.Game;
 
 public class JsonParser {
 
@@ -38,11 +36,7 @@ public class JsonParser {
         try {
             JSONObject gameJson = new JSONObject(jsonStr);
 
-/*
-            String result = "";
-            result += "id="+gameJson.getString("id");
-            Log.d(TAG, "Result: "+result);*/
-
+            // Common Info
             Integer id = gameJson.getInt("id");
             String slug = gameJson.getString("slug");
             String description = gameJson.getString("description");  //exists also "description_raw"
@@ -87,7 +81,8 @@ public class JsonParser {
                 publishers[j] = publishersJson.getString("name");
             }
 
-            game.add(new Game(id, slug, name, description, released, imgHttp, rating, metacritic, website, genres, platforms , developers, publishers));
+            game.add(new Game(id, slug, name, description, released, imgHttp, rating, metacritic,
+                              website, genres, platforms , developers, publishers, jsonStr));
             Log.d(TAG, "Game: \n"+((Game) game.get(0)).toString());
         } catch (final JSONException e) {
             Log.e(TAG, "Json parsing error: " + e.getMessage());
