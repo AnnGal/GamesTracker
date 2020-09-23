@@ -21,6 +21,9 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.GameDetailActivity;
 import art.manguste.android.gamesearch.R;
+import art.manguste.android.gamesearch.db.FavoriteGame;
+import art.manguste.android.gamesearch.db.GameDBHelper;
+import art.manguste.android.gamesearch.db.GameDatabase;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
         implements ListItemClickListener {
@@ -67,7 +70,10 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
 
     @Override
     public void onFavoriteBtnClick(Game game) {
-        Toast.makeText(mContext, "add to favorite", Toast.LENGTH_SHORT).show();
+        // TODO check if not favorite game
+        // add to DB asynch
+        GameDBHelper.saveGameAsFavorite(mContext, game);
+        //Toast.makeText(mContext, "add to favorite", Toast.LENGTH_SHORT).show();
     }
 
     class GameViewHolder extends RecyclerView.ViewHolder{

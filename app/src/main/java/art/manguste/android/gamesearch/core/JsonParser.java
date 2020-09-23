@@ -21,7 +21,7 @@ public class JsonParser {
 
         if (jsonStr != null) {
             if (SearchType.GAME.equals(searchType)) {
-                parseGameData(jsonStr, game);
+                game.add(parseGameData(jsonStr));
             } else  {
                 parseDateFromMassiveRequest(jsonStr, game);
             }
@@ -31,7 +31,8 @@ public class JsonParser {
         return game;
     }
 
-    private static void parseGameData(String jsonStr, ArrayList<Game> game) {
+    public static Game parseGameData(String jsonStr) {
+        Game game = null;
 
         try {
             JSONObject gameJson = new JSONObject(jsonStr);
@@ -81,17 +82,17 @@ public class JsonParser {
                 publishers[j] = publishersJson.getString("name");
             }
 
-            game.add(new Game(id, slug, name, description, released, imgHttp, rating, metacritic,
-                              website, genres, platforms , developers, publishers, jsonStr));
-            Log.d(TAG, "Game: \n"+((Game) game.get(0)).toString());
+            game = new Game(id, slug, name, description, released, imgHttp, rating, metacritic,
+                              website, genres, platforms , developers, publishers, jsonStr);
+            Log.d(TAG, "Game: \n" + game.toString());
         } catch (final JSONException e) {
             Log.e(TAG, "Json parsing error: " + e.getMessage());
         }
 
-
+        return game;
     }
 
-    private static void parseDateFromMassiveRequest(String jsonStr, ArrayList<Game> game) {
+    public static void parseDateFromMassiveRequest(String jsonStr, ArrayList<Game> game) {
         try {
             JSONObject jsonObj = new JSONObject(jsonStr);
             // getting json array node

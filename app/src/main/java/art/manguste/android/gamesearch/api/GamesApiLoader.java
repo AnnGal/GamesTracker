@@ -11,15 +11,15 @@ import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.core.JsonParser;
 import art.manguste.android.gamesearch.core.SearchType;
 
-public class GamesLoader extends AsyncTaskLoader<ArrayList<Game>> {
+public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
 
-    private static final String TAG = GamesLoader.class.getSimpleName()+"CheckLoader";
+    private static final String TAG = GamesApiLoader.class.getSimpleName()+"CheckLoader";
 
     private String mUrl;
     private SearchType mSearchType;
     private Boolean alreadyAsked = false;
 
-    public GamesLoader(Context context, String url, SearchType searchType) {
+    public GamesApiLoader(Context context, String url, SearchType searchType) {
         super(context);
         mUrl = url;
         mSearchType = searchType;

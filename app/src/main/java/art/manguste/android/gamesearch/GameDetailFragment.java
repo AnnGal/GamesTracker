@@ -14,6 +14,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,8 +26,9 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.core.Game;
-import art.manguste.android.gamesearch.api.GamesLoader;
+import art.manguste.android.gamesearch.api.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
+import art.manguste.android.gamesearch.db.GameDBHelper;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
@@ -53,6 +55,8 @@ public class GameDetailFragment extends Fragment
     TextView mPlatform;
     TextView mPublisher;
     TextView mWebsite;
+    ImageButton mFavoriteButton;
+    Game mGame;
     CollapsingToolbarLayout mToolbarLayout;
 
 
@@ -97,6 +101,15 @@ public class GameDetailFragment extends Fragment
         mPlatform = view.findViewById(R.id.tv_platform);
         mPublisher = view.findViewById(R.id.tv_publisher);
         mWebsite = view.findViewById(R.id.tv_game_website);
+        mFavoriteButton = view.findViewById(R.id.ib_makeFavorite);
+
+        //save game as favorite game for tracking
+        mFavoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GameDBHelper.saveGameAsFavorite(getContext(), mGame);
+            }
+        });
 
         // toolbar and return button
         AppCompatActivity mActivity = ((AppCompatActivity) getActivity());
@@ -120,10 +133,8 @@ public class GameDetailFragment extends Fragment
     @Override
     public Loader<ArrayList<Game>> onCreateLoader(int id, @Nullable Bundle args) {
         mProgressBar.setVisibility(View.VISIBLE);
-
         String urlString = formURL(SearchType.GAME, gameCode);
-
-        return new GamesLoader(getContext(), urlString, SearchType.GAME);
+        return new GamesApiLoader(getContext(), urlString, SearchType.GAME);
     }
 
     @Override
@@ -148,21 +159,26 @@ public class GameDetailFragment extends Fragment
     private void setGameInfo(ArrayList<Game> data) {
         Game game = data.get(0);
 
-        Glide.with(getContext())
-                .load(game.getImgHttp())
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .placeholder(R.drawable.empty_photo)
-                .override(mImageSize, mImageSize)
-                .into(mCoverImageView);
+        if (game != null){
+            mGame = game;
 
-        mTitle.setText(game.getName());
-        mRelease.setText(game.getReleaseStr());
-        mDescription.setText(Html.fromHtml(game.getDescription()));
-        mGenre.setText(game.getGenresList());
-        mDeveloper.setText(game.getDevelopersList());
-        mPlatform.setText(game.getPlatformsList());
-        mPublisher.setText(game.getPublishersList());
-        mWebsite.setText(game.getWebsite());
+            Glide.with(getContext())
+                    .load(game.getImgHttp())
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .placeholder(R.drawable.empty_photo)
+                    .override(mImageSize, mImageSize)
+                    .into(mCoverImageView);
+
+            mTitle.setText(game.getName());
+            mRelease.setText(game.getReleaseStr());
+            mDescription.setText(Html.fromHtml(game.getDescription()));
+            mGenre.setText(game.getGenresList());
+            mDeveloper.setText(game.getDevelopersList());
+            mPlatform.setText(game.getPlatformsList());
+            mPublisher.setText(game.getPublishersList());
+            mWebsite.setText(game.getWebsite());
+        }
+
     }
 
 

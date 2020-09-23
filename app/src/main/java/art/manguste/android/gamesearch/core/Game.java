@@ -11,6 +11,7 @@ import java.util.Locale;
 public class Game {
 
     private static final String DELIMITER = ", ";
+
     private Integer id;
     private String siteName;
     private String name;
@@ -186,5 +187,9 @@ public class Game {
 
     public String getJsonString() {
         return jsonString;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

@@ -1,12 +1,13 @@
 package art.manguste.android.gamesearch.db;
 
-import android.database.Cursor;
-
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface FavoriteGameDao {
@@ -14,24 +15,21 @@ public interface FavoriteGameDao {
     @Query("SELECT COUNT(*) FROM " + FavoriteGame.TABLE_NAME)
     int count();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(FavoriteGame favoriteGame);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long[] insertAll(FavoriteGame[] favoriteGames);
-
     @Query("SELECT * FROM " + FavoriteGame.TABLE_NAME)
-    Cursor selectAll();
+    List<FavoriteGame> selectAll();
 
-    @Query("SELECT * FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_ID + " = :id")
-    Cursor selectById(long id);
+    @Query("SELECT * FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_API_ID + " = :id")
+    FavoriteGame selectById(long id);
 
-    @Query("DELETE FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_ID + " = :id")
+    @Query("DELETE FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_API_ID + " = :id")
     int deleteById(long id);
 
     @Query("DELETE FROM " + FavoriteGame.TABLE_NAME )
     void deleteAll();
 
-    @Update
-    int update(FavoriteGame cheese);
+/*    @Update
+    int update(FavoriteGame cheese);*/
 }

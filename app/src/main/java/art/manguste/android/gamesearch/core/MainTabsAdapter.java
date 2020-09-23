@@ -35,9 +35,8 @@ public class MainTabsAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0: return GamesListFragment.newInstance(SearchType.HOT);
             case 1: return GamesListFragment.newInstance(SearchType.SEARCH);
-            // TODO make fragment fo favorite games
-            // TODO make DB for saving favorite games and info
-            default: return PlaceholderFragment.newInstance(position + 1);
+            case 2: return GamesListFragment.newInstance(SearchType.FAVORITE);
+            default: return null;
         }
     }
 

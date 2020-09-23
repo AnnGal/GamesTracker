@@ -21,10 +21,13 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.core.GameCardAdapter;
-import art.manguste.android.gamesearch.api.GamesLoader;
+import art.manguste.android.gamesearch.api.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
+import art.manguste.android.gamesearch.db.FavoriteGame;
+import art.manguste.android.gamesearch.db.GamesDBLoader;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
+import static art.manguste.android.gamesearch.core.JsonParser.parseGameData;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +41,7 @@ public class GamesListFragment extends Fragment {
     private static final String SEARCH_TYPE = "search_type";
     private static final int LOADER_BY_NAME_ID = 1;
     private static final int LOADER_HOT_ID = 2;
+    private static final int LOADER_FAVORITE_ID = 3;
 
     private ProgressBar mProgressBar;
     private EditText mSearchByNameTextView;
@@ -85,13 +89,14 @@ public class GamesListFragment extends Fragment {
         // Recycler view stuff
         mRecyclerView = view.findViewById(R.id.rv_games_list);
         int imageSize = getResources().getDimensionPixelSize(R.dimen.icon_size) * 2;
+
         mAdapter = new GameCardAdapter(getContext(), imageSize);
         mRecyclerView.setAdapter(mAdapter);
 
         // connect data and view
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
 
-        if (SearchType.HOT.equals(searchType)){
+        if (!SearchType.SEARCH.equals(searchType)){
             (view.findViewById(R.id.ll_search_by_name)).setVisibility(View.GONE);
         }
 
@@ -114,7 +119,7 @@ public class GamesListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated " + searchType.toString());
-        if (SearchType.HOT.equals(searchType)){
+        if (!SearchType.SEARCH.equals(searchType)){
             startGameSearch(false);
         }
     }
@@ -125,18 +130,22 @@ public class GamesListFragment extends Fragment {
     private void startGameSearch(boolean forceNewRequest) {
         if (SearchType.HOT.equals(searchType)) {
             if (mLoaderManager.getLoader(LOADER_HOT_ID) == null){
-                mLoaderManager.initLoader(LOADER_HOT_ID, null, mLoaderCallbacks);
+                mLoaderManager.initLoader(LOADER_HOT_ID, null, mAPILoaderCallbacks);
             }
         } else if (SearchType.SEARCH.equals(searchType)){
             if (mLoaderManager.getLoader(LOADER_BY_NAME_ID) == null){
-                mLoaderManager.initLoader(LOADER_BY_NAME_ID, null, mLoaderCallbacks);
+                mLoaderManager.initLoader(LOADER_BY_NAME_ID, null, mAPILoaderCallbacks);
             } else if (forceNewRequest){
-                mLoaderManager.restartLoader(LOADER_BY_NAME_ID, null, mLoaderCallbacks);
+                mLoaderManager.restartLoader(LOADER_BY_NAME_ID, null, mAPILoaderCallbacks);
+            }
+        } else if (SearchType.FAVORITE.equals(searchType)){
+            if (mLoaderManager.getLoader(LOADER_FAVORITE_ID) == null){
+                mLoaderManager.initLoader(LOADER_FAVORITE_ID, null, mDBLoaderCallbacks);
             }
         }
     }
 
-    private final LoaderManager.LoaderCallbacks<ArrayList<Game>> mLoaderCallbacks =
+    private final LoaderManager.LoaderCallbacks<ArrayList<Game>> mAPILoaderCallbacks =
             new LoaderManager.LoaderCallbacks<ArrayList<Game>>() {
 
                 @Override
@@ -147,8 +156,7 @@ public class GamesListFragment extends Fragment {
 
                     String searchTxt = String.valueOf(mSearchByNameTextView.getText());
                     String urlString = formURL(searchType, searchTxt);
-
-                    return new GamesLoader(getContext(), urlString, searchType);
+                    return new GamesApiLoader(getContext(), urlString, searchType);
                 }
 
                 @Override
@@ -170,4 +178,47 @@ public class GamesListFragment extends Fragment {
                     mAdapter.setGames(null);
                 }
             };
+
+    private final LoaderManager.LoaderCallbacks<ArrayList<FavoriteGame>> mDBLoaderCallbacks =
+            new LoaderManager.LoaderCallbacks<ArrayList<FavoriteGame>>() {
+
+                @Override
+                @NonNull
+                public Loader<ArrayList<FavoriteGame>> onCreateLoader(int id, @Nullable Bundle args) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+
+
+                    return new GamesDBLoader(getContext());
+                }
+
+
+                @Override
+                public void onLoadFinished(@NonNull Loader<ArrayList<FavoriteGame>> loader, ArrayList<FavoriteGame> data) {
+                    mProgressBar.setVisibility(View.GONE);
+
+                    //TODO if none games found - set text about it
+
+                    //FavoriteGame to Game
+                    ArrayList<Game> games = new ArrayList();
+                    for (FavoriteGame favGame : data) {
+                        if (favGame.getJson() != null){
+                            games.add(parseGameData(favGame.getJson()));
+                        }
+                    }
+
+                    // change data in view
+                    if (games != null && !games.isEmpty()) {
+                        mAdapter.setGames(games);
+                    }
+                    Log.d(TAG, "onLoadFinished ");
+                }
+
+                @Override
+                public void onLoaderReset(@NonNull Loader<ArrayList<FavoriteGame>> loader) {
+                    Log.d(TAG, "onLoaderReset ");
+                    mAdapter.setGames(null);
+                }
+            };
+
+
 }
