@@ -19,7 +19,7 @@ public class TestURLActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test_connection);
 
         mGameForSearchEditText = findViewById(R.id.ed_game_title);
-        mGameForSearchEditText.setText("Dishonored");
+        mGameForSearchEditText.setText("dishonored");
 
         mSearchResultTextView = findViewById(R.id.tv_request_txt);
         mSearchResultTextView.setText("");
@@ -27,7 +27,7 @@ public class TestURLActivity extends AppCompatActivity {
 
     public void onStartSearch(View view) {
         String searchTxt = String.valueOf(mGameForSearchEditText.getText());
-        mSearchResultTextView.setText(formURL(SearchType.HOT, searchTxt));
+        mSearchResultTextView.setText(formURL(SearchType.GAME, searchTxt));
     }
 
 }

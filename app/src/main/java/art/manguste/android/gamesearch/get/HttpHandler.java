@@ -26,7 +26,6 @@ public class HttpHandler {
         if (reqUrl == null){
             return null;
         }
-
         try {
             URL url = new URL(reqUrl);
 

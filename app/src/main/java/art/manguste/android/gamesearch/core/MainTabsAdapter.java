@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch;
+package art.manguste.android.gamesearch.core;
 
 import android.content.Context;
 
@@ -7,6 +7,7 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import art.manguste.android.gamesearch.GamesListFragment;
 import art.manguste.android.gamesearch.R;
@@ -17,10 +18,11 @@ import art.manguste.android.gamesearch.ui.main.PlaceholderFragment;
 /**
  * returns a fragment corresponding to one of the sections/tabs/pages
  */
-public class MainTabsAdapter extends FragmentPagerAdapter {
+public class MainTabsAdapter extends FragmentStatePagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.category_hot,
+    private static final int[] TAB_TITLES = new int[]{
+            R.string.category_hot,
             R.string.category_search,
             R.string.category_favorite};
     private final Context mContext;

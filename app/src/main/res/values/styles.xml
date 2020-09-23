@@ -16,4 +16,18 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppText" parent="TextAppearance.AppCompat">
+
+    </style>
+
+    <style name="AppTextTitle" parent="AppText">
+        <item name="fontFamily">@font/roboto_black</item>
+
+    </style>
+
+    <style name="AppTextSubTitle" parent="AppText">
+        <item name="fontFamily">@font/roboto_thin</item>
+    </style>
+
+
 </resources>
