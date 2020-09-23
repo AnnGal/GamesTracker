@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.get;
+package art.manguste.android.gamesearch.api;
 
 import android.net.Uri;
 
@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import art.manguste.android.gamesearch.core.SearchType;
 
 public class URLMaker {
     //TODO (1) API request should have a User-Agent header with your app name

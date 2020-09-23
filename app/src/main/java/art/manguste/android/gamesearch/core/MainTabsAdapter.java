@@ -6,12 +6,10 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import art.manguste.android.gamesearch.GamesListFragment;
 import art.manguste.android.gamesearch.R;
-import art.manguste.android.gamesearch.get.SearchType;
 import art.manguste.android.gamesearch.ui.main.PlaceholderFragment;
 
 
@@ -37,9 +35,8 @@ public class MainTabsAdapter extends FragmentStatePagerAdapter {
         switch (position) {
             case 0: return GamesListFragment.newInstance(SearchType.HOT);
             case 1: return GamesListFragment.newInstance(SearchType.SEARCH);
-            // TODO make fragment fo favorite games
-            // TODO make DB for saving favorite games and info
-            default: return PlaceholderFragment.newInstance(position + 1);
+            case 2: return GamesListFragment.newInstance(SearchType.FAVORITE);
+            default: return null;
         }
     }
 

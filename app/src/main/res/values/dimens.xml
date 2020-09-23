@@ -8,7 +8,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="icon_size">84dp</dimen>
-    <dimen name="cover_size">300dp</dimen>
+    <dimen name="cover_size">400dp</dimen>
     <dimen name="list_item_padding_vertical">8dp</dimen>
     <dimen name="list_item_padding_horizontal">8dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>

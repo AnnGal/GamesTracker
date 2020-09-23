@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import art.manguste.android.gamesearch.get.SearchType;
-import static art.manguste.android.gamesearch.get.URLMaker.formURL;
+import art.manguste.android.gamesearch.core.SearchType;
+import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
 public class TestURLActivity extends AppCompatActivity {
 
