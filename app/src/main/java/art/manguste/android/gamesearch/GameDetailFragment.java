@@ -29,6 +29,7 @@ import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.api.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
 import art.manguste.android.gamesearch.db.GameDBHelper;
+import art.manguste.android.gamesearch.db.GameDatabase;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
@@ -169,7 +170,10 @@ public class GameDetailFragment extends Fragment
                     .override(mImageSize, mImageSize)
                     .into(mCoverImageView);
 
-            mTitle.setText(game.getName());
+            if (game.getFavorite()){
+                mTitle.setText(game.getName()+" +fav");
+            } else mTitle.setText(game.getName()+" +no fav");
+            //mTitle.setText(game.getName());
             mRelease.setText(game.getReleaseStr());
             mDescription.setText(Html.fromHtml(game.getDescription()));
             mGenre.setText(game.getGenresList());

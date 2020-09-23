@@ -21,7 +21,7 @@ public class JsonParser {
 
         if (jsonStr != null) {
             if (SearchType.GAME.equals(searchType)) {
-                game.add(parseGameData(jsonStr));
+                game.add(parseGameData(jsonStr, false));
             } else  {
                 parseDateFromMassiveRequest(jsonStr, game);
             }
@@ -31,7 +31,7 @@ public class JsonParser {
         return game;
     }
 
-    public static Game parseGameData(String jsonStr) {
+    public static Game parseGameData(String jsonStr, boolean thisIsFavorite) {
         Game game = null;
 
         try {
@@ -83,7 +83,7 @@ public class JsonParser {
             }
 
             game = new Game(id, slug, name, description, released, imgHttp, rating, metacritic,
-                              website, genres, platforms , developers, publishers, jsonStr);
+                              website, genres, platforms , developers, publishers, jsonStr, thisIsFavorite);
             Log.d(TAG, "Game: \n" + game.toString());
         } catch (final JSONException e) {
             Log.e(TAG, "Json parsing error: " + e.getMessage());
@@ -126,7 +126,7 @@ public class JsonParser {
                     platforms[j] = platformJson.getString("name");
                 }
 
-                game.add(new Game(slug, name, released, imgHttp, rating, metacritic, genres, platforms));
+                game.add(new Game(slug, name, released, imgHttp, rating, metacritic, genres, platforms, false));
                 //Log.d(TAG, "Game: \n"+((Game) game.get(game.size()-1)).toString());
             }
         } catch (final JSONException e) {

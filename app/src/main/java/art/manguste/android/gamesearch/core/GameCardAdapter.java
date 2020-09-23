@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,9 +20,7 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.GameDetailActivity;
 import art.manguste.android.gamesearch.R;
-import art.manguste.android.gamesearch.db.FavoriteGame;
 import art.manguste.android.gamesearch.db.GameDBHelper;
-import art.manguste.android.gamesearch.db.GameDatabase;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
         implements ListItemClickListener {
@@ -63,7 +60,7 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
     @Override
     public void onListItemClick(Game game) {
         Intent intent = new Intent(mContext, GameDetailActivity.class);
-        intent.putExtra(GameDetailActivity.EXTRA_GAME_CODE, game.getSiteName());
+        intent.putExtra(GameDetailActivity.EXTRA_GAME_CODE, game.getGameAlias());
         intent.putExtra(GameDetailActivity.EXTRA_GAME_NAME, game.getName());
         mContext.startActivity(intent);
     }
@@ -123,6 +120,11 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
                         +"Platforms: "+game.getPlatformsList()*/);
                 mReleaseTextView.setText(game.getReleaseStr());
                 mRateTextView.setText(game.getRating());
+
+                if (game.getFavorite()) {
+                    mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_filled));
+                }
+
                 Glide.with(mContext)
                         .load(game.getImgHttp())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)

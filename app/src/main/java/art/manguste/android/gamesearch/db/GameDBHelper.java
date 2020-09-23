@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Date;
 
 import art.manguste.android.gamesearch.api.HttpHandler;
@@ -32,7 +30,7 @@ public class GameDBHelper {
         FavoriteGame dbGame = new FavoriteGame(
                 game.getId(),
                 game.getName(),
-                game.getSiteName(),
+                game.getGameAlias(),
                 dateToTimestamp(new Date()),
                 dateToTimestamp(game.getReleaseDate()),
                 Double.valueOf(game.getRating()),
@@ -67,17 +65,17 @@ public class GameDBHelper {
 
             if (game.getJsonString() == null) {
                 // load full data
-                String urlString = formURL(SearchType.GAME, game.getSiteName());
+                String urlString = formURL(SearchType.GAME, game.getGameAlias());
                 HttpHandler sh = new HttpHandler();
                 String jsonStr = sh.makeServiceCall(urlString);
                 // parse response
-                fullGameData = JsonParser.parseGameData(jsonStr);
+                fullGameData = JsonParser.parseGameData(jsonStr, true);
             } else fullGameData = game;
 
             Log.d(TAG, "DB: try to save game "+fullGameData.toString());
             FavoriteGame favGame = makeFavoriteGame(fullGameData);
             GameDatabase.getInstance(context).favoriteGameDao().insert(favGame);
-            Log.d(TAG, "DB: "+fullGameData.getSiteName()+" success! ");
+            Log.d(TAG, "DB: "+fullGameData.getGameAlias()+" success! ");
 
             return null;
         }

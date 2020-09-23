@@ -174,8 +174,8 @@ public class GamesListFragment extends Fragment {
 
                 @Override
                 public void onLoaderReset(@NonNull Loader<ArrayList<Game>> loader) {
-                    Log.d(TAG, "onLoaderReset " + searchType.toString());
-                    mAdapter.setGames(null);
+                    //Log.d(TAG, "onLoaderReset " + searchType.toString());
+                    //mAdapter.setGames(null);
                 }
             };
 
@@ -186,8 +186,6 @@ public class GamesListFragment extends Fragment {
                 @NonNull
                 public Loader<ArrayList<FavoriteGame>> onCreateLoader(int id, @Nullable Bundle args) {
                     mProgressBar.setVisibility(View.VISIBLE);
-
-
                     return new GamesDBLoader(getContext());
                 }
 
@@ -202,7 +200,7 @@ public class GamesListFragment extends Fragment {
                     ArrayList<Game> games = new ArrayList();
                     for (FavoriteGame favGame : data) {
                         if (favGame.getJson() != null){
-                            games.add(parseGameData(favGame.getJson()));
+                            games.add(parseGameData(favGame.getJson(), true));
                         }
                     }
 

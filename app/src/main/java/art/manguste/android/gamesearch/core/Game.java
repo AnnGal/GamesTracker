@@ -26,6 +26,7 @@ public class Game {
     private String[] developersList;
     private String[] publishersList;
     private String jsonString;
+    private Boolean isFavorite = false;
 
     /**
      * Constructor for short game info
@@ -39,7 +40,7 @@ public class Game {
      * @param platformsList  - which platforms can launch
      */
     public Game(String siteName, String name, Date releaseDate, String imgHttp, String rating, String metacritic,
-                String[] genresList, String[] platformsList) {
+                String[] genresList, String[] platformsList, Boolean isFavorite) {
         this.siteName = siteName;
         this.name = name;
         this.releaseDate = releaseDate;
@@ -48,6 +49,7 @@ public class Game {
         this.metacritic = metacritic;
         this.genresList = genresList;
         this.platformsList = platformsList;
+        this.isFavorite = isFavorite;
     }
 
 
@@ -70,7 +72,7 @@ public class Game {
     public Game(Integer id, String siteName, String name, String description, Date releaseDate,
                 String imgHttp, String rating, String metacritic, String website,
                 String[] genresList, String[] platformsList, String[] developersList, String[] publishersList,
-                String jsonString) {
+                String jsonString, Boolean isFavorite) {
         this.id = id;
         this.siteName = siteName;
         this.name = name;
@@ -85,6 +87,7 @@ public class Game {
         this.developersList = developersList;
         this.publishersList = publishersList;
         this.jsonString = jsonString;
+        this.isFavorite = isFavorite;
     }
 
     // the shot version for tests only
@@ -93,7 +96,7 @@ public class Game {
         this.name = name;
     }
 
-    public String getSiteName() {
+    public String getGameAlias() {
         return siteName;
     }
 
@@ -191,5 +194,13 @@ public class Game {
 
     public Integer getId() {
         return id;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean isFavorite) {
+        this.isFavorite = isFavorite;
     }
 }

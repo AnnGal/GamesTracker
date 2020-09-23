@@ -22,6 +22,8 @@ public class FavoriteGame {
     public static final String TABLE_NAME = "games";
     @Ignore
     public static final String COLUMN_API_ID = "api_id";
+    @Ignore
+    public static final String COLUMN_API_ALIAS = "api_alias";
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = BaseColumns._ID)
@@ -33,7 +35,7 @@ public class FavoriteGame {
     @ColumnInfo(name = "name")
     public String name;
 
-    @ColumnInfo(name = "api_alias")
+    @ColumnInfo(index = true, name = COLUMN_API_ALIAS)
     public String apiAlias;
 
     @ColumnInfo(name = "last_update")

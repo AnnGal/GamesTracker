@@ -24,6 +24,9 @@ public interface FavoriteGameDao {
     @Query("SELECT * FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_API_ID + " = :id")
     FavoriteGame selectById(long id);
 
+    @Query("SELECT COUNT(*) FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_API_ALIAS + " = :alias")
+    int IsGameInFavorite(String alias);
+
     @Query("DELETE FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_API_ID + " = :id")
     int deleteById(long id);
 
