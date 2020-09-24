@@ -21,7 +21,7 @@ public class GameDBHelper {
 
     private static final String TAG = GameDBHelper.class.getSimpleName();
 
-    public static void saveGameAsFavorite(Context context, Game game) {
+    public static void changeFavoriteStatus(Context context, Game game) {
         Log.d(TAG, "DB: saveGameAsFavorite ");
         (new SaveAsyncTask(context, game)).execute();
     }
@@ -61,23 +61,38 @@ public class GameDBHelper {
 
         @Override
         protected Void doInBackground(Void... params) {
-            Game fullGameData = null;
 
-            if (game.getJsonString() == null) {
-                // load full data
-                String urlString = formURL(SearchType.GAME, game.getGameAlias());
-                HttpHandler sh = new HttpHandler();
-                String jsonStr = sh.makeServiceCall(urlString);
-                // parse response
-                fullGameData = JsonParser.parseGameData(jsonStr, true);
-            } else fullGameData = game;
+            if (isGameInFavorite(game.getGameAlias())){
+            //if (game.isFavorite()){
+                GameDatabase.getInstance(context).favoriteGameDao().deleteByAlias(game.getGameAlias());
+                Log.d(TAG, "DB: removed "+game.getGameAlias()+" successfully! ");
+            } else {
+                Game fullGameData = null;
 
-            Log.d(TAG, "DB: try to save game "+fullGameData.toString());
-            FavoriteGame favGame = makeFavoriteGame(fullGameData);
-            GameDatabase.getInstance(context).favoriteGameDao().insert(favGame);
-            Log.d(TAG, "DB: "+fullGameData.getGameAlias()+" success! ");
+                if (game.getJsonString() == null) {
+                    // load full data
+                    String urlString = formURL(SearchType.GAME, game.getGameAlias());
+                    HttpHandler sh = new HttpHandler();
+                    String jsonStr = sh.makeServiceCall(urlString);
+                    // parse response
+                    fullGameData = JsonParser.parseGameData(jsonStr, true);
+                } else fullGameData = game;
 
+                Log.d(TAG, "DB: try to save game "+fullGameData.getGameAlias());
+                FavoriteGame favGame = makeFavoriteGame(fullGameData);
+                GameDatabase.getInstance(context).favoriteGameDao().insert(favGame);
+                Log.d(TAG, "DB: "+fullGameData.getGameAlias()+" successfully added! ");
+            }
             return null;
+        }
+
+        private boolean isGameInFavorite(String gameAlias){
+            boolean gameInDB = false;
+            int count = GameDatabase.getInstance(context).favoriteGameDao().IsGameInFavorite(gameAlias);
+            if (count > 0){
+                gameInDB = true;
+            }
+            return gameInDB;
         }
 
         @Override

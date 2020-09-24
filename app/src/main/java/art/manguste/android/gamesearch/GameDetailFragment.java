@@ -29,7 +29,6 @@ import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.api.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
 import art.manguste.android.gamesearch.db.GameDBHelper;
-import art.manguste.android.gamesearch.db.GameDatabase;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
@@ -108,7 +107,7 @@ public class GameDetailFragment extends Fragment
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GameDBHelper.saveGameAsFavorite(getContext(), mGame);
+                GameDBHelper.changeFavoriteStatus(getContext(), mGame);
             }
         });
 
@@ -170,7 +169,7 @@ public class GameDetailFragment extends Fragment
                     .override(mImageSize, mImageSize)
                     .into(mCoverImageView);
 
-            if (game.getFavorite()){
+            if (game.isFavorite()){
                 mTitle.setText(game.getName()+" +fav");
             } else mTitle.setText(game.getName()+" +no fav");
             //mTitle.setText(game.getName());

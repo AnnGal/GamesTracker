@@ -196,7 +196,7 @@ public class Game {
         return id;
     }
 
-    public Boolean getFavorite() {
+    public Boolean isFavorite() {
         return isFavorite;
     }
 

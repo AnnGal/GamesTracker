@@ -90,7 +90,7 @@ public class GamesListFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.rv_games_list);
         int imageSize = getResources().getDimensionPixelSize(R.dimen.icon_size) * 2;
 
-        mAdapter = new GameCardAdapter(getContext(), imageSize);
+        mAdapter = new GameCardAdapter(getContext(), imageSize, container, searchType);
         mRecyclerView.setAdapter(mAdapter);
 
         // connect data and view
