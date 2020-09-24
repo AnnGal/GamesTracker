@@ -2,6 +2,7 @@ package art.manguste.android.gamesearch.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,13 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.GameDetailActivity;
 import art.manguste.android.gamesearch.R;
+import art.manguste.android.gamesearch.api.GamesApiLoader;
 import art.manguste.android.gamesearch.db.GameDBHelper;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
         implements ListItemClickListener {
+
+    private static final String TAG = GameCardAdapter.class.getSimpleName();
 
     private ArrayList<Game> games = new ArrayList<>();
     private Context mContext;
@@ -154,8 +158,9 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
                 mRateTextView.setText(game.getRating());
 
                 if (game.isFavorite()) {
+                    Log.d(TAG, "Favorite: " + game.getGameAlias());
                     mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_filled));
-                }
+                } else mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_empty));
 
                 Glide.with(mContext)
                         .load(game.getImgHttp())

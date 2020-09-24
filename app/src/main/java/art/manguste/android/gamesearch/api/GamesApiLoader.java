@@ -31,14 +31,7 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
     protected void onStartLoading() {
         Log.d(TAG, "onStartLoading: " + mSearchType.toString());
 
-        // Loader not synchronized with fragment lifestyle and repeat same requests when going back from Detail Activity
-        // or I miss something :-/
-        // Anyway stay with this fix until I understand what's going out and solve it
-        if (!alreadyAsked){
-            alreadyAsked = true;
-            forceLoad();
-        }
-        //forceLoad();
+        forceLoad();
     }
 
     @Nullable
@@ -59,6 +52,7 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
             for (Game game : games) {
                 for (FavoriteGame gameFavorite : favGames) {
                     if (game.getGameAlias().equals(gameFavorite.getApiAlias())){
+                        Log.d(TAG, "Favorite: " + game.getGameAlias());
                         game.setFavorite(true);
                         break;
                     }
@@ -66,8 +60,7 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
             }
         }
 
-     /*   for (Game game : games) {
-
+/*        for (Game game : games) {
             if (isGameInFavorite(game.getGameAlias())){
                 game.setFavorite(true);
             }

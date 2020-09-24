@@ -57,48 +57,64 @@
             android:id="@+id/favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/primary_text"
-            android:src="@drawable/ic_action_star_empty"
             android:background="@color/white"
             android:paddingHorizontal="@dimen/card_view_horizontal_padding"
-            android:paddingVertical="@dimen/card_view_vertical_padding"
-            card_view:layout_constraintBottom_toTopOf="@+id/guideline_main"
-            card_view:layout_constraintRight_toRightOf="parent"
-            card_view:layout_constraintTop_toTopOf="@+id/guideline_main"
-
-            />
+            android:src="@drawable/ic_action_star_empty"
+            android:textColor="@color/primary_text"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            card_view:layout_constraintGuide_percent="0.18"/>
+            card_view:layout_constraintGuide_percent="0.2"/>
 
+        <TextView
+            android:id="@+id/release_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/card_view_horizontal_padding"
+            android:text="@string/release"
+            android:textColor="@color/primary_text"
+            card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+            card_view:layout_constraintStart_toEndOf="@+id/game_icon" />
 
         <TextView
             android:id="@+id/release_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/card_view_horizontal_padding"
             android:textColor="@color/primary_text"
-            card_view:layout_constraintStart_toEndOf="@+id/game_icon"
+            android:paddingLeft="4dp"
+            card_view:layout_constraintStart_toEndOf="@+id/release_label"
             card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
-            tools:text="11 Okt, 2011" />
+            tools:text="15 Jul, 2016" />
+
+        <TextView
+            android:id="@+id/rate_label"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="right"
+            android:textColor="@color/primary_text"
+            android:text="@string/rating"
+            card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
+            card_view:layout_constraintEnd_toStartOf="@+id/rate"
+            card_view:layout_constraintStart_toEndOf="@+id/release_date"
+            card_view:layout_constraintTop_toBottomOf="@+id/description" />
 
         <TextView
             android:id="@+id/rate"
-            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:paddingHorizontal="@dimen/card_view_horizontal_padding"
-            android:textColor="@color/primary_text"
+            android:layout_width="wrap_content"
             android:gravity="right"
+            android:paddingLeft="4dp"
+            android:textColor="@color/primary_text"
             card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
-            card_view:layout_constraintEnd_toStartOf="@+id/favorite"
-            card_view:layout_constraintStart_toEndOf="@+id/release_date"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintStart_toEndOf="@+id/rate_label"
             card_view:layout_constraintTop_toBottomOf="@+id/description"
-            tools:text="Rate: 77.2" />
+            tools:text="5.2" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_bottom"

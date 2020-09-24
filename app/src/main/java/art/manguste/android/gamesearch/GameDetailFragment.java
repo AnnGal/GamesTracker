@@ -1,5 +1,8 @@
 package art.manguste.android.gamesearch;
 
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -56,9 +59,11 @@ public class GameDetailFragment extends Fragment
     TextView mPublisher;
     TextView mWebsite;
     ImageButton mFavoriteButton;
+    ImageButton mShareButton;
+    TextView mDisclaimer;
+
     Game mGame;
     CollapsingToolbarLayout mToolbarLayout;
-
 
     public GameDetailFragment() {
         // Required empty public constructor
@@ -101,13 +106,36 @@ public class GameDetailFragment extends Fragment
         mPlatform = view.findViewById(R.id.tv_platform);
         mPublisher = view.findViewById(R.id.tv_publisher);
         mWebsite = view.findViewById(R.id.tv_game_website);
-        mFavoriteButton = view.findViewById(R.id.ib_makeFavorite);
+        mFavoriteButton = view.findViewById(R.id.ib_favorite);
+        mShareButton = view.findViewById(R.id.ib_share);
+        mDisclaimer = view.findViewById(R.id.tv_disclaimer);
 
         //save game as favorite game for tracking
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GameDBHelper.changeFavoriteStatus(getContext(), mGame);
+                boolean isAddToFavorite = true;
+                if (!mGame.isFavorite()){
+                    // add to Favorite
+                    mFavoriteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_star_filled));
+                } else {
+                    // remove from Favorite
+                    mFavoriteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_star_empty));
+                    isAddToFavorite = false;
+                }
+                mGame.setFavorite(isAddToFavorite);
+            }
+        });
+
+        //save game as favorite game for tracking
+        mShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, mGame.getName()+" - "+ mGame.getApiLink());
+                startActivity(intent);
             }
         });
 
@@ -169,17 +197,44 @@ public class GameDetailFragment extends Fragment
                     .override(mImageSize, mImageSize)
                     .into(mCoverImageView);
 
-            if (game.isFavorite()){
-                mTitle.setText(game.getName()+" +fav");
-            } else mTitle.setText(game.getName()+" +no fav");
-            //mTitle.setText(game.getName());
+            mTitle.setText(game.getName());
             mRelease.setText(game.getReleaseStr());
             mDescription.setText(Html.fromHtml(game.getDescription()));
             mGenre.setText(game.getGenresList());
             mDeveloper.setText(game.getDevelopersList());
             mPlatform.setText(game.getPlatformsList());
             mPublisher.setText(game.getPublishersList());
-            mWebsite.setText(game.getWebsite());
+
+            if (game.isFavorite()) {
+                mFavoriteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_star_filled));
+            }
+
+            mWebsite.setText(Html.fromHtml("<u>"+game.getWebsite()+"</u>"));
+            mWebsite.setTextColor(Color.BLUE);
+
+            mWebsite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = String.valueOf(mWebsite.getText());
+                    if (url.length()>0){
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        startActivity(intent);
+                    }
+                }
+            });
+
+            mDisclaimer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String url = mGame.getApiLink();
+                    if (url.length()>0){
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        startActivity(intent);
+                    }
+                }
+            });
         }
 
     }

@@ -1,7 +1,5 @@
 package art.manguste.android.gamesearch.core;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
@@ -11,9 +9,11 @@ import java.util.Locale;
 public class Game {
 
     private static final String DELIMITER = ", ";
+    private static final String DATE_PATTERN = "dd-MM-yyyy";
+    private static final String API_SITE = "https://rawg.io/games/";
 
     private Integer id;
-    private String siteName;
+    private String alias;
     private String name;
     private String description;
     private Date releaseDate;
@@ -28,9 +28,10 @@ public class Game {
     private String jsonString;
     private Boolean isFavorite = false;
 
+
     /**
      * Constructor for short game info
-     * @param siteName - site code name - used to find game via https request
+     * @param alias - site code name - used to find game via https request
      * @param name - name of the game
      * @param releaseDate - when game will or was released
      * @param imgHttp - games cover image
@@ -39,9 +40,9 @@ public class Game {
      * @param genresList - list of genres
      * @param platformsList  - which platforms can launch
      */
-    public Game(String siteName, String name, Date releaseDate, String imgHttp, String rating, String metacritic,
+    public Game(String alias, String name, Date releaseDate, String imgHttp, String rating, String metacritic,
                 String[] genresList, String[] platformsList, Boolean isFavorite) {
-        this.siteName = siteName;
+        this.alias = alias;
         this.name = name;
         this.releaseDate = releaseDate;
         this.imgHttp = imgHttp;
@@ -56,7 +57,7 @@ public class Game {
     /**
      * Constructor for full game info (+ id, website)
      * @param id - game id
-     * @param siteName - site code name - used to find game via https request
+     * @param alias - site code name - used to find game via https request
      * @param name - name of the game
      * @param description - description with html tags
      * @param releaseDate - when game will or was released
@@ -69,12 +70,12 @@ public class Game {
      * @param developersList - who developed
      * @param publishersList - who published
      */
-    public Game(Integer id, String siteName, String name, String description, Date releaseDate,
+    public Game(Integer id, String alias, String name, String description, Date releaseDate,
                 String imgHttp, String rating, String metacritic, String website,
                 String[] genresList, String[] platformsList, String[] developersList, String[] publishersList,
                 String jsonString, Boolean isFavorite) {
         this.id = id;
-        this.siteName = siteName;
+        this.alias = alias;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
@@ -97,7 +98,7 @@ public class Game {
     }
 
     public String getGameAlias() {
-        return siteName;
+        return alias;
     }
 
     public String getName() {
@@ -115,7 +116,7 @@ public class Game {
     public String getReleaseStr() {
         String dateStr = "";
         if (releaseDate != null){
-            dateStr = (new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())).format(releaseDate);
+            dateStr = (new SimpleDateFormat(DATE_PATTERN, Locale.getDefault())).format(releaseDate);
         }
         return dateStr;
     }
@@ -169,7 +170,7 @@ public class Game {
     @Override
     public String toString() {
         String info =
-                "siteName="+siteName+"\n"+
+                "siteName="+ alias +"\n"+
                 "name="+name+"\n"+
                 "description"+description+"\n"+
                 "released="+getReleaseStr()+"\n"+
@@ -202,5 +203,9 @@ public class Game {
 
     public void setFavorite(Boolean isFavorite) {
         this.isFavorite = isFavorite;
+    }
+
+    public String getApiLink() {
+        return API_SITE + alias;
     }
 }

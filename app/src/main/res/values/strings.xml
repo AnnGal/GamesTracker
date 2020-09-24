@@ -108,4 +108,8 @@
     <string name="label_developer">Developer</string>
     <string name="label_genre">Genre</string>
     <string name="label_platform">Platform</string>
+    <string name="release">Release:</string>
+    <string name="rating">Rating:</string>
+    <string name="disclaimer">All data provided by RAWG. Move to the game page on rawg.io \u21F0</string>
+    <string name="website">Website:</string>
 </resources>
