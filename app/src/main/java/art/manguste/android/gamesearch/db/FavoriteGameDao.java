@@ -1,6 +1,7 @@
 package art.manguste.android.gamesearch.db;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -29,6 +30,9 @@ public interface FavoriteGameDao {
 
     @Query("DELETE FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_API_ID + " = :id")
     int deleteById(long id);
+
+    @Query("DELETE FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_API_ALIAS + " = :alias")
+    int deleteByAlias(String alias);
 
     @Query("DELETE FROM " + FavoriteGame.TABLE_NAME )
     void deleteAll();

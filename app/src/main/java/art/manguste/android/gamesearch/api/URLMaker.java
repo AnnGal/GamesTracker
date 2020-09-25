@@ -72,7 +72,7 @@ public class URLMaker {
     private static URL createSearchHotGamesUrl() {
         // example: https://api.rawg.io/api/games?dates=2020-06-01,2020-09-15&ordering=-added
 
-        // set last 3 month
+        // set last N month
         String dates = getDatesRange(MONTH_GAP);
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
@@ -93,7 +93,8 @@ public class URLMaker {
     private static String getDatesRange(int diff) {
         Date dateNow = new Date();
         Date dateFrom = addMonth(dateNow, diff);
-        return formatDate(dateFrom)+","+formatDate(dateNow);
+        Date datefuture  = addMonth(dateNow, 3);
+        return formatDate(dateFrom)+","+formatDate(datefuture);
     }
 
     private static String formatDate(Date dateObject) {

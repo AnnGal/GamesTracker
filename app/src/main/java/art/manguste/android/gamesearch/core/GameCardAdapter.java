@@ -2,6 +2,7 @@ package art.manguste.android.gamesearch.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,24 +16,32 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.GameDetailActivity;
 import art.manguste.android.gamesearch.R;
+import art.manguste.android.gamesearch.api.GamesApiLoader;
 import art.manguste.android.gamesearch.db.GameDBHelper;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
         implements ListItemClickListener {
 
+    private static final String TAG = GameCardAdapter.class.getSimpleName();
+
     private ArrayList<Game> games = new ArrayList<>();
     private Context mContext;
     private int mImageSize;
+    private ViewGroup mViewGroup;
+    private SearchType mSearchType;
 
-    public GameCardAdapter(Context context, int imageSize) {
+    public GameCardAdapter(Context context, int imageSize, ViewGroup container, SearchType searchType) {
         super();
         mContext = context;
         mImageSize = imageSize;
+        mViewGroup = container;
+        mSearchType = searchType;
     }
 
     @NonNull
@@ -66,11 +75,38 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
     }
 
     @Override
-    public void onFavoriteBtnClick(Game game) {
-        // TODO check if not favorite game
-        // add to DB asynch
-        GameDBHelper.saveGameAsFavorite(mContext, game);
-        //Toast.makeText(mContext, "add to favorite", Toast.LENGTH_SHORT).show();
+    public void onFavoriteBtnClick(Game game, ImageButton mFavoriteImageButton, int position) {
+        // add or remove from DB async
+        boolean isAddToFavorite = true;
+        if (!game.isFavorite()){
+            // add to Favorite
+            mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_filled));
+        } else {
+            // remove from Favorite
+            mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_empty));
+            isAddToFavorite = false;
+        }
+
+        game.setFavorite(isAddToFavorite);
+        showSnackbar(game.getName(), isAddToFavorite);
+
+        GameDBHelper.changeFavoriteStatus(mContext, game);
+
+        // if it favorite list - then remove game from the list
+        if (!isAddToFavorite && SearchType.FAVORITE.equals(mSearchType)){
+            games.remove(position);
+            this.notifyItemRemoved(position);
+        }
+    }
+
+    private void showSnackbar(String name, boolean added){
+        // Snackbar interaction
+        String snackMessage = "\"" + name + "\" ";
+        snackMessage += added ? "added to favourites" : "removed from favourites";
+
+        Snackbar snackbar = Snackbar
+                .make(mViewGroup, snackMessage, Snackbar.LENGTH_LONG);
+        snackbar.show();
     }
 
     class GameViewHolder extends RecyclerView.ViewHolder{
@@ -99,7 +135,7 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
                 @Override
                 public void onClick(View v) {
                     if (mListItemClickListener != null)
-                        mListItemClickListener.onFavoriteBtnClick(game);
+                        mListItemClickListener.onFavoriteBtnClick(game, mFavoriteImageButton, getAdapterPosition());
                 }
             });
 
@@ -121,9 +157,10 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
                 mReleaseTextView.setText(game.getReleaseStr());
                 mRateTextView.setText(game.getRating());
 
-                if (game.getFavorite()) {
+                if (game.isFavorite()) {
+                    Log.d(TAG, "Favorite: " + game.getGameAlias());
                     mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_filled));
-                }
+                } else mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_empty));
 
                 Glide.with(mContext)
                         .load(game.getImgHttp())
