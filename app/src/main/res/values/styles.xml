@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -24,7 +24,6 @@
 
     <style name="AppTextTitle" parent="AppText">
         <item name="fontFamily">@font/roboto_black</item>
-
     </style>
 
     <style name="AppTextSubTitle" parent="AppText">
@@ -36,6 +35,43 @@
         <item name="colorControlNormal">@color/colorTab</item>
     </style>
 
+    <style name="GameDetailStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:textColor">@color/primary_text</item>
+    </style>
 
+    <style name="GameDetailTextStyle" parent="GameDetailStyle">
+        <item name="android:paddingLeft">@dimen/activity_horizontal_gap</item>
+        <item name="android:elegantTextHeight" tools:targetApi="lollipop">true</item>
+    </style>
+
+    <style name="GameDetailTitleStyle" parent="GameDetailStyle">
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_gap</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="GameDetailSubTitleStyle" parent="GameDetailTitleStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    android:textColor="@color/primary_text"
+
+
+    <!--<TextView
+        android:id="@+id/tv_label_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/activity_horizontal_gap"
+        android:layout_marginTop="24dp"
+        android:text="@string/label_about"
+        style="?android:textAppearanceSmallInverse"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_label_release" />-->
 
 </resources>

@@ -9,7 +9,7 @@ import java.util.Locale;
 public class Game {
 
     private static final String DELIMITER = ", ";
-    private static final String DATE_PATTERN = "dd-MM-yyyy";
+    private static final String DATE_PATTERN = "dd.MM.yyyy";
     private static final String API_SITE = "https://rawg.io/games/";
 
     private Integer id;
