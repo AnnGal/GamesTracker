@@ -19,7 +19,6 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
 
     private String mUrl;
     private SearchType mSearchType;
-    private Boolean alreadyAsked = false;
 
     public GamesApiLoader(Context context, String url, SearchType searchType) {
         super(context);
@@ -30,7 +29,6 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
     @Override
     protected void onStartLoading() {
         Log.d(TAG, "onStartLoading: " + mSearchType.toString());
-
         forceLoad();
     }
 
@@ -47,7 +45,8 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
         // parse response
         ArrayList<Game> games = JsonParser.extractData(jsonStr, mSearchType);
 
-        if (games != null && games.size() > 0){
+        if (games.size() > 0){
+            // get all games in DB and compare by api alias
             ArrayList<FavoriteGame> favGames = (ArrayList<FavoriteGame>) GameDatabase.getInstance(getContext()).favoriteGameDao().selectAll();
             for (Game game : games) {
                 for (FavoriteGame gameFavorite : favGames) {
@@ -60,7 +59,7 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
             }
         }
 
-/*        for (Game game : games) {
+        /*for (Game game : games) {
             if (isGameInFavorite(game.getGameAlias())){
                 game.setFavorite(true);
             }
@@ -69,13 +68,13 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
         return games;
     }
 
-    private boolean isGameInFavorite(String gameAlias){
+/*    private boolean isGameInFavorite(String gameAlias){
         boolean gameInDB = false;
         int count = GameDatabase.getInstance(getContext()).favoriteGameDao().IsGameInFavorite(gameAlias);
         if (count > 0){
             gameInDB = true;
         }
         return gameInDB;
-    }
+    }*/
 
 }

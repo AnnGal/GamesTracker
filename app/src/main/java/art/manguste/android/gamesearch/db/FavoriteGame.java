@@ -3,18 +3,11 @@ package art.manguste.android.gamesearch.db;
 import android.content.ContentValues;
 import android.provider.BaseColumns;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
-import androidx.room.TypeConverters;
-
-import java.util.Date;
-
-import art.manguste.android.gamesearch.core.Game;
 
 @Entity(tableName = FavoriteGame.TABLE_NAME)
 public class FavoriteGame {
@@ -60,20 +53,6 @@ public class FavoriteGame {
         this.json = json;
     }
 
-    public static FavoriteGame formFavoriteGame(@Nullable ContentValues value) {
-        //ask https
-        final FavoriteGame favoriteGame = new FavoriteGame(
-                /*game.getApiId()*/
-                0,
-                "test",
-                "test",
-                1l,
-                2l,
-                1.0d,
-                "testJson");
-        return  favoriteGame;
-    }
-
     public long getId() {
         return id;
     }
@@ -105,17 +84,5 @@ public class FavoriteGame {
     public String getJson() {
         return json;
     }
-
-/*
-    @TypeConverter
-    public Long dateToTimestamp(Date date) {
-        if (date == null) {
-            return null;
-        } else {
-            return date.getTime();
-        }
-    }
-*/
-
-
+    
 }

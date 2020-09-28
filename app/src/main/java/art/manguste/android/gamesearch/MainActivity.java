@@ -1,15 +1,10 @@
 package art.manguste.android.gamesearch;
 
 import android.os.Bundle;
-
 import com.google.android.material.tabs.TabLayout;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
-
 import art.manguste.android.gamesearch.core.MainTabsAdapter;
-import art.manguste.android.gamesearch.db.GameDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //make an adapter
+        // make an adapter
         MainTabsAdapter mainTabsAdapter = new MainTabsAdapter(this, getSupportFragmentManager());
         // add the adapter to ViewPager
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -35,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
         // TODO check connection
 
-        //pin tab icons
+        // pin tab icons
         for (int i = 0; i < tabs.getTabCount(); i++) {
             tabs.getTabAt(i).setIcon(icons[i]);
         }

@@ -18,6 +18,10 @@ public class HttpHandler {
     public HttpHandler() {
     }
 
+    /**
+     * @param reqUrl - url for request
+     * @return - json string with response
+     */
     public String makeServiceCall(String reqUrl) {
         String response = null;
 
@@ -48,6 +52,12 @@ public class HttpHandler {
         return response;
     }
 
+
+    /**
+     * Make a string from stream
+     * @param is - response as stream from API
+     * @return - response in string format
+     */
     private String convertStreamToString(InputStream is) {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();

@@ -12,7 +12,6 @@ import java.util.Locale;
 import art.manguste.android.gamesearch.core.SearchType;
 
 public class URLMaker {
-    //TODO (1) API request should have a User-Agent header with your app name
 
     private final static String BASE_URL ="https://api.rawg.io/api/games";
     private final static String PARAM_QUERY = "search";
@@ -21,9 +20,16 @@ public class URLMaker {
     private final static String PARAM_DATE_RANGE = "dates";
     private final static String rowNum = "10";  // how many rows in query
     private final static String orderBy = "-added";  // sort query by
-    private static final int MONTH_GAP = -6;
+    private static final int MONTH_GAP_BACK = -3;
+    private static final int MONTH_GAP_FORWARD = 3;
 
 
+    /**
+     * Make a URL for future request
+     * @param search - enum variable. Shows what kind of url should be built
+     * @param searchText - if url should contain any search word or phrase
+     * @return - prepared url
+     */
     public static String formURL(SearchType search, String searchText){
         URL url = null;
 
@@ -32,27 +38,40 @@ public class URLMaker {
         } else if (SearchType.HOT.equals(search)){
             url = createSearchHotGamesUrl();
         } else if (SearchType.GAME.equals(search)){
-            url = createSearchСoncreteGameUrl(searchText);
+            url = createSearchForParticularGameUrl(searchText);
         }
 
-        return url.toString();
+        return url != null ? url.toString() : null;
     }
 
-    private static URL createSearchСoncreteGameUrl(String searchText) {
+    /**
+     * form url for particular game - used when we need detail information about game
+     * @param gameAlias - alias for game, which was getting from previous massive request
+     * @return - url for particular game
+     */
+    private static URL createSearchForParticularGameUrl(String gameAlias) {
         //https://api.rawg.io/api/games/cyberpunk-2077
-        Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(searchText)
-                .build();
-
         URL url = null;
-        try {
-            url = new URL(builtUri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if (gameAlias != null) {
+            Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                    .appendPath(gameAlias)
+                    .build();
+
+            try {
+                url = new URL(builtUri.toString());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
+
         return url;
     }
 
+    /**
+     * form url for massive search game by name
+     * @param searchText - name of the game we looking for
+     * @return - url for massive request by name
+     */
     private static URL createSearchByNameUrl(String searchText) {
         // example https://api.rawg.io/api/games?page_size=5&search=dishonored
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
@@ -69,11 +88,15 @@ public class URLMaker {
         return url;
     }
 
+    /**
+     * form url for top hot games for the period
+     * @return url for hot games
+     */
     private static URL createSearchHotGamesUrl() {
         // example: https://api.rawg.io/api/games?dates=2020-06-01,2020-09-15&ordering=-added
 
         // set last N month
-        String dates = getDatesRange(MONTH_GAP);
+        String dates = getDatesRange(MONTH_GAP_BACK, MONTH_GAP_FORWARD);
 
         Uri builtUri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(PARAM_DATE_RANGE, dates)
@@ -90,11 +113,17 @@ public class URLMaker {
         return url;
     }
 
-    private static String getDatesRange(int diff) {
+    /**
+     * Make a date range for request
+     * @param stepBack - how many months before current date
+     * @param stepForward - how many months after current date
+     * @return - string with dates range
+     */
+    private static String getDatesRange(int stepBack, int stepForward) {
         Date dateNow = new Date();
-        Date dateFrom = addMonth(dateNow, diff);
-        Date datefuture  = addMonth(dateNow, 3);
-        return formatDate(dateFrom)+","+formatDate(datefuture);
+        Date dateFrom = addMonth(dateNow, stepBack);
+        Date dateFuture  = addMonth(dateNow, stepForward);
+        return formatDate(dateFrom)+","+formatDate(dateFuture);
     }
 
     private static String formatDate(Date dateObject) {

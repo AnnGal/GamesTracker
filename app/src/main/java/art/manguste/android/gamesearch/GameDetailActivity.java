@@ -5,11 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 //import android.util.Log;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class GameDetailActivity extends AppCompatActivity {
 
-    //private static final String TAG = GameDetailActivity.class.getSimpleName();
+    private static final String TAG = GameDetailActivity.class.getSimpleName();
     public static final String EXTRA_GAME_CODE = "game_site_code";
     public static final String EXTRA_GAME_NAME = "game_name";
 
@@ -34,7 +35,7 @@ public class GameDetailActivity extends AppCompatActivity {
                         .add(R.id.container, GameDetailFragment.createInstance(gameCode, gameName))
                         .commit();
             }
-        } // TODO else write about mistake
+        } else Log.d(TAG, "onCreate: gameCode == null");
     }
 
     @Override

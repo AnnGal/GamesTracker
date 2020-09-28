@@ -23,6 +23,7 @@
             android:layout_weight="1"
             android:ems="10"
             android:hint="@string/hint_write_game"
+            android:text="rimworld"
             android:inputType="textPersonName" />
 
         <ImageButton

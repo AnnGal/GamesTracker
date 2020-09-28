@@ -1,13 +1,9 @@
 package art.manguste.android.gamesearch.db;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import java.lang.ref.WeakReference;
 import java.util.Date;
-
 import art.manguste.android.gamesearch.api.HttpHandler;
 import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.core.JsonParser;
@@ -15,28 +11,32 @@ import art.manguste.android.gamesearch.core.SearchType;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
-
 // I really should use Rx or kotlin coroutines next time
 public class GameDBHelper {
 
     private static final String TAG = GameDBHelper.class.getSimpleName();
 
+
+    /**
+     * Check and change game status. If game was in favorite list - then remove it. And opposite.
+     */
     public static void changeFavoriteStatus(Context context, Game game) {
         Log.d(TAG, "DB: saveGameAsFavorite ");
         (new SaveAsyncTask(context, game)).execute();
     }
 
+    /**
+     * Convert Game into FavoriteGame class for future saving into DB
+     */
     public static FavoriteGame makeFavoriteGame(Game game){
-        FavoriteGame dbGame = new FavoriteGame(
+        return new FavoriteGame(
                 game.getId(),
                 game.getName(),
                 game.getGameAlias(),
                 dateToTimestamp(new Date()),
-                dateToTimestamp(game.getReleaseDate()),
+                dateToTimestamp(game.getReleaseDateDef(Game.NULL_DATE)),
                 Double.valueOf(game.getRating()),
                 game.getJsonString());
-
-        return dbGame;
     }
 
     public static Long dateToTimestamp(Date date) {
@@ -52,8 +52,6 @@ public class GameDBHelper {
         private final Game game;
         private final Context context;
 
-        private WeakReference<Activity> weakActivity;
-
         public SaveAsyncTask(Context context, Game game) {
             this.game = game;
             this.context = context;
@@ -67,7 +65,7 @@ public class GameDBHelper {
                 GameDatabase.getInstance(context).favoriteGameDao().deleteByAlias(game.getGameAlias());
                 Log.d(TAG, "DB: removed "+game.getGameAlias()+" successfully! ");
             } else {
-                Game fullGameData = null;
+                Game fullGameData;
 
                 if (game.getJsonString() == null) {
                     // load full data
@@ -80,6 +78,7 @@ public class GameDBHelper {
 
                 Log.d(TAG, "DB: try to save game "+fullGameData.getGameAlias());
                 FavoriteGame favGame = makeFavoriteGame(fullGameData);
+                //Log.d(TAG, "DB: transform to favorite finished "+fullGameData.getGameAlias());
                 GameDatabase.getInstance(context).favoriteGameDao().insert(favGame);
                 Log.d(TAG, "DB: "+fullGameData.getGameAlias()+" successfully added! ");
             }

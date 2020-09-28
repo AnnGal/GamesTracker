@@ -1,5 +1,6 @@
 package art.manguste.android.gamesearch;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.widget.TextView;
 import art.manguste.android.gamesearch.core.SearchType;
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
+/**
+ * Activity for debug only
+ */
 public class TestURLActivity extends AppCompatActivity {
 
     EditText mGameForSearchEditText;

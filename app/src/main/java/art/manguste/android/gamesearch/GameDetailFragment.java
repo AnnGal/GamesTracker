@@ -38,25 +38,29 @@ import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 public class GameDetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<ArrayList<Game>>{
 
-
-
     private static final String EXTRA_GAME_CODE = "game_site_code";
     private static final String EXTRA_GAME_NAME = "game_name";
-    private String gameCode = null;
-    private String gameName = null;
     private static final int LOADER_GAME_ID = 3;
-    private int mImageSize = 0;
 
-    //UI
+    private String gameCode = null; // alias - needed for create an url
+    private String gameName = null; // shows as page title
+    private int mImageSize = 0; // for uploading image via Glide
+
+    // UI
     ProgressBar mProgressBar;
     ImageView mCoverImageView;
     TextView mTitle;
     TextView mRelease;
     TextView mDescription;
+    TextView mLabelGenre;
     TextView mGenre;
+    TextView mLabelDeveloper;
     TextView mDeveloper;
+    TextView mLabelPlatform;
     TextView mPlatform;
+    TextView mLabelPublisher;
     TextView mPublisher;
+    TextView mLabelWebsite;
     TextView mWebsite;
     ImageButton mFavoriteButton;
     ImageButton mShareButton;
@@ -71,6 +75,7 @@ public class GameDetailFragment extends Fragment
 
     public static GameDetailFragment createInstance(String gameCode, String gameName) {
         GameDetailFragment fragment = new GameDetailFragment();
+        // pack params
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_GAME_CODE, gameCode);
         bundle.putString(EXTRA_GAME_NAME, gameName);
@@ -81,7 +86,7 @@ public class GameDetailFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // unpack params
         if (getArguments() != null) {
             gameCode = getArguments().getString(EXTRA_GAME_CODE);
             gameName = getArguments().getString(EXTRA_GAME_NAME);
@@ -101,16 +106,21 @@ public class GameDetailFragment extends Fragment
         mTitle = view.findViewById(R.id.tv_title);
         mRelease = view.findViewById(R.id.tv_release);
         mDescription = view.findViewById(R.id.tv_description);
+        mLabelGenre = view.findViewById(R.id.tv_label_genre);
         mGenre = view.findViewById(R.id.tv_genre);
+        mLabelDeveloper = view.findViewById(R.id.tv_label_developer);
         mDeveloper = view.findViewById(R.id.tv_developer);
+        mLabelPlatform = view.findViewById(R.id.tv_label_platform);
         mPlatform = view.findViewById(R.id.tv_platform);
+        mLabelPublisher = view.findViewById(R.id.tv_label_publisher);
         mPublisher = view.findViewById(R.id.tv_publisher);
+        mLabelWebsite = view.findViewById(R.id.tv_label_game_website);
         mWebsite = view.findViewById(R.id.tv_game_website);
         mFavoriteButton = view.findViewById(R.id.ib_favorite);
         mShareButton = view.findViewById(R.id.ib_share);
         mDisclaimer = view.findViewById(R.id.tv_disclaimer);
 
-        //save game as favorite game for tracking
+        // save game as favorite game for tracking
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +138,7 @@ public class GameDetailFragment extends Fragment
             }
         });
 
-        //save game as favorite game for tracking
+        // share game link
         mShareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,8 +179,6 @@ public class GameDetailFragment extends Fragment
     public void onLoadFinished(@NonNull Loader<ArrayList<Game>> loader, ArrayList<Game> data) {
         mProgressBar.setVisibility(View.GONE);
 
-        //TODO if none games found - set text about it
-
         // change data in view
         if (data != null && !data.isEmpty()) {
             setGameInfo(data);
@@ -183,47 +191,91 @@ public class GameDetailFragment extends Fragment
     }
     // Loader end
 
-
+    /**
+     * set game detailed info on a fragment
+     * @param data - ArrayList with only one Game
+     */
     private void setGameInfo(ArrayList<Game> data) {
         Game game = data.get(0);
 
         if (game != null){
             mGame = game;
-
+            // grab image from web
             Glide.with(getContext())
                     .load(game.getImgHttp())
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .placeholder(R.drawable.empty_photo)
                     .override(mImageSize, mImageSize)
                     .into(mCoverImageView);
-
+            // text info
             mTitle.setText(game.getName());
-            mRelease.setText(game.getReleaseStr());
+            mRelease.setText(game.getNotNullReleaseStr());
             mDescription.setText(Html.fromHtml(game.getDescription()));
-            mGenre.setText(game.getGenresList());
-            mDeveloper.setText(game.getDevelopersList());
-            mPlatform.setText(game.getPlatformsList());
-            mPublisher.setText(game.getPublishersList());
 
+            // genres
+            String genres = game.getGenresList();
+            if (genres != null && genres.length()>0){
+                mGenre.setText(genres);
+            } else {
+                mGenre.setVisibility(View.GONE);
+                mLabelGenre.setVisibility(View.GONE);
+            }
+
+            // developers
+            String dev = game.getDevelopersList();
+            if (dev != null && dev.length()>0){
+                mDeveloper.setText(dev);
+            } else {
+                mDeveloper.setVisibility(View.GONE);
+                mLabelDeveloper.setVisibility(View.GONE);
+            }
+
+            // platform
+            String platform = game.getPlatformsList();
+            if (platform != null && platform.length()>0){
+                mPlatform.setText(platform);
+            } else {
+                mPlatform.setVisibility(View.GONE);
+                mLabelPlatform.setVisibility(View.GONE);
+            }
+
+            // publisher
+            String publisher = game.getPublishersList();
+            if (publisher != null && publisher.length()>0){
+                mPublisher.setText(publisher);
+            } else {
+                mPublisher.setVisibility(View.GONE);
+                mLabelPublisher.setVisibility(View.GONE);
+            }
+
+            // if it a favorite game - fire up a star
             if (game.isFavorite()) {
                 mFavoriteButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_star_filled));
             }
 
-            mWebsite.setText(Html.fromHtml("<u>"+game.getWebsite()+"</u>"));
-            mWebsite.setTextColor(Color.BLUE);
+            // link to game website (if game have any)
+            String website = mGame.getWebsite();
+            if (website != null && website.length() > 0){
+                mWebsite.setText(Html.fromHtml("<u>"+website+"</u>"));
+                mWebsite.setTextColor(Color.BLUE);
 
-            mWebsite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String url = String.valueOf(mWebsite.getText());
-                    if (url.length()>0){
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(url));
-                        startActivity(intent);
+                mWebsite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String url = String.valueOf(mWebsite.getText());
+                        if (url.length()>0){
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(url));
+                            startActivity(intent);
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                mWebsite.setVisibility(View.GONE);
+                mLabelWebsite.setVisibility(View.GONE);
+            }
 
+            // link to the API website
             mDisclaimer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

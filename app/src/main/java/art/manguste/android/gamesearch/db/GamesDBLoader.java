@@ -9,13 +9,12 @@ import androidx.loader.content.AsyncTaskLoader;
 import java.util.ArrayList;
 
 
+/**
+ * For async access to DB
+ */
 public class GamesDBLoader extends AsyncTaskLoader<ArrayList<FavoriteGame>> {
 
     private static final String TAG = GamesDBLoader.class.getSimpleName()+"CheckLoader";
-
-    private String mUrl;
-    private Boolean alreadyAsked = false;
-    private GameDatabase mGameDB;
 
     public GamesDBLoader(Context context) {
         super(context);
