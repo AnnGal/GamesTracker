@@ -156,10 +156,10 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
                 // description
                 String genres = game.getGenresList();
                 if (genres != null && genres.length()>0){
-                    mDescriptionTextView.setText(mContext.getResources().getText(R.string.label_genres)+game.getGenresList());
+                    mDescriptionTextView.setText(mContext.getResources().getText(R.string.label_genres)+" "+game.getGenresList());
                 }
 
-                // Raring
+                // raring
                 float rating = Float.parseFloat(game.getRating());
                 if (Float.compare(rating, 0f) == 0){
                     mRateTextView.setVisibility(View.GONE);
