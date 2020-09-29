@@ -46,7 +46,7 @@
                 android:layout_marginTop="16dp"
                 android:paddingVertical="@dimen/activity_vertical_gap"
                 android:paddingHorizontal="@dimen/activity_horizontal_gap"
-                android:background="@color/text_background"
+                android:background="@color/colorTextBackground"
                 app:layout_collapseMode="parallax"
                 tools:text="RimWorld"/>
 
@@ -72,47 +72,35 @@
 
             <TextView
                 android:id="@+id/tv_label_release"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/text_top_gap"
-                android:paddingLeft="@dimen/activity_horizontal_gap"
-                android:text="Release date: "
-                android:textColor="@color/secondary_text"
+                style="@style/GameDetailSubTitleStyle"
+                android:layout_marginTop="8dp"
+                android:text="@string/release_date"
+                android:textStyle="normal"
+                android:textColor="@color/colorPrimaryText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_release"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/GameDetailStyle"
                 android:layout_marginLeft="4dp"
-                android:textColor="@color/secondary_text"
+                android:layout_marginStart="4dp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_release"
                 app:layout_constraintStart_toEndOf="@+id/tv_label_release"
-                tools:text="19 november 2020"
-                />
-
+                tools:text="19.11.2020"
+                 />
 
             <TextView
                 android:id="@+id/tv_label_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/activity_horizontal_gap"
-                android:layout_marginTop="24dp"
+                style="@style/GameDetailTitleStyle"
+                android:layout_marginTop="@dimen/text_top_gap"
                 android:text="@string/label_about"
-                style="?android:textAppearanceSmallInverse"
-                android:textColor="@color/secondary_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_label_release" />
 
             <TextView
                 android:id="@+id/tv_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:paddingHorizontal="@dimen/activity_horizontal_gap"
-                android:elegantTextHeight="true"
-                android:textColor="@color/primary_text"
+                style="@style/GameDetailTextStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_label_description"
@@ -122,23 +110,21 @@
                 android:id="@+id/ll_genres"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginTop="@dimen/text_top_gap"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_description">
                 <TextView
+                    android:id="@+id/tv_label_genre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/activity_horizontal_gap"
+                    style="@style/GameDetailSubTitleStyle"
                     android:text="@string/label_genre"/>
                 <TextView
                     android:id="@+id/tv_genre"
+                    style="@style/GameDetailTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary_text"
-                    android:paddingHorizontal="@dimen/activity_horizontal_gap"
                     tools:text="Info"/>
             </LinearLayout>
 
@@ -146,23 +132,21 @@
                 android:id="@+id/ll_developers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginTop="@dimen/text_top_gap"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_genres">
                 <TextView
+                    android:id="@+id/tv_label_developer"
+                    style="@style/GameDetailSubTitleStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/activity_horizontal_gap"
                     android:text="@string/label_developer"/>
                 <TextView
                     android:id="@+id/tv_developer"
+                    style="@style/GameDetailTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary_text"
-                    android:paddingHorizontal="@dimen/activity_horizontal_gap"
                     tools:text="Info"/>
             </LinearLayout>
 
@@ -170,23 +154,21 @@
                 android:id="@+id/ll_platforms"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginTop="@dimen/text_top_gap"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_developers">
                 <TextView
+                    android:id="@+id/tv_label_platform"
+                    style="@style/GameDetailSubTitleStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/activity_horizontal_gap"
                     android:text="@string/label_platform"/>
                 <TextView
                     android:id="@+id/tv_platform"
+                    style="@style/GameDetailTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary_text"
-                    android:paddingHorizontal="@dimen/activity_horizontal_gap"
                     tools:text="Info"/>
             </LinearLayout>
 
@@ -194,43 +176,38 @@
                 android:id="@+id/ll_publisher"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginTop="@dimen/text_top_gap"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_platforms">
                 <TextView
+                    android:id="@+id/tv_label_publisher"
+                    style="@style/GameDetailSubTitleStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/activity_horizontal_gap"
-                    android:text="@string/label_platform"/>
+                    android:text="@string/label_publisher"/>
                 <TextView
                     android:id="@+id/tv_publisher"
+                    style="@style/GameDetailTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primary_text"
-                    android:paddingHorizontal="@dimen/activity_horizontal_gap"
                     tools:text="Info"/>
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_label_game_website"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/GameDetailSubTitleStyle"
                 android:layout_marginTop="@dimen/text_top_gap"
-                android:paddingLeft="@dimen/activity_horizontal_gap"
                 android:text="@string/website"
-                android:textColor="@color/secondary_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_publisher" />
 
             <TextView
                 android:id="@+id/tv_game_website"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/GameDetailStyle"
                 android:layout_marginLeft="4dp"
-                android:textColor="@color/secondary_text"
+                android:layout_marginStart="4dp"
+                android:textColor="@color/colorSecondaryText"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_game_website"
                 app:layout_constraintStart_toEndOf="@+id/tv_label_game_website"
                 tools:text="https://ludeon.com"/>
@@ -248,13 +225,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_main"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.03" />
-
             <ImageButton
                 android:id="@+id/ib_favorite"
                 android:layout_width="38dp"
@@ -264,6 +234,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:background="@color/colorSlight"
+                android:contentDescription="@string/action_make_favorite"
                 android:paddingHorizontal="@dimen/card_view_horizontal_padding"
                 android:src="@drawable/ic_action_star_empty"/>
 
@@ -277,6 +248,7 @@
                 android:background="@color/colorSlight"
                 android:paddingHorizontal="@dimen/card_view_horizontal_padding"
                 android:paddingVertical="@dimen/card_view_vertical_padding"
+                android:contentDescription="@string/action_share"
                 android:src="@drawable/ic_action_share"/>
 
 
@@ -285,14 +257,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/disclaimer"
-                android:textColor="@color/white"
+                android:textColor="@color/colorWhite"
                 android:layout_marginTop="16dp"
                 android:paddingVertical="@dimen/activity_vertical_gap"
                 android:paddingHorizontal="@dimen/activity_horizontal_gap"
-                android:background="@color/text_background"
+                android:background="@color/colorTextBackground"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_game_website"
-                android:paddingLeft="@dimen/activity_horizontal_gap"/>
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_game_website"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

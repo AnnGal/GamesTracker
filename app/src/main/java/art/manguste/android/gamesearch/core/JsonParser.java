@@ -16,6 +16,12 @@ public class JsonParser {
 
     private static final String TAG = JsonParser.class.getSimpleName();
 
+    /**
+     * Parse data from API
+     * @param jsonStr - json string, ready for parsing
+     * @param searchType - shows what kind of parsing needed
+     * @return list of games
+     */
     public static ArrayList<Game> extractData(String jsonStr, SearchType searchType) {
         ArrayList<Game> game = new ArrayList<>();
 
@@ -23,14 +29,18 @@ public class JsonParser {
             if (SearchType.GAME.equals(searchType)) {
                 game.add(parseGameData(jsonStr, false));
             } else  {
-                parseDateFromMassiveRequest(jsonStr, game);
+                game = parseDateFromMassiveRequest(jsonStr);
             }
         }
 
-        //parseDateFromMassiveRequest(jsonStr, game);
         return game;
     }
 
+    /**
+     * Parse json with detail info about the game
+     * @param jsonStr - json string, ready for parsing
+     * @param thisIsFavorite - mark games as favorite by default (for example, for json from Favorite)
+     */
     public static Game parseGameData(String jsonStr, boolean thisIsFavorite) {
         Game game = null;
 
@@ -58,7 +68,9 @@ public class JsonParser {
             }
 
             // platforms
+            Log.d(TAG, "Game: before platform");
             JSONArray platformsArray = gameJson.getJSONArray("platforms");
+            Log.d(TAG, "Game: before platform");
             String[] platforms = new String[platformsArray.length()];
             for (int j = 0; j < platformsArray.length(); j++){
                 JSONObject tmpJson = platformsArray.getJSONObject(j);
@@ -92,7 +104,13 @@ public class JsonParser {
         return game;
     }
 
-    public static void parseDateFromMassiveRequest(String jsonStr, ArrayList<Game> game) {
+    /**
+     * Parse json which contains list of games
+     * @param jsonStr - json string, ready for parsing
+     * @return ArrayList with games from json
+     */
+    public static ArrayList<Game> parseDateFromMassiveRequest(String jsonStr/*, ArrayList<Game> game*/) {
+        ArrayList<Game> list = new ArrayList<Game>();
         try {
             JSONObject jsonObj = new JSONObject(jsonStr);
             // getting json array node
@@ -126,12 +144,13 @@ public class JsonParser {
                     platforms[j] = platformJson.getString("name");
                 }
 
-                game.add(new Game(slug, name, released, imgHttp, rating, metacritic, genres, platforms, false));
-                //Log.d(TAG, "Game: \n"+((Game) game.get(game.size()-1)).toString());
+                list.add(new Game(slug, name, released, imgHttp, rating, metacritic, genres, platforms, false));
+                //Log.d(TAG, "Game: \n"+((Game) list.get(list.size()-1)).toString());
             }
         } catch (final JSONException e) {
             Log.e(TAG, "Json parsing error: " + e.getMessage());
         }
+        return list;
     }
 
 

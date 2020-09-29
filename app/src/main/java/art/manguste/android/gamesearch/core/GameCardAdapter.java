@@ -1,5 +1,6 @@
 package art.manguste.android.gamesearch.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -9,20 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
-
 import art.manguste.android.gamesearch.GameDetailActivity;
 import art.manguste.android.gamesearch.R;
-import art.manguste.android.gamesearch.api.GamesApiLoader;
 import art.manguste.android.gamesearch.db.GameDBHelper;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
@@ -100,7 +96,7 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
     }
 
     private void showSnackbar(String name, boolean added){
-        // Snackbar interaction
+        // Snack-bar interaction
         String snackMessage = "\"" + name + "\" ";
         snackMessage += added ? "added to favourites" : "removed from favourites";
 
@@ -115,6 +111,7 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
         private TextView mTitleTextView;
         private TextView mDescriptionTextView;
         private TextView mReleaseTextView;
+        private TextView mLabelRateTextView;
         private TextView mRateTextView;
         private ImageButton mFavoriteImageButton;
         private ImageView mGameIconImageView;
@@ -127,6 +124,7 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
             mTitleTextView = itemView.findViewById(R.id.title);
             mDescriptionTextView = itemView.findViewById(R.id.description);
             mReleaseTextView = itemView.findViewById(R.id.release_date);
+            mLabelRateTextView = itemView.findViewById(R.id.rate_label);
             mRateTextView = itemView.findViewById(R.id.rate);
             mFavoriteImageButton = itemView.findViewById(R.id.favorite);
             mGameIconImageView = itemView.findViewById(R.id.game_icon);
@@ -148,20 +146,37 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
             });
         }
 
+        @SuppressLint("SetTextI18n")
         void bind(Game game) {
             this.game = game;
             if (game != null) {
                 mTitleTextView.setText(this.game.getName());
-                mDescriptionTextView.setText("Genres: "+game.getGenresList()/*+"\n"
-                        +"Platforms: "+game.getPlatformsList()*/);
-                mReleaseTextView.setText(game.getReleaseStr());
-                mRateTextView.setText(game.getRating());
+                mReleaseTextView.setText(game.getNotNullReleaseStr());
 
+                // description
+                String genres = game.getGenresList();
+                if (genres != null && genres.length()>0){
+                    mDescriptionTextView.setText(mContext.getResources().getText(R.string.label_genres)+" "+game.getGenresList());
+                }
+
+                // raring
+                float rating = Float.parseFloat(game.getRating());
+                if (Float.compare(rating, 0f) == 0){
+                    mRateTextView.setVisibility(View.GONE);
+                    mLabelRateTextView.setVisibility(View.GONE);
+                } else {
+                    mRateTextView.setVisibility(View.VISIBLE);
+                    mLabelRateTextView.setVisibility(View.VISIBLE);
+                    mRateTextView.setText(game.getRating());
+                }
+
+                // if game in favorite list - fire up a star
                 if (game.isFavorite()) {
                     Log.d(TAG, "Favorite: " + game.getGameAlias());
                     mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_filled));
                 } else mFavoriteImageButton.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_star_empty));
 
+                // download image from web
                 Glide.with(mContext)
                         .load(game.getImgHttp())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)

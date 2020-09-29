@@ -28,6 +28,7 @@
             card_view:layout_constraintStart_toStartOf="parent"
             card_view:layout_constraintTop_toTopOf="parent"
             card_view:layout_constraintVertical_bias="0.0"
+            android:contentDescription="@string/game_cover"
             android:scaleType="centerCrop"
             android:src="@drawable/empty_photo" />
 
@@ -35,7 +36,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/colorPrimaryText"
             android:paddingHorizontal="@dimen/card_view_horizontal_padding"
             card_view:layout_constraintBottom_toTopOf="@+id/guideline_main"
             card_view:layout_constraintLeft_toRightOf="@+id/game_icon"
@@ -46,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingHorizontal="@dimen/card_view_horizontal_padding"
-            android:textColor="@color/secondary_text"
+            android:textColor="@color/colorSecondaryText"
             card_view:layout_constraintBottom_toTopOf="@+id/release_date"
             card_view:layout_constraintEnd_toStartOf="@+id/favorite"
             card_view:layout_constraintStart_toEndOf="@+id/game_icon"
@@ -57,10 +58,12 @@
             android:id="@+id/favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingHorizontal="@dimen/card_view_horizontal_padding"
+            android:background="@color/colorWhite"
+            android:paddingHorizontal="@dimen/card_view_image_padding"
+            android:paddingVertical="@dimen/card_view_image_padding"
             android:src="@drawable/ic_action_star_empty"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/colorPrimaryText"
+            android:contentDescription="@string/action_make_favorite"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintTop_toTopOf="parent" />
 
@@ -77,15 +80,16 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/card_view_horizontal_padding"
             android:text="@string/release"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/colorPrimaryText"
             card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
-            card_view:layout_constraintStart_toEndOf="@+id/game_icon" />
+            card_view:layout_constraintStart_toEndOf="@+id/game_icon"
+             />
 
         <TextView
             android:id="@+id/release_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/colorPrimaryText"
             android:paddingLeft="4dp"
             card_view:layout_constraintStart_toEndOf="@+id/release_label"
             card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
@@ -95,8 +99,8 @@
             android:id="@+id/rate_label"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:gravity="right"
-            android:textColor="@color/primary_text"
+            android:gravity="end"
+            android:textColor="@color/colorPrimaryText"
             android:text="@string/rating"
             card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
             card_view:layout_constraintEnd_toStartOf="@+id/rate"
@@ -107,9 +111,9 @@
             android:id="@+id/rate"
             android:layout_height="0dp"
             android:layout_width="wrap_content"
-            android:gravity="right"
+            android:gravity="end"
             android:paddingLeft="4dp"
-            android:textColor="@color/primary_text"
+            android:textColor="@color/colorPrimaryText"
             card_view:layout_constraintBottom_toTopOf="@+id/guideline_bottom"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/rate_label"
@@ -124,33 +128,4 @@
             card_view:layout_constraintGuide_percent="1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_weight="10"
-
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="" />
-
-            <TextView
-                android:id="@+id/release_date"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="" />
-        </LinearLayout>-->
-
 </com.google.android.material.card.MaterialCardView>

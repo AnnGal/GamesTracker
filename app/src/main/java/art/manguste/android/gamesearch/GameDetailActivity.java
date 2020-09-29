@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+//import android.util.Log;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -34,7 +35,7 @@ public class GameDetailActivity extends AppCompatActivity {
                         .add(R.id.container, GameDetailFragment.createInstance(gameCode, gameName))
                         .commit();
             }
-        } // TODO else write about mistake
+        } else Log.d(TAG, "onCreate: gameCode == null");
     }
 
     @Override
