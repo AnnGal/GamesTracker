@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.room.TypeConverter;
+
 import java.lang.ref.WeakReference;
 import java.util.Date;
 
@@ -17,36 +19,29 @@ import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
 
 // I really should use Rx or kotlin coroutines next time
-public class GameDBHelper {
+public class DBUtils {
 
-    private static final String TAG = GameDBHelper.class.getSimpleName();
+    private static final String TAG = DBUtils.class.getSimpleName();
 
+    // Async save the game in db
     public static void changeFavoriteStatus(Context context, Game game) {
         Log.d(TAG, "DB: saveGameAsFavorite ");
         (new SaveAsyncTask(context, game)).execute();
     }
 
+    // Convert Game.class into FavoriteGame.class
     public static FavoriteGame makeFavoriteGame(Game game){
         FavoriteGame dbGame = new FavoriteGame(
                 game.getId(),
                 game.getName(),
                 game.getGameAlias(),
-                dateToTimestamp(new Date()),
-                dateToTimestamp(game.getReleaseDate()),
+                new Date(),
+                game.getReleaseDate(),
                 Double.valueOf(game.getRating()),
                 game.getJsonString());
 
         return dbGame;
     }
-
-    public static Long dateToTimestamp(Date date) {
-        if (date == null) {
-            return null;
-        } else {
-            return date.getTime();
-        }
-    }
-
 
     private static class SaveAsyncTask extends AsyncTask<Void, Void, Void> {
         private final Game game;
@@ -99,4 +94,6 @@ public class GameDBHelper {
         protected void onPostExecute(Void agentsCount) {
         }
     }
+
+
 }

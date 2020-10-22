@@ -22,8 +22,7 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.GameDetailActivity;
 import art.manguste.android.gamesearch.R;
-import art.manguste.android.gamesearch.api.GamesApiLoader;
-import art.manguste.android.gamesearch.db.GameDBHelper;
+import art.manguste.android.gamesearch.db.DBUtils;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
         implements ListItemClickListener {
@@ -90,7 +89,7 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameVi
         game.setFavorite(isAddToFavorite);
         showSnackbar(game.getName(), isAddToFavorite);
 
-        GameDBHelper.changeFavoriteStatus(mContext, game);
+        DBUtils.changeFavoriteStatus(mContext, game);
 
         // if it favorite list - then remove game from the list
         if (!isAddToFavorite && SearchType.FAVORITE.equals(mSearchType)){

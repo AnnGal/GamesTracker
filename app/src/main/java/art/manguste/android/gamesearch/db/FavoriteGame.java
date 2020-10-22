@@ -5,16 +5,14 @@ import android.provider.BaseColumns;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
-import androidx.room.TypeConverters;
 
 import java.util.Date;
 
-import art.manguste.android.gamesearch.core.Game;
 
 @Entity(tableName = FavoriteGame.TABLE_NAME)
 public class FavoriteGame {
@@ -39,10 +37,10 @@ public class FavoriteGame {
     public String apiAlias;
 
     @ColumnInfo(name = "last_update")
-    public long lastUpdate;
+    public Date lastUpdate;
 
     @ColumnInfo(name = "release")
-    public long release;
+    public Date release;
 
     @ColumnInfo(name = "rating")
     public double rating;
@@ -50,7 +48,7 @@ public class FavoriteGame {
     @ColumnInfo(name = "json")
     public String json;
 
-    public FavoriteGame(long apiId, String name, String apiAlias, long lastUpdate, long release, Double rating, String json) {
+    public FavoriteGame(long apiId, String name, String apiAlias, Date lastUpdate, Date release, Double rating, String json) {
         this.apiId = apiId;
         this.name = name;
         this.apiAlias = apiAlias;
@@ -60,6 +58,8 @@ public class FavoriteGame {
         this.json = json;
     }
 
+    @VisibleForTesting
+    @Ignore
     public static FavoriteGame formFavoriteGame(@Nullable ContentValues value) {
         //ask https
         final FavoriteGame favoriteGame = new FavoriteGame(
@@ -67,8 +67,8 @@ public class FavoriteGame {
                 0,
                 "test",
                 "test",
-                1l,
-                2l,
+                new Date(),
+                new Date(),
                 1.0d,
                 "testJson");
         return  favoriteGame;
@@ -90,11 +90,11 @@ public class FavoriteGame {
         return apiAlias;
     }
 
-    public long getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 
-    public long getRelease() {
+    public Date getRelease() {
         return release;
     }
 

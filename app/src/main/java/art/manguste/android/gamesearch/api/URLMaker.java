@@ -12,8 +12,6 @@ import java.util.Locale;
 import art.manguste.android.gamesearch.core.SearchType;
 
 public class URLMaker {
-    //TODO (1) API request should have a User-Agent header with your app name
-
     private final static String BASE_URL ="https://api.rawg.io/api/games";
     private final static String PARAM_QUERY = "search";
     private final static String PARAM_PAGE_SIZE = "page_size";

@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.api.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
-import art.manguste.android.gamesearch.db.GameDBHelper;
+import art.manguste.android.gamesearch.db.DBUtils;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
@@ -114,7 +114,7 @@ public class GameDetailFragment extends Fragment
         mFavoriteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GameDBHelper.changeFavoriteStatus(getContext(), mGame);
+                DBUtils.changeFavoriteStatus(getContext(), mGame);
                 boolean isAddToFavorite = true;
                 if (!mGame.isFavorite()){
                     // add to Favorite
