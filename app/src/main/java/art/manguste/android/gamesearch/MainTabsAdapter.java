@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.core;
+package art.manguste.android.gamesearch;
 
 import android.content.Context;
 
@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import art.manguste.android.gamesearch.GamesListFragment;
 import art.manguste.android.gamesearch.R;
+import art.manguste.android.gamesearch.core.SearchType;
 
 
 /**

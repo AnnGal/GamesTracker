@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.core.ListItemClickListener;
 import art.manguste.android.gamesearch.core.SearchType;
-import art.manguste.android.gamesearch.db.DBUtils;
+import art.manguste.android.gamesearch.threads.DBUtils;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>
         implements ListItemClickListener {

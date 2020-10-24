@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.core;
+package art.manguste.android.gamesearch.api;
 
 import android.util.Log;
 
@@ -11,6 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import art.manguste.android.gamesearch.core.Game;
+import art.manguste.android.gamesearch.core.SearchType;
 
 public class JsonParser {
 

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,15 +20,16 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import art.manguste.android.gamesearch.core.Game;
+import art.manguste.android.gamesearch.db.GameDatabase;
 import art.manguste.android.gamesearch.threads.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
 import art.manguste.android.gamesearch.db.FavoriteGame;
-import art.manguste.android.gamesearch.threads.GamesDBLoader;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
-import static art.manguste.android.gamesearch.core.JsonParser.parseGameData;
+import static art.manguste.android.gamesearch.api.JsonParser.parseGameData;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +43,6 @@ public class GamesListFragment extends Fragment {
     private static final String SEARCH_TYPE = "search_type";
     private static final int LOADER_BY_NAME_ID = 1;
     private static final int LOADER_HOT_ID = 2;
-    private static final int LOADER_FAVORITE_ID = 3;
 
     private ProgressBar mProgressBar;
     private EditText mSearchByNameTextView;
@@ -48,6 +50,7 @@ public class GamesListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private SearchType searchType;
     LoaderManager mLoaderManager;
+    private GameDatabase gameDatabase;
 
     public GamesListFragment() {
         // Required empty public constructor
@@ -110,7 +113,7 @@ public class GamesListFragment extends Fragment {
         Log.d(TAG, "onCreateView " + searchType.toString());
 
         //mLoaderManager.initLoader(LOADER_HOT_ID, null, this);
-
+        gameDatabase = GameDatabase.getInstance(getContext());
         return view;
     }
 
@@ -118,10 +121,12 @@ public class GamesListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d(TAG, "onViewCreated " + searchType.toString());
+        // TODO try to change on ViewModel
         if (!SearchType.SEARCH.equals(searchType)){
             startGameSearch(false);
         }
     }
+
 
     /**
      * Go to API and grab data
@@ -138,9 +143,7 @@ public class GamesListFragment extends Fragment {
                 mLoaderManager.restartLoader(LOADER_BY_NAME_ID, null, mAPILoaderCallbacks);
             }
         } else if (SearchType.FAVORITE.equals(searchType)){
-            if (mLoaderManager.getLoader(LOADER_FAVORITE_ID) == null){
-                mLoaderManager.initLoader(LOADER_FAVORITE_ID, null, mDBLoaderCallbacks);
-            }
+            getFavoriteGames();
         }
     }
 
@@ -178,44 +181,29 @@ public class GamesListFragment extends Fragment {
                 }
             };
 
-    private final LoaderManager.LoaderCallbacks<ArrayList<FavoriteGame>> mDBLoaderCallbacks =
-            new LoaderManager.LoaderCallbacks<ArrayList<FavoriteGame>>() {
+    // for Favorite Games Fragment
+    // LiveData + observe
+    private void getFavoriteGames() {
+        LiveData<List<FavoriteGame>> favGames
+                = (LiveData<List<FavoriteGame>>) gameDatabase.favoriteGameDao().selectAll();
 
-                @Override
-                @NonNull
-                public Loader<ArrayList<FavoriteGame>> onCreateLoader(int id, @Nullable Bundle args) {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    return new GamesDBLoader(getContext());
-                }
-
-
-                @Override
-                public void onLoadFinished(@NonNull Loader<ArrayList<FavoriteGame>> loader, ArrayList<FavoriteGame> data) {
-                    mProgressBar.setVisibility(View.GONE);
-
-                    //TODO if none games found - set text about it
-
-                    //FavoriteGame to Game
-                    ArrayList<Game> games = new ArrayList();
-                    for (FavoriteGame favGame : data) {
-                        if (favGame.getJson() != null){
-                            games.add(parseGameData(favGame.getJson(), true));
-                        }
+        favGames.observe(getActivity(), new Observer<List<FavoriteGame>>() {
+            @Override
+            public void onChanged(List<FavoriteGame> favoriteGames) {
+                ArrayList<Game> games = new ArrayList();
+                for (FavoriteGame favGame : favoriteGames) {
+                    if (favGame.getJson() != null){
+                        games.add(parseGameData(favGame.getJson(), true));
                     }
-
-                    // change data in view
-                    if (games != null && !games.isEmpty()) {
-                        mAdapter.setGames(games);
-                    }
-                    Log.d(TAG, "onLoadFinished ");
                 }
 
-                @Override
-                public void onLoaderReset(@NonNull Loader<ArrayList<FavoriteGame>> loader) {
-                    Log.d(TAG, "onLoaderReset ");
-                    mAdapter.setGames(null);
+                // change data in view
+                if (games != null && !games.isEmpty()) {
+                    mAdapter.setGames(games);
                 }
-            };
 
+            }
 
+        });
+    }
 }

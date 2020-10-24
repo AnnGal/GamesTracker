@@ -1,5 +1,6 @@
 package art.manguste.android.gamesearch.db;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -26,7 +27,10 @@ public interface FavoriteGameDao {
     int update(FavoriteGame favoriteGame);
 
     @Query("SELECT * FROM " + FavoriteGame.TABLE_NAME)
-    List<FavoriteGame> selectAll();
+    LiveData<List<FavoriteGame>> selectAll();
+
+    @Query("SELECT * FROM " + FavoriteGame.TABLE_NAME)
+    List<FavoriteGame> selectAllNoLiveData();
 
     @Query("SELECT * FROM " + FavoriteGame.TABLE_NAME + " WHERE " + FavoriteGame.COLUMN_API_ID + " = :id")
     FavoriteGame selectById(long id);

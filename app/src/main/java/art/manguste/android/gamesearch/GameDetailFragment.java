@@ -31,14 +31,12 @@ import java.util.ArrayList;
 import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.threads.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
-import art.manguste.android.gamesearch.db.DBUtils;
+import art.manguste.android.gamesearch.threads.DBUtils;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
 public class GameDetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<ArrayList<Game>>{
-
-
 
     private static final String EXTRA_GAME_CODE = "game_site_code";
     private static final String EXTRA_GAME_NAME = "game_name";

@@ -1,20 +1,19 @@
-package art.manguste.android.gamesearch.db;
+package art.manguste.android.gamesearch.threads;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import androidx.room.TypeConverter;
-
 import java.lang.ref.WeakReference;
 import java.util.Date;
 
 import art.manguste.android.gamesearch.api.HttpHandler;
 import art.manguste.android.gamesearch.core.Game;
-import art.manguste.android.gamesearch.core.JsonParser;
+import art.manguste.android.gamesearch.api.JsonParser;
 import art.manguste.android.gamesearch.core.SearchType;
-
+import art.manguste.android.gamesearch.db.FavoriteGame;
+import art.manguste.android.gamesearch.db.GameDatabase;
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 
 
@@ -26,29 +25,9 @@ public class DBUtils {
 
 
     // Async save the game in db
-    /*public static void changeFavoriteStatus(Context context, Game game) {
-        Log.d(TAG, "DB: saveGameAsFavorite ");
-        (new SaveAsyncTask(context, game)).execute();
-    }*/
-
-    // Async save the game in db
     public static void changeFavoriteStatus(Context context, Game game) {
         Log.d(TAG, "DB: saveGameAsFavorite ");
         (new SaveAsyncTask(context, game)).execute();
-    }
-
-    // Convert Game.class into FavoriteGame.class
-    public static FavoriteGame makeFavoriteGame(Game game){
-        FavoriteGame dbGame = new FavoriteGame(
-                game.getId(),
-                game.getName(),
-                game.getGameAlias(),
-                new Date(),
-                game.getReleaseDate(),
-                Double.valueOf(game.getRating()),
-                game.getJsonString());
-
-        return dbGame;
     }
 
     private static class SaveAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -60,6 +39,19 @@ public class DBUtils {
         public SaveAsyncTask(Context context, Game game) {
             this.game = game;
             this.context = context;
+        }
+
+        public static FavoriteGame makeFavoriteGame(Game game){
+            FavoriteGame dbGame = new FavoriteGame(
+                    game.getId(),
+                    game.getName(),
+                    game.getGameAlias(),
+                    new Date(),
+                    game.getReleaseDate(),
+                    Double.valueOf(game.getRating()),
+                    game.getJsonString());
+
+            return dbGame;
         }
 
         @Override
@@ -102,6 +94,5 @@ public class DBUtils {
         protected void onPostExecute(Void agentsCount) {
         }
     }
-
 
 }

@@ -5,11 +5,7 @@ import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
-
-import art.manguste.android.gamesearch.core.MainTabsAdapter;
-import art.manguste.android.gamesearch.db.GameDatabase;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.api.HttpHandler;
 import art.manguste.android.gamesearch.core.Game;
-import art.manguste.android.gamesearch.core.JsonParser;
+import art.manguste.android.gamesearch.api.JsonParser;
 import art.manguste.android.gamesearch.core.SearchType;
 import art.manguste.android.gamesearch.db.FavoriteGame;
 import art.manguste.android.gamesearch.db.GameDatabase;
@@ -50,7 +50,7 @@ public class GamesApiLoader extends AsyncTaskLoader<ArrayList<Game>> {
         ArrayList<Game> games = JsonParser.extractData(jsonStr, mSearchType);
 
         if (games != null && games.size() > 0){
-            ArrayList<FavoriteGame> favGames = (ArrayList<FavoriteGame>) GameDatabase.getInstance(getContext()).favoriteGameDao().selectAll();
+            ArrayList<FavoriteGame> favGames = (ArrayList<FavoriteGame>) GameDatabase.getInstance(getContext()).favoriteGameDao().selectAllNoLiveData();
             for (Game game : games) {
                 for (FavoriteGame gameFavorite : favGames) {
                     if (game.getGameAlias().equals(gameFavorite.getApiAlias())){
