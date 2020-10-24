@@ -22,6 +22,14 @@ import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 public class DBUtils {
 
     private static final String TAG = DBUtils.class.getSimpleName();
+    private GameDatabase gameDatabase;
+
+
+    // Async save the game in db
+    /*public static void changeFavoriteStatus(Context context, Game game) {
+        Log.d(TAG, "DB: saveGameAsFavorite ");
+        (new SaveAsyncTask(context, game)).execute();
+    }*/
 
     // Async save the game in db
     public static void changeFavoriteStatus(Context context, Game game) {

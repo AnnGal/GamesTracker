@@ -20,11 +20,10 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.core.Game;
-import art.manguste.android.gamesearch.core.GameCardAdapter;
-import art.manguste.android.gamesearch.api.GamesApiLoader;
+import art.manguste.android.gamesearch.threads.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
 import art.manguste.android.gamesearch.db.FavoriteGame;
-import art.manguste.android.gamesearch.db.GamesDBLoader;
+import art.manguste.android.gamesearch.threads.GamesDBLoader;
 
 import static art.manguste.android.gamesearch.api.URLMaker.formURL;
 import static art.manguste.android.gamesearch.core.JsonParser.parseGameData;

@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.core;
+package art.manguste.android.gamesearch;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +20,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-import art.manguste.android.gamesearch.GameDetailActivity;
-import art.manguste.android.gamesearch.R;
+import art.manguste.android.gamesearch.core.Game;
+import art.manguste.android.gamesearch.core.ListItemClickListener;
+import art.manguste.android.gamesearch.core.SearchType;
 import art.manguste.android.gamesearch.db.DBUtils;
 
 public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.GameViewHolder>

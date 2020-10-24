@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.api;
+package art.manguste.android.gamesearch.threads;
 
 import android.content.Context;
 import android.util.Log;
@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
+
+import art.manguste.android.gamesearch.api.HttpHandler;
 import art.manguste.android.gamesearch.core.Game;
 import art.manguste.android.gamesearch.core.JsonParser;
 import art.manguste.android.gamesearch.core.SearchType;

@@ -29,7 +29,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import java.util.ArrayList;
 
 import art.manguste.android.gamesearch.core.Game;
-import art.manguste.android.gamesearch.api.GamesApiLoader;
+import art.manguste.android.gamesearch.threads.GamesApiLoader;
 import art.manguste.android.gamesearch.core.SearchType;
 import art.manguste.android.gamesearch.db.DBUtils;
 

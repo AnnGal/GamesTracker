@@ -10,7 +10,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import art.manguste.android.gamesearch.GamesListFragment;
 import art.manguste.android.gamesearch.R;
-import art.manguste.android.gamesearch.ui.main.PlaceholderFragment;
 
 
 /**
