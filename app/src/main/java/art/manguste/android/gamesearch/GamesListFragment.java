@@ -117,6 +117,10 @@ public class GamesListFragment extends Fragment {
 
         //mLoaderManager.initLoader(LOADER_HOT_ID, null, this);
         gameDatabase = GameDatabase.getInstance(getContext());
+
+        if (SearchType.FAVORITE.equals(searchType)){
+            getFavoriteGames();
+        }
         return view;
     }
 
@@ -145,9 +149,9 @@ public class GamesListFragment extends Fragment {
             } else if (forceNewRequest){
                 mLoaderManager.restartLoader(LOADER_BY_NAME_ID, null, mAPILoaderCallbacks);
             }
-        } else if (SearchType.FAVORITE.equals(searchType)){
+        } /*else if (SearchType.FAVORITE.equals(searchType)){
             getFavoriteGames();
-        }
+        }*/
     }
 
     private final LoaderManager.LoaderCallbacks<ArrayList<Game>> mAPILoaderCallbacks =
@@ -191,11 +195,11 @@ public class GamesListFragment extends Fragment {
         LiveData<List<FavoriteGame>> favGames
                 = (LiveData<List<FavoriteGame>>) gameDatabase.favoriteGameDao().selectAll();
 
-        favGames.observe(getActivity(), new Observer<List<FavoriteGame>>() {
+        favGames.observe(getViewLifecycleOwner(), new Observer<List<FavoriteGame>>() {
 
         //View Modesl
         //AppViewModel viewModel = ViewModelProviders.of(this).get(AppViewModel.class);
-        //((MainActivity) getActivity()).viewModel.getGamesFavorite().observe(getActivity(), new Observer<List<FavoriteGame>>() {
+        //((MainActivity) getActivity()).viewModel.getGamesFavorite().observe(getViewLifecycleOwner(), new Observer<List<FavoriteGame>>() {
             @Override
             public void onChanged(List<FavoriteGame> favoriteGames) {
                 Log.d(TAG, "Load favorite games because of ViewModel and LiveData");

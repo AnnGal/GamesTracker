@@ -10,11 +10,11 @@ import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
 
-    //AppViewModel viewModel;
+    AppViewModel viewModel;
 
     private int[] icons = {
-            R.drawable.ic_action_search,
             R.drawable.ic_action_fire,
+            R.drawable.ic_action_search,
             R.drawable.ic_action_star
     };
 
@@ -39,6 +39,6 @@ public class MainActivity extends AppCompatActivity {
             tabs.getTabAt(i).setIcon(icons[i]);
         }
 
-        //viewModel = ViewModelProviders.of(this).get(AppViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(AppViewModel.class);
     }
 }
