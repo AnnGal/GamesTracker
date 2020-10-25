@@ -7,6 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -184,12 +187,18 @@ public class GamesListFragment extends Fragment {
     // for Favorite Games Fragment
     // LiveData + observe
     private void getFavoriteGames() {
+        // LiveData
         LiveData<List<FavoriteGame>> favGames
                 = (LiveData<List<FavoriteGame>>) gameDatabase.favoriteGameDao().selectAll();
 
         favGames.observe(getActivity(), new Observer<List<FavoriteGame>>() {
+
+        //View Modesl
+        //AppViewModel viewModel = ViewModelProviders.of(this).get(AppViewModel.class);
+        //((MainActivity) getActivity()).viewModel.getGamesFavorite().observe(getActivity(), new Observer<List<FavoriteGame>>() {
             @Override
             public void onChanged(List<FavoriteGame> favoriteGames) {
+                Log.d(TAG, "Load favorite games because of ViewModel and LiveData");
                 ArrayList<Game> games = new ArrayList();
                 for (FavoriteGame favGame : favoriteGames) {
                     if (favGame.getJson() != null){
@@ -203,7 +212,6 @@ public class GamesListFragment extends Fragment {
                 }
 
             }
-
         });
     }
 }

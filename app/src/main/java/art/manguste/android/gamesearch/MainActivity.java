@@ -5,9 +5,12 @@ import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 public class MainActivity extends AppCompatActivity {
+
+    //AppViewModel viewModel;
 
     private int[] icons = {
             R.drawable.ic_action_search,
@@ -36,6 +39,6 @@ public class MainActivity extends AppCompatActivity {
             tabs.getTabAt(i).setIcon(icons[i]);
         }
 
-
+        //viewModel = ViewModelProviders.of(this).get(AppViewModel.class);
     }
 }
