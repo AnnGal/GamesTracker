@@ -8,17 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
+import art.manguste.android.gamesearch.MainActivity.Companion.icons
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.gamesList.GamesListFragment
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
-
-    private val icons = intArrayOf(
-            R.drawable.ic_action_fire,
-            R.drawable.ic_action_search,
-            R.drawable.ic_action_star
-    )
 
     // TODO Retrofit
 
@@ -41,7 +36,14 @@ class MainActivity : AppCompatActivity() {
         for (i in 0 until tabs.tabCount) {
             tabs.getTabAt(i)!!.setIcon(icons[i])
         }
+    }
 
+    companion object {
+        val icons = intArrayOf(
+                R.drawable.ic_action_fire,
+                R.drawable.ic_action_search,
+                R.drawable.ic_action_star
+        )
     }
 }
 
@@ -55,19 +57,20 @@ private class MainTabsAdapter(private val mContext: Context, fm: FragmentManager
         }
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return mContext.resources.getString(TAB_TITLES[position])
+    override fun getPageTitle(position: Int): CharSequence {
+        //return mContext.resources.getString(TAB_TITLES[position])
+        return ""
     }
 
     override fun getCount(): Int {
-        return TAB_TITLES.size
+        return icons.size
     }
 
-    companion object {
+/*    companion object {
         @StringRes
         private val TAB_TITLES = intArrayOf(
                 R.string.category_hot,
                 R.string.category_search,
                 R.string.category_favorite)
-    }
+    }*/
 }

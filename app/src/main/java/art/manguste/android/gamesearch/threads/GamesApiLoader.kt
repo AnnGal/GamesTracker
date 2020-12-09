@@ -16,7 +16,6 @@ class GamesApiLoader(context: Context?, private val mUrl: String?, private val m
     override fun onStartLoading() {
         Log.d(TAG, "onStartLoading: " + mSearchType.toString())
         forceLoad()
-
     }
 
     override fun loadInBackground(): ArrayList<Game?>? {
