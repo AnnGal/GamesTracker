@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.api
+package art.manguste.android.gamesearch.old_api
 
 import android.util.Log
 import java.io.*

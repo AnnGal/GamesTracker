@@ -20,4 +20,7 @@
     <string name="rating">Rating:</string>
     <string name="disclaimer">All data provided by RAWG. Move to the game page on rawg.io \u21F0</string>
     <string name="website">Website:</string>
+    <string name="title_activity_games23232">Games23232Activity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

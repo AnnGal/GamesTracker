@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch
+package art.manguste.android.gamesearch.gamesList
 
 import android.content.Context
 import android.content.Intent
@@ -9,7 +9,9 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import art.manguste.android.gamesearch.GameCardAdapter.GameViewHolder
+import art.manguste.android.gamesearch.GameDetailActivity
+import art.manguste.android.gamesearch.R
+import art.manguste.android.gamesearch.gamesList.GameCardAdapter.GameViewHolder
 import art.manguste.android.gamesearch.core.Game
 import art.manguste.android.gamesearch.core.ListItemClickListener
 import art.manguste.android.gamesearch.core.SearchType
@@ -42,8 +44,8 @@ class GameCardAdapter(private val mContext: Context?, private val mImageSize: In
 
     override fun onListItemClick(game: Game) {
         val intent = Intent(mContext, GameDetailActivity::class.java)
-        intent.putExtra(GameDetailActivity.Companion.EXTRA_GAME_CODE, game.alias)
-        intent.putExtra(GameDetailActivity.Companion.EXTRA_GAME_NAME, game.name)
+        intent.putExtra(GameDetailActivity.EXTRA_GAME_CODE, game.alias)
+        intent.putExtra(GameDetailActivity.EXTRA_GAME_NAME, game.name)
         mContext!!.startActivity(intent)
     }
 

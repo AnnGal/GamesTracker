@@ -4,16 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
-import art.manguste.android.gamesearch.api.HttpHandler
-import art.manguste.android.gamesearch.api.JsonParser.parseGameData
-import art.manguste.android.gamesearch.api.URLMaker.formURL
+import art.manguste.android.gamesearch.old_api.HttpHandler
+import art.manguste.android.gamesearch.old_api.JsonParser.parseGameData
+import art.manguste.android.gamesearch.old_api.URLMaker.formURL
 import art.manguste.android.gamesearch.core.Game
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.db.FavoriteGame
 import art.manguste.android.gamesearch.db.GameDatabase
-import java.lang.Double
 import java.lang.ref.WeakReference
-import java.util.*
 
 // I really should use Rx or kotlin coroutines next time
 class DBUtils {

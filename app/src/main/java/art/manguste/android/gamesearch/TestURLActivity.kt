@@ -2,10 +2,8 @@ package art.manguste.android.gamesearch
 
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import art.manguste.android.gamesearch.api.URLMaker.formURL
+import art.manguste.android.gamesearch.old_api.URLMaker.formURL
 import art.manguste.android.gamesearch.core.SearchType
 import kotlinx.android.synthetic.main.activity_test_connection.*
 

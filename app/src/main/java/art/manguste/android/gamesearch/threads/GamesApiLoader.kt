@@ -3,13 +3,12 @@ package art.manguste.android.gamesearch.threads
 import android.content.Context
 import android.util.Log
 import androidx.loader.content.AsyncTaskLoader
-import art.manguste.android.gamesearch.api.HttpHandler
-import art.manguste.android.gamesearch.api.JsonParser.extractData
+import art.manguste.android.gamesearch.old_api.HttpHandler
+import art.manguste.android.gamesearch.old_api.JsonParser.extractData
 import art.manguste.android.gamesearch.core.Game
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.db.FavoriteGame
 import art.manguste.android.gamesearch.db.GameDatabase
-import java.lang.Exception
 import java.util.*
 
 class GamesApiLoader(context: Context?, private val mUrl: String?, private val mSearchType: SearchType?) : AsyncTaskLoader<ArrayList<Game?>?>(context!!) {

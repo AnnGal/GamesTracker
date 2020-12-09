@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.api
+package art.manguste.android.gamesearch.old_api
 
 import android.util.Log
 import art.manguste.android.gamesearch.core.Game
@@ -11,7 +11,7 @@ import java.util.*
 
 object JsonParser {
     private val TAG = JsonParser::class.java.simpleName
-    @JvmStatic
+
     fun extractData(jsonStr: String?, searchType: SearchType): ArrayList<Game?> {
         val game = ArrayList<Game?>()
         if (jsonStr != null) {
@@ -26,7 +26,6 @@ object JsonParser {
         return game
     }
 
-    @JvmStatic
     fun parseGameData(jsonStr: String?, thisIsFavorite: Boolean): Game? {
         var game: Game? = null
         try {

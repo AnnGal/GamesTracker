@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.api
+package art.manguste.android.gamesearch.old_api
 
 import android.net.Uri
 import art.manguste.android.gamesearch.core.SearchType
@@ -16,7 +16,7 @@ object URLMaker {
     private const val rowNum = "10" // how many rows in query
     private const val orderBy = "-added" // sort query by
     private const val MONTH_GAP = -6
-    @JvmStatic
+
     fun formURL(search: SearchType, searchText: String): String {
         var url: URL? = null
         if (SearchType.SEARCH == search) {
@@ -94,4 +94,6 @@ object URLMaker {
         cal.add(Calendar.MONTH, diff)
         return cal.time
     }
+
+
 }

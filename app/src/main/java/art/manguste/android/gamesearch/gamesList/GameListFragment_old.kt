@@ -1,28 +1,30 @@
-package art.manguste.android.gamesearch
+package art.manguste.android.gamesearch.gamesList
+/*
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.loader.app.LoaderManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import art.manguste.android.gamesearch.R
 import art.manguste.android.gamesearch.core.SearchType
-import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
 import art.manguste.android.gamesearch.db.GameDatabase
-
-/**
+import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
+*
  * A simple [Fragment] subclass.
  * Use the [GamesListFragment.newInstance] factory method to
  * create an instance of this fragment.
- */
-class GamesListFragment : Fragment() {
 
+
+class GamesListFragment1 : Fragment() {
+
+    private lateinit var viewModer: GamesViewModel
     private lateinit var binding: FragmentGameSearchBinding
 
 
@@ -46,35 +48,9 @@ class GamesListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        binding = DataBindingUtil.inflate<FragmentGameSearchBinding>(
-                              inflater, R.layout.fragment_game_search, container, false)
+        binding = FragmentGameSearchBinding.inflate(inflater, container, false)
 
-        // Inflate the layout for this fragment
 
-      /*  mProgressBar = view.findViewById(R.id.pb_loading)
-        mSearchByNameTextView = view.findViewById(R.id.et_search_by_name)
-
-        // Recycler view stuff
-        mRecyclerView = view.findViewById(R.id.rv_games_list)
-        val imageSize = resources.getDimensionPixelSize(R.dimen.icon_size) * 2
-        mAdapter = GameCardAdapter(context, imageSize, container, searchType)
-        mRecyclerView?.setAdapter(mAdapter)
-
-        // connect data and view
-        mRecyclerView?.setLayoutManager(GridLayoutManager(activity, 1))
-        if (SearchType.SEARCH != searchType) {
-            view.findViewById<View>(R.id.ll_search_by_name).visibility = View.GONE
-        }
-
-        // on a click "start search" button
-        view.findViewById<View>(R.id.btn_start_search).setOnClickListener {  }
-        Log.d(TAG, "onCreateView " + searchType.toString())
-
-        //mLoaderManager.initLoader(LOADER_HOT_ID, null, this);
-        gameDatabase = context?.let { GameDatabase.Companion.getInstance(it) }
-        if (SearchType.FAVORITE == searchType) {
-            //todo fix favoriteGames
-        }*/
         // set Recycler View
         val imageSize = resources.getDimensionPixelSize(R.dimen.icon_size) * 2
         binding.recyclerGames.adapter = GameCardAdapter(context, imageSize, container, searchType)
@@ -88,6 +64,9 @@ class GamesListFragment : Fragment() {
             }
         }
 
+        // hook up the view model
+        viewModer = ViewModelProvider(this).get(GamesViewModel::class.java)
+
         return binding.root
     }
 
@@ -98,55 +77,88 @@ class GamesListFragment : Fragment() {
         if (SearchType.SEARCH != searchType) {
             startGameSearch(false)
         }
+
     }
 
-    /**
+
+    // Inflate the layout for this fragment
+
+  mProgressBar = view.findViewById(R.id.pb_loading)
+      mSearchByNameTextView = view.findViewById(R.id.et_search_by_name)
+
+      // Recycler view stuff
+      mRecyclerView = view.findViewById(R.id.rv_games_list)
+      val imageSize = resources.getDimensionPixelSize(R.dimen.icon_size) * 2
+      mAdapter = GameCardAdapter(context, imageSize, container, searchType)
+      mRecyclerView?.setAdapter(mAdapter)
+
+      // connect data and view
+      mRecyclerView?.setLayoutManager(GridLayoutManager(activity, 1))
+      if (SearchType.SEARCH != searchType) {
+          view.findViewById<View>(R.id.ll_search_by_name).visibility = View.GONE
+      }
+
+      // on a click "start search" button
+      view.findViewById<View>(R.id.btn_start_search).setOnClickListener {  }
+      Log.d(TAG, "onCreateView " + searchType.toString())
+
+      //mLoaderManager.initLoader(LOADER_HOT_ID, null, this);
+      gameDatabase = context?.let { GameDatabase.Companion.getInstance(it) }
+      if (SearchType.FAVORITE == searchType) {
+          //todo fix favoriteGames
+      }
+
+
+*
      * Go to API and grab data
-     */
+
+
     private fun startGameSearch(forceNewRequest: Boolean) {
         //todo fix
-     /*   if (SearchType.HOT == searchType) {
-            if (mLoaderManager!!.getLoader<Any>(LOADER_HOT_ID) == null) {
-                mLoaderManager!!.initLoader(LOADER_HOT_ID, null, mAPILoaderCallbacks)
-            }
-        } else if (SearchType.SEARCH == searchType) {
-            if (mLoaderManager!!.getLoader<Any>(LOADER_BY_NAME_ID) == null) {
-                mLoaderManager!!.initLoader(LOADER_BY_NAME_ID, null, mAPILoaderCallbacks)
-            } else if (forceNewRequest) {
-                mLoaderManager!!.restartLoader(LOADER_BY_NAME_ID, null, mAPILoaderCallbacks)
-            }
-        } else if (SearchType.FAVORITE.equals(searchType)){
-            getFavoriteGames();
-        }*/
+   if (SearchType.HOT == searchType) {
+               if (mLoaderManager!!.getLoader<Any>(LOADER_HOT_ID) == null) {
+                   mLoaderManager!!.initLoader(LOADER_HOT_ID, null, mAPILoaderCallbacks)
+               }
+           } else if (SearchType.SEARCH == searchType) {
+               if (mLoaderManager!!.getLoader<Any>(LOADER_BY_NAME_ID) == null) {
+                   mLoaderManager!!.initLoader(LOADER_BY_NAME_ID, null, mAPILoaderCallbacks)
+               } else if (forceNewRequest) {
+                   mLoaderManager!!.restartLoader(LOADER_BY_NAME_ID, null, mAPILoaderCallbacks)
+               }
+           } else if (SearchType.FAVORITE.equals(searchType)){
+               getFavoriteGames();
+           }
+
     }
 
     //todo fix
-   /* private val mAPILoaderCallbacks: LoaderManager.LoaderCallbacks<ArrayList<Game>> = object : LoaderManager.LoaderCallbacks<ArrayList<Game?>?> {
-        override fun onCreateLoader(id: Int, args: Bundle?): Loader<ArrayList<Game?>?> {
-            mProgressBar!!.visibility = View.VISIBLE
-            Log.d(TAG, "onCreateLoader " + searchType.toString() + " with Context=" + context)
-            val searchTxt = mSearchByNameTextView!!.text.toString()
-            val urlString = formURL(searchType!!, searchTxt)
-            return GamesApiLoader(context, urlString, searchType)
-        }
+ private val mAPILoaderCallbacks: LoaderManager.LoaderCallbacks<ArrayList<Game>> = object : LoaderManager.LoaderCallbacks<ArrayList<Game?>?> {
+         override fun onCreateLoader(id: Int, args: Bundle?): Loader<ArrayList<Game?>?> {
+             mProgressBar!!.visibility = View.VISIBLE
+             Log.d(TAG, "onCreateLoader " + searchType.toString() + " with Context=" + context)
+             val searchTxt = mSearchByNameTextView!!.text.toString()
+             val urlString = formURL(searchType!!, searchTxt)
+             return GamesApiLoader(context, urlString, searchType)
+         }
 
-        override fun onLoadFinished(loader: Loader<ArrayList<Game?>?>, data: ArrayList<Game?>?) {
-            mProgressBar!!.visibility = View.GONE
+         override fun onLoadFinished(loader: Loader<ArrayList<Game?>?>, data: ArrayList<Game?>?) {
+             mProgressBar!!.visibility = View.GONE
 
-            //TODO if none games found - set text about it
+             //TODO if none games found - set text about it
 
-            // change data in view
-            if (data != null && !data.isEmpty()) {
-                mAdapter!!.setGames(data)
-            }
-            Log.d(TAG, "onLoadFinished " + searchType.toString())
-        }
+             // change data in view
+             if (data != null && !data.isEmpty()) {
+                 mAdapter!!.setGames(data)
+             }
+             Log.d(TAG, "onLoadFinished " + searchType.toString())
+         }
 
-        override fun onLoaderReset(loader: Loader<ArrayList<Game?>?>) {
-            //Log.d(TAG, "onLoaderReset " + searchType.toString());
-            //mAdapter.setGames(null);
-        }
-    }*/// change data in view//View Modesl
+         override fun onLoaderReset(loader: Loader<ArrayList<Game?>?>) {
+             //Log.d(TAG, "onLoaderReset " + searchType.toString());
+             //mAdapter.setGames(null);
+         }
+     }
+// change data in view//View Modesl
 
     //AppViewModel viewModel = ViewModelProviders.of(this).get(AppViewModel.class);
     //((MainActivity) getActivity()).viewModel.getGamesFavorite().observe(getViewLifecycleOwner(), new Observer<List<FavoriteGame>>() {
@@ -154,7 +166,6 @@ class GamesListFragment : Fragment() {
     // for Favorite Games Fragment
     // LiveData + observe
     //todo fix
-/*
     private val favoriteGames: Unit
         private get() {
             // LiveData
@@ -178,7 +189,8 @@ class GamesListFragment : Fragment() {
                 }
             })
         }
-*/
+
+
 
     companion object {
         private val TAG = GamesListFragment::class.java.simpleName + "CheckLoader"
@@ -186,13 +198,14 @@ class GamesListFragment : Fragment() {
         private const val LOADER_BY_NAME_ID = 1
         private const val LOADER_HOT_ID = 2
 
-        /**
+*
          * New instance via factory method
          * this fragment using the provided parameters.
          *
          * @param searchType - determines what kind of search and API request to use
          * @return new instance of fragment GamesListFragment.
-         */
+
+
         fun newInstance(searchType: SearchType): GamesListFragment {
             val fragment = GamesListFragment()
             val args = Bundle()
@@ -202,3 +215,4 @@ class GamesListFragment : Fragment() {
         }
     }
 }
+*/

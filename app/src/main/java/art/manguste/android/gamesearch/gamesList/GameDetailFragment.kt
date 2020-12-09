@@ -1,10 +1,7 @@
-package art.manguste.android.gamesearch
+package art.manguste.android.gamesearch.gamesList
 
 import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +14,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
-import art.manguste.android.gamesearch.api.URLMaker.formURL
+import art.manguste.android.gamesearch.R
+import art.manguste.android.gamesearch.old_api.URLMaker.formURL
 import art.manguste.android.gamesearch.core.Game
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.threads.DBUtils
-import art.manguste.android.gamesearch.threads.GamesApiLoader
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import kotlinx.android.synthetic.main.fragment_game_detail.*
 import java.util.*

@@ -19,7 +19,7 @@ class FavoriteGame(
         var lastUpdate: Date, @field:ColumnInfo(name = "release")
         var release: Date, @field:ColumnInfo(name = "rating")
         var rating: Double, @field:ColumnInfo(name = "json") var json: String) {
-    @JvmField
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = BaseColumns._ID)
     var id: Long = 0

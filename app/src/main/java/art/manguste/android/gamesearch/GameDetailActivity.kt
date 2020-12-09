@@ -3,6 +3,7 @@ package art.manguste.android.gamesearch
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import art.manguste.android.gamesearch.gamesList.GameDetailFragment
 
 class GameDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

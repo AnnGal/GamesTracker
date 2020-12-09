@@ -1,12 +1,9 @@
-package art.manguste.android.gamesearch
+package art.manguste.android.gamesearch.gamesList
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import art.manguste.android.gamesearch.db.FavoriteGame
-import art.manguste.android.gamesearch.db.GameDatabase
 
-class AppViewModel(application: Application) : AndroidViewModel(application) {
+class GamesViewModel(application: Application) : AndroidViewModel(application) {
 /*    public LiveData<ArrayList<Game>> getGamesHot() {
         return gamesHot;
     }
