@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
 
@@ -33,11 +35,34 @@ class GamesListFragment : Fragment() {
         // data binding will observe LiveData with the lifecycle of the fragment
         binding.lifecycleOwner = this
         // access to View Model from the layout
+
+
+
+        binding.recyclerGames.adapter = GameAdapter()
+        viewModel.gamesList.observe(viewLifecycleOwner, Observer { games ->
+            //Log.d("GamesList fragment", "games = ${games.size}")
+            (binding.recyclerGames.adapter as GameAdapter).apply {
+                reloadGames(games)
+            }
+        })
+
         binding.viewModel = viewModel
+
+
+  /*      viewModel.eventGameFinish.observe(viewLifecycleOwner, Observer { isFinished ->
+            if (isFinished) {
+                val currentScore = viewModel.score.value ?: 0
+                val action = GameFragmentDirections.actionGameToScore(currentScore)
+                findNavController(this).navigate(action)
+                viewModel.onGameFinishComplete()
+            }
+        })*/
 
         setHasOptionsMenu(true)
         return binding.root
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

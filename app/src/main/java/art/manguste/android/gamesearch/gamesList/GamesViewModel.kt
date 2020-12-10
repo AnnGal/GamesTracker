@@ -1,10 +1,12 @@
 package art.manguste.android.gamesearch.gamesList
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.network.GamesApi
 import kotlinx.coroutines.launch
 
@@ -13,32 +15,24 @@ class GamesViewModel(application: Application) : AndroidViewModel(application) {
     private val _response = MutableLiveData<String>()
     val response: LiveData<String> get() = _response
 
+    private var _gamesList = MutableLiveData<List<GameBriefly>>()
+    val gamesList: LiveData<List<GameBriefly>> get() = _gamesList
+
     // displays data on init
     init {
         getGamesHotListSearch()
     }
 
-
-/*    private fun getMarsRealEstateProperties() {
-        viewModelScope.launch {
-            try {
-                var listResult = MarsApi.retrofitService.getProperties()
-                _response.value = "Success: ${listResult.size} Mars properties retrieved"
-            } catch (e: Exception) {
-                _response.value = "Failure: ${e.message}"
-            }
-        }
-    }    */
-
     private fun getGamesHotListSearch() {
         viewModelScope.launch {
             try {
-                var resultRequest = GamesApi.retrofitService.getGamesList()
-                _response.value = "Got : ${resultRequest.next} and ${resultRequest.results.joinToString (", \n")  {it.name} } "//response.body()
+                val resultRequest = GamesApi.retrofitService.getGamesList()
+                _gamesList.value = resultRequest.results
+                //Log.d("GamesList fragment", "games = ${gamesList.value?.size}")
+                _response.value = "Got : ${resultRequest.next}  "//response.body()
             } catch (e: Exception) {
                 _response.value = "Not reachable : ${e.message}"
             }
-
         }
 
   /*      GamesApi.retrofitService.getGamesList().enqueue( object: Callback<ResultRequest> {

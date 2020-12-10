@@ -1,11 +1,10 @@
 package art.manguste.android.gamesearch.network
 
-import art.manguste.android.gamesearch.core.ResultRequest
+import art.manguste.android.gamesearch.core.ResponseJsonGamesList
 
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -30,7 +29,7 @@ private val retrofit = Retrofit.Builder()
 
 interface GamesApiService {
     @GET("games")
-    suspend fun getGamesList(): ResultRequest
+    suspend fun getGamesList(): ResponseJsonGamesList
 }
 
 object GamesApi {

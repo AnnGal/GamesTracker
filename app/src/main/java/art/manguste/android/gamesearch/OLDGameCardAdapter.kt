@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.gamesList
+package art.manguste.android.gamesearch
 
 import android.content.Context
 import android.content.Intent
@@ -9,9 +9,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import art.manguste.android.gamesearch.GameDetailActivity
-import art.manguste.android.gamesearch.R
-import art.manguste.android.gamesearch.gamesList.GameCardAdapter.GameViewHolder
+import art.manguste.android.gamesearch.OLDGameCardAdapter.OLDGameViewHolder
 import art.manguste.android.gamesearch.core.Game
 import art.manguste.android.gamesearch.core.ListItemClickListener
 import art.manguste.android.gamesearch.core.SearchType
@@ -22,15 +20,17 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
-class GameCardAdapter(private val mContext: Context?, private val mImageSize: Int, private val mViewGroup: ViewGroup?, private val mSearchType: SearchType?) : RecyclerView.Adapter<GameViewHolder>(), ListItemClickListener {
+class OLDGameCardAdapter(private val mContext: Context?, private val mImageSize: Int, private val mViewGroup: ViewGroup?, private val mSearchType: SearchType?) : RecyclerView.Adapter<OLDGameViewHolder>(), ListItemClickListener {
+    //private var games = ArrayList<Game>()
     private var games = ArrayList<Game>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OLDGameViewHolder {
         val cv = LayoutInflater.from(parent.context).inflate(R.layout.card_view_game, parent, false) as MaterialCardView
-        return GameViewHolder(cv, this)
+        return OLDGameViewHolder(cv, this)
     }
 
-    override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
-        holder.bind(games[position])
+    override fun onBindViewHolder(holderOLD: OLDGameViewHolder, position: Int) {
+        holderOLD.bind(games[position])
     }
 
     override fun getItemCount(): Int {
@@ -80,7 +80,7 @@ class GameCardAdapter(private val mContext: Context?, private val mImageSize: In
         snackbar.show()
     }
 
-    inner class GameViewHolder(itemView: MaterialCardView, private val mListItemClickListener: ListItemClickListener?) : RecyclerView.ViewHolder(itemView) {
+    inner class OLDGameViewHolder(itemView: MaterialCardView, private val mListItemClickListener: ListItemClickListener?) : RecyclerView.ViewHolder(itemView) {
         private lateinit var game: Game
         private val mTitleTextView: TextView
         private val mDescriptionTextView: TextView
@@ -122,6 +122,6 @@ class GameCardAdapter(private val mContext: Context?, private val mImageSize: In
     }
 
     companion object {
-        private val TAG = GameCardAdapter::class.java.simpleName
+        private val TAG = OLDGameCardAdapter::class.java.simpleName
     }
 }
