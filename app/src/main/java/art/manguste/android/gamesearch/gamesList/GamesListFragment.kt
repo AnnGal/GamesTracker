@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
 
@@ -18,16 +19,23 @@ import art.manguste.android.gamesearch.db.GameDatabase
  */
 class GamesListFragment : Fragment() {
 
-    private lateinit var viewModer: GamesViewModel
+    private val viewModel: GamesViewModel by lazy {
+        ViewModelProvider(this).get(GamesViewModel::class.java)
+    }
 
-    private var _binding: FragmentGameSearchBinding? = null
-    private val binding get() = _binding!!
     private var searchType: String? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        _binding = FragmentGameSearchBinding.inflate(inflater, container, false)
+        val binding = FragmentGameSearchBinding.inflate(inflater)
+
+        // data binding will observe LiveData with the lifecycle of the fragment
+        binding.lifecycleOwner = this
+        // access to View Model from the layout
+        binding.viewModel = viewModel
+
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -37,9 +45,6 @@ class GamesListFragment : Fragment() {
         searchType = requireArguments().getString(SEARCH_TYPE)
         Log.d(TAG, "SEARCH_TYPE = $searchType")
     }
-
-
-
 
     companion object {
         private val TAG = GamesListFragment::class.java.simpleName

@@ -2,15 +2,14 @@ package art.manguste.android.gamesearch
 
 import android.content.Context
 import android.os.Bundle
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import art.manguste.android.gamesearch.MainActivity.Companion.icons
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.gamesList.GamesListFragment
+import art.manguste.android.gamesearch.MainActivity.Companion.icons
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.old_activity_main)
 
         //make an adapter
         val mainTabsAdapter = MainTabsAdapter(this, supportFragmentManager)
