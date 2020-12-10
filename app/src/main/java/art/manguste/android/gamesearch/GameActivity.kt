@@ -1,16 +1,9 @@
 package art.manguste.android.gamesearch
 
-import android.content.Context
 import android.os.Bundle
-import androidx.annotation.StringRes
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import art.manguste.android.gamesearch.core.SearchType
@@ -20,16 +13,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class GameActivity : AppCompatActivity() {
 
-    private val icons = intArrayOf(
-            R.drawable.ic_action_fire,
-            R.drawable.ic_action_search,
-            R.drawable.ic_action_star
+    private val tabsIcons = linkedMapOf(
+            R.string.category_hot to R.drawable.ic_action_fire,
+            R.string.category_search to R.drawable.ic_action_search,
+            R.string.category_favorite to R.drawable.ic_action_star
     )
-
-    private val TAB_TITLES = intArrayOf(
-            R.string.category_hot,
-            R.string.category_search,
-            R.string.category_favorite)
 
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
@@ -38,19 +26,10 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-
-        // connect Tabs to ViewPager
-/*        val tabs = findViewById<TabLayout>(R.id.tabs)
-        findViewById<TabLayout>(R.id.tabs).setupWithViewPager(viewPager)*/
         // TODO check connection
 
-        //pin tab icons
-/*        for (i in 0 until tabs.tabCount) {
-            tabs.getTabAt(i)!!.setIcon(icons[i])
-        }*/
-
+        // set view pager
         viewPager = findViewById(R.id.view_pager)
-
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
@@ -62,32 +41,29 @@ class GameActivity : AppCompatActivity() {
             }
 
             override fun getItemCount(): Int {
-                return icons.size
+                return tabsIcons.size
             }
         }
 
+        // set tabs
         tabLayout = findViewById(R.id.tabs)
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = resources.getString(TAB_TITLES[position])
-        }.attach()
-
-        for (i in 0 until tabLayout.tabCount) {
-            tabLayout.getTabAt(i)!!.setIcon(icons[i])
+        TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
+        // set tabs icon and text
+        var indx = 0
+        for (Pair in tabsIcons) {
+            Log.d(GameActivity::class.java.simpleName, "$Pair")
+            tabLayout.getTabAt(indx)!!.apply {
+                setIcon(Pair.value)
+                setText(Pair.key)
+            }
+            indx++
         }
-
-  /*      findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }*/
     }
 
     override fun onBackPressed() {
         if (viewPager.currentItem == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed()
         } else {
-            // Otherwise, select the previous step.
             viewPager.currentItem = viewPager.currentItem - 1
         }
     }
