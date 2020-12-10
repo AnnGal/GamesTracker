@@ -4,16 +4,15 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import art.manguste.android.gamesearch.network.GamesApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class GamesViewModel(application: Application) : AndroidViewModel(application) {
 
-
     private val _response = MutableLiveData<String>()
-    val response: LiveData<String>
-        get() = _response
+    val response: LiveData<String> get() = _response
 
     // displays data on init
     init {
@@ -21,7 +20,15 @@ class GamesViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun getGamesHotListSearch() {
-        _response.value = "Response will be here soon"
+        GamesApi.retrofitService.getGamesList().enqueue( object: Callback<String> {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                _response.value = "Not reachable : " + t.message
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                _response.value = response.body()
+            }
+        })
     }
 
 }
