@@ -10,6 +10,8 @@ import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.network.GamesApi
 import kotlinx.coroutines.launch
 
+enum class ApiStatus { LOADING, ERROR, DONE }
+
 class GamesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _response = MutableLiveData<String>()
@@ -17,6 +19,10 @@ class GamesViewModel(application: Application) : AndroidViewModel(application) {
 
     private var _gamesList = MutableLiveData<List<GameBriefly>>()
     val gamesList: LiveData<List<GameBriefly>> get() = _gamesList
+
+    private val _status = MutableLiveData<ApiStatus>()
+    val status: LiveData<ApiStatus>
+        get() = _status
 
     // displays data on init
     init {
@@ -26,35 +32,19 @@ class GamesViewModel(application: Application) : AndroidViewModel(application) {
     private fun getGamesHotListSearch() {
         viewModelScope.launch {
             try {
+                _status.value = ApiStatus.LOADING
                 val resultRequest = GamesApi.retrofitService.getGamesList()
                 _gamesList.value = resultRequest.results
                 //Log.d("GamesList fragment", "games = ${gamesList.value?.size}")
                 _response.value = "Got : ${resultRequest.next}  "//response.body()
+                _status.value = ApiStatus.DONE
             } catch (e: Exception) {
+                _status.value = ApiStatus.ERROR
                 _response.value = "Not reachable : ${e.message}"
+                _gamesList.value = ArrayList()
             }
         }
 
-  /*      GamesApi.retrofitService.getGamesList().enqueue( object: Callback<ResultRequest> {
-            override fun onFailure(call: Call<ResultRequest>, t: Throwable) {
-                _response.value = "Not reachable : " + t.message
-            }
-
-            override fun onResponse(call: Call<ResultRequest>, response: Response<ResultRequest>) {
-                _response.value = "Got : ${(response.body())?.next} and ${(response.body())?.results?.joinToString (", \n")  {it.name} } "//response.body()
-                //_response.value = "Success: ${response.body()?.size} Mars properties retrieved"
-            }
-        })*/
-
-        /*GamesApi.retrofitService.getGamesList().enqueue( object: Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                _response.value = "Not reachable : " + t.message
-            }
-
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                _response.value = response.body()
-            }
-        })*/
     }
 
 }

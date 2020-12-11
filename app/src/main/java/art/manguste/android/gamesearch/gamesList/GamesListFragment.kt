@@ -63,6 +63,23 @@ class GamesListFragment : Fragment() {
                 reloadGames(games)
             }
         })
+
+        viewModel.status.observe(viewLifecycleOwner, {status ->
+            when (status) {
+                ApiStatus.LOADING -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.netLostImage.visibility = View.GONE
+                }
+                ApiStatus.DONE -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.netLostImage.visibility = View.GONE
+                }
+                ApiStatus.ERROR -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.netLostImage.visibility = View.VISIBLE
+                }
+            }
+        })
     }
 
     companion object {

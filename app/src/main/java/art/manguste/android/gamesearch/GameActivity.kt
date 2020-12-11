@@ -26,8 +26,6 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        // TODO check connection
-
         // set view pager
         viewPager = findViewById(R.id.view_pager)
         viewPager.adapter = object : FragmentStateAdapter(this) {

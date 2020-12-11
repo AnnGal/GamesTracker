@@ -4,6 +4,6 @@
     <item name="ll_search" type="id"/>
     <item name="btnStartSearch" type="id"/>
     <item name="et_search_by_name" type="id"/>
-    <item name="pb_loading" type="id"/>
+    <item name="progressBar" type="id"/>
     <item name="recyclerGames" type="id"/>
 </resources>

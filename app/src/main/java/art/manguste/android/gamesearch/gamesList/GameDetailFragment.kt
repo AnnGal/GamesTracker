@@ -58,7 +58,7 @@ class GameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayList<G
         mImageSize = resources.getDimensionPixelSize(R.dimen.cover_size) * 2
 
         // UI objects
-        mProgressBar = view.findViewById(R.id.pb_loading)
+        mProgressBar = view.findViewById(R.id.progressBar)
         mCoverImageView = view.findViewById(R.id.iv_cover)
         mTitle = view.findViewById(R.id.tv_title)
         mRelease = view.findViewById(R.id.tv_release)

@@ -1,6 +1,5 @@
 package art.manguste.android.gamesearch.gamesList
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import art.manguste.android.gamesearch.R
-import art.manguste.android.gamesearch.core.Game
 import art.manguste.android.gamesearch.core.GameBriefly
-import art.manguste.android.gamesearch.old_api.JsonParser
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 

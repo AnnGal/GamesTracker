@@ -236,7 +236,7 @@
                 tools:text="https://ludeon.com"/>
 
             <ProgressBar
-                android:id="@+id/pb_loading"
+                android:id="@+id/progressBar"
                 style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
