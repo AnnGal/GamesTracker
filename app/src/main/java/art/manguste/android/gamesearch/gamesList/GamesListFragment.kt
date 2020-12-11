@@ -1,5 +1,6 @@
 package art.manguste.android.gamesearch.gamesList
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,11 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import art.manguste.android.gamesearch.GameDetailActivity
 import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
-
-import art.manguste.android.gamesearch.db.GameDatabase
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * A simple [Fragment] subclass.
@@ -37,14 +38,47 @@ class GamesListFragment : Fragment() {
         binding.lifecycleOwner = this
         // access to View Model from the layout
 
-        binding.recyclerGames.adapter = GameAdapter()
+        binding.recyclerGames.adapter = GameAdapter(OnClickListener(
+                // on click by whole card - going to the detail info about game
+                { game ->
+                    toDetailInfo(game)
+                },
+                // on click "make favorite" button - make favorite
+                { game ->
+                    changeGamesFavoriteStatus(game)
+                }))
+
         binding.viewModel = viewModel
 
         setHasOptionsMenu(true)
         return binding.root
     }
 
+    private fun toDetailInfo(game: GameBriefly){
+        Log.d(TAG, "OnClick ${game.name}")
+        val intent = Intent(activity, GameDetailActivity::class.java)
+                .putExtra(GameDetailActivity.EXTRA_GAME_CODE, game.alias)
+                .putExtra(GameDetailActivity.EXTRA_GAME_NAME, game.name)
 
+        Log.d(TAG, "OnClick start activity ${game.name}")
+        startActivity(intent)
+    }
+
+    private fun changeGamesFavoriteStatus(game: GameBriefly)  {
+        Log.d(TAG, "OnClickFavorite ${game.name}")
+
+        // form message into snakbar
+        val snackMessage = if (game.isFavorite) "${game.name} removed from favourites"
+        else "${game.name} added to favourites"
+
+        // DB actions
+        when (game.isFavorite) {
+            true -> game.isFavorite = false
+            false -> game.isFavorite = true
+        }
+
+        Snackbar.make(view!!, snackMessage, Snackbar.LENGTH_LONG).show()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,8 +87,22 @@ class GamesListFragment : Fragment() {
         Log.d(TAG, "SEARCH_TYPE = $searchType")
 
         // hide search panel if it needed
-        when (searchType == SearchType.SEARCH) {
-            false -> binding.panelSearchGame.visibility = View.GONE
+        when (searchType)  {
+            SearchType.HOT -> {
+                binding.panelSearchGame.visibility = View.GONE
+                viewModel.getHotGamesList()
+            }
+            SearchType.SEARCH -> {
+                binding.panelSearchGame.visibility = View.VISIBLE
+                // search Game by click on button
+                binding.btnStartSearch.setOnClickListener {
+                    binding.searchByTitle.text.isNotEmpty().let {
+                        viewModel.getSearchGameList(binding.searchByTitle.text.toString())
+                    }
+                }
+            }
+            SearchType.FAVORITE -> binding.panelSearchGame.visibility = View.GONE
+            else -> Log.d(TAG, "Unexpected search type = $searchType")
         }
 
         viewModel.gamesList.observe(viewLifecycleOwner, Observer { games ->
@@ -66,15 +114,15 @@ class GamesListFragment : Fragment() {
 
         viewModel.status.observe(viewLifecycleOwner, {status ->
             when (status) {
-                ApiStatus.LOADING -> {
+                LoadStatus.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.netLostImage.visibility = View.GONE
                 }
-                ApiStatus.DONE -> {
+                LoadStatus.DONE -> {
                     binding.progressBar.visibility = View.GONE
                     binding.netLostImage.visibility = View.GONE
                 }
-                ApiStatus.ERROR -> {
+                LoadStatus.ERROR -> {
                     binding.progressBar.visibility = View.GONE
                     binding.netLostImage.visibility = View.VISIBLE
                 }
@@ -83,7 +131,7 @@ class GamesListFragment : Fragment() {
     }
 
     companion object {
-        private val TAG = GamesListFragment::class.java.simpleName
+        val TAG = GamesListFragment::class.java.simpleName
         private const val SEARCH_TYPE = "search_type"
 
         /**

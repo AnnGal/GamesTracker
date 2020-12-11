@@ -49,7 +49,7 @@ class OLDGameCardAdapter(private val mContext: Context?, private val mImageSize:
         mContext!!.startActivity(intent)
     }
 
-        override fun onFavoriteBtnClick(game: Game, mFavoriteImageButton: ImageButton, position: Int) {
+    override fun onFavoriteBtnClick(game: Game, mFavoriteImageButton: ImageButton, position: Int) {
         // add or remove from DB async
         var isAddToFavorite = true
         if (!game!!.isFavorite) {

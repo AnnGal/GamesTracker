@@ -10,6 +10,8 @@ data class ResponseJsonGamesList(
 
 data class GameBriefly(
         val id: Int,
+        @Json(name = "slug")
+        val alias: String,
         val name: String,
         val released: String,
         @Json(name = "background_image")

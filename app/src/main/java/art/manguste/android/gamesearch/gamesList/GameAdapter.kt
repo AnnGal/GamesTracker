@@ -14,7 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GameAdapter() : RecyclerView.Adapter<GameViewHolder>() {
+class GameAdapter(val onClickListener: OnClickListener) : RecyclerView.Adapter<GameViewHolder>() {
     var games = listOf<GameBriefly>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
@@ -24,7 +24,7 @@ class GameAdapter() : RecyclerView.Adapter<GameViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
-        holder.bind(games[position])
+        holder.bind(games[position], onClickListener)
     }
 
     override fun getItemCount(): Int = games.size
@@ -43,7 +43,7 @@ class GameViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
     private val favorite = itemView.findViewById<ImageButton>(R.id.favorite)
     private val gameIcon = itemView.findViewById<ImageView>(R.id.game_icon)
 
-    fun bind(gameBriefly: GameBriefly) {
+    fun bind(gameBriefly: GameBriefly, onClickListener: OnClickListener) {
         Glide.with(itemView.context)
                 .load(gameBriefly.imgHttp)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -65,7 +65,25 @@ class GameViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
             false -> favorite.setImageResource(R.drawable.ic_action_star_empty)
         }
 
+        favorite.setOnClickListener {
+            onClickListener.onClickFavorite(gameBriefly)
+            // todo replace with functions or set on check on View Model
+            when (gameBriefly.isFavorite){
+                true -> favorite.setImageResource(R.drawable.ic_action_star_filled)
+                false -> favorite.setImageResource(R.drawable.ic_action_star_empty)
+            }
+        }
+
+        itemView.setOnClickListener {
+            onClickListener.onClickCard(gameBriefly)
+        }
     }
+}
+
+class OnClickListener(val clickListener: (game: GameBriefly) -> Unit,
+                      val clickListenerFavorite: (game: GameBriefly) -> Unit) {
+    fun onClickCard(game: GameBriefly) = clickListener(game)
+    fun onClickFavorite(game: GameBriefly) = clickListenerFavorite(game)
 }
 
 private fun String.toCardFormat(): String {

@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/et_search_by_name"
+                android:id="@+id/searchByTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
