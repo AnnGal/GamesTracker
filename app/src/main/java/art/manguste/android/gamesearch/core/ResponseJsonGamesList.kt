@@ -16,7 +16,9 @@ data class GameBriefly(
         val imgHttp: String,
         val rating: String,
         val genres: List<Genres>
-)
+) {
+        var isFavorite: Boolean = false
+}
 
 data class Genres(
         val id: Int,

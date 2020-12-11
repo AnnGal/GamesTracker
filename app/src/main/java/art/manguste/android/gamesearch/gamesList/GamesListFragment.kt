@@ -25,38 +25,20 @@ class GamesListFragment : Fragment() {
         ViewModelProvider(this).get(GamesViewModel::class.java)
     }
 
-    private var searchType: String? = null
+    private var searchType: SearchType? = null
+    private lateinit var binding: FragmentGameSearchBinding
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
-        val binding = FragmentGameSearchBinding.inflate(inflater)
+        binding = FragmentGameSearchBinding.inflate(inflater)
 
         // data binding will observe LiveData with the lifecycle of the fragment
         binding.lifecycleOwner = this
         // access to View Model from the layout
 
-
-
         binding.recyclerGames.adapter = GameAdapter()
-        viewModel.gamesList.observe(viewLifecycleOwner, Observer { games ->
-            //Log.d("GamesList fragment", "games = ${games.size}")
-            (binding.recyclerGames.adapter as GameAdapter).apply {
-                reloadGames(games)
-            }
-        })
-
         binding.viewModel = viewModel
-
-
-  /*      viewModel.eventGameFinish.observe(viewLifecycleOwner, Observer { isFinished ->
-            if (isFinished) {
-                val currentScore = viewModel.score.value ?: 0
-                val action = GameFragmentDirections.actionGameToScore(currentScore)
-                findNavController(this).navigate(action)
-                viewModel.onGameFinishComplete()
-            }
-        })*/
 
         setHasOptionsMenu(true)
         return binding.root
@@ -67,8 +49,20 @@ class GamesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchType = requireArguments().getString(SEARCH_TYPE)
+        searchType = requireArguments().getString(SEARCH_TYPE)?.let { SearchType.valueOf(it) }
         Log.d(TAG, "SEARCH_TYPE = $searchType")
+
+        // hide search panel if it needed
+        when (searchType == SearchType.SEARCH) {
+            false -> binding.panelSearchGame.visibility = View.GONE
+        }
+
+        viewModel.gamesList.observe(viewLifecycleOwner, Observer { games ->
+            Log.d(TAG, "games = ${games.size}")
+            (binding.recyclerGames.adapter as GameAdapter).apply {
+                reloadGames(games)
+            }
+        })
     }
 
     companion object {
