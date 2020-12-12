@@ -8,10 +8,19 @@ import androidx.lifecycle.viewModelScope
 import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.network.GamesApi
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 enum class LoadStatus { LOADING, ERROR, DONE }
 
 class GamesViewModel(application: Application) : AndroidViewModel(application) {
+
+    // retrofit requests fast settings
+    private val rowNum = 10                 // how many rows in query
+    private val orderBy = "-added"          // sort query by
+    private val monthGapBeforeNow = 1       // for "hot games" - range settings
+    private val monthGapAfterNow = 1        // for "hot games" - range settings
 
     private val _response = MutableLiveData<String>()
     val response: LiveData<String> get() = _response
@@ -51,9 +60,8 @@ class GamesViewModel(application: Application) : AndroidViewModel(application) {
                 _status.value = LoadStatus.LOADING
 
                 val resultRequest = GamesApi.retrofitService.getGamesHotListSorts(
-                        datesRange = "2020-06-01,2020-09-15",
-                        ordering = "-added")
-                // example: https://api.rawg.io/api/games?dates=2020-06-01,2020-09-15&ordering=-added
+                        datesRange = getDatesRange(monthGapBeforeNow,monthGapAfterNow),
+                        ordering = orderBy)
 
                 _gamesList.value = resultRequest.results
                 //Log.d("GamesList fragment", "games = ${gamesList.value?.size}")
@@ -71,7 +79,8 @@ class GamesViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 _status.value = LoadStatus.LOADING
 
-                val resultRequest = GamesApi.retrofitService.getGamesListSearch(pageSize = 10,
+                val resultRequest = GamesApi.retrofitService.getGamesListSearch(
+                        pageSize = rowNum,
                         gameName = search)
 
                 _gamesList.value = resultRequest.results
@@ -84,7 +93,25 @@ class GamesViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+}
 
+private fun getDatesRange(monthBefore: Int, monthAfter: Int): String {
+    val dateNow = Date()
+    val dateFrom = addMonth(dateNow, -monthBefore)
+    val dateFuture = addMonth(dateNow, monthAfter)
+    return formatDate(dateFrom) + "," + formatDate(dateFuture)
+}
+
+private fun formatDate(dateObject: Date): String {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    return dateFormat.format(dateObject)
+}
+
+fun addMonth(date: Date, diff: Int): Date {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    cal.add(Calendar.MONTH, diff)
+    return cal.time
 }
 
 

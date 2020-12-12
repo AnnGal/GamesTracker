@@ -29,7 +29,6 @@ class GamesListFragment : Fragment() {
     private var searchType: SearchType? = null
     private lateinit var binding: FragmentGameSearchBinding
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentGameSearchBinding.inflate(inflater)
