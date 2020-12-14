@@ -57,7 +57,7 @@
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:theme="@style/ToolbarTheme"/>
+                    app:theme="@style/ToolbarTheme" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -75,17 +75,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/text_top_gap"
-                    android:paddingLeft="@dimen/activity_horizontal_gap"
-                    android:text="Release date: "
+                    android:paddingStart="@dimen/activity_horizontal_gap"
+                    android:text="@string/release_date"
                     android:textColor="@color/secondary_text"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/release"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:textColor="@color/secondary_text"
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_release"
                     app:layout_constraintStart_toEndOf="@+id/tv_label_release"
@@ -210,7 +211,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="@dimen/activity_horizontal_gap"
-                        android:text="@string/label_platform" />
+                        android:text="@string/label_publisher" />
 
                     <TextView
                         android:id="@+id/publisher"
@@ -225,8 +226,8 @@
                     android:id="@+id/tv_label_game_website"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_gap"
                     android:layout_marginTop="@dimen/text_top_gap"
-                    android:paddingLeft="@dimen/activity_horizontal_gap"
                     android:text="@string/website"
                     android:textColor="@color/secondary_text"
                     app:layout_constraintStart_toStartOf="parent"
@@ -236,7 +237,7 @@
                     android:id="@+id/gameWebsite"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
                     android:textColor="@color/secondary_text"
                     app:layout_constraintBaseline_toBaselineOf="@+id/tv_label_game_website"
                     app:layout_constraintStart_toEndOf="@+id/tv_label_game_website"
@@ -253,9 +254,10 @@
                     android:id="@+id/favorite"
                     android:layout_width="38dp"
                     android:layout_height="38dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
                     android:background="@color/colorSlight"
+                    android:contentDescription="@string/image_of_make_favorite_button"
                     android:paddingHorizontal="@dimen/card_view_horizontal_padding"
                     android:src="@drawable/ic_action_star_empty"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -267,6 +269,7 @@
                     android:layout_height="38dp"
                     android:layout_marginHorizontal="16dp"
                     android:background="@color/colorSlight"
+                    android:contentDescription="@string/image_of_share_icon"
                     android:paddingHorizontal="@dimen/card_view_horizontal_padding"
                     android:paddingVertical="@dimen/card_view_vertical_padding"
                     android:src="@drawable/ic_action_share"
@@ -278,11 +281,11 @@
                     android:id="@+id/disclaimer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/activity_horizontal_gap"
                     android:layout_marginTop="16dp"
                     android:background="@color/text_background"
                     android:paddingHorizontal="@dimen/activity_horizontal_gap"
                     android:paddingVertical="@dimen/activity_vertical_gap"
-                    android:paddingLeft="@dimen/activity_horizontal_gap"
                     android:text="@string/disclaimer"
                     android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
@@ -308,9 +311,10 @@
             android:id="@+id/netLostImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_gravity="center"
+            android:contentDescription="@string/cut_wifi_img_desc"
             android:src="@drawable/ic_wifi_off"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

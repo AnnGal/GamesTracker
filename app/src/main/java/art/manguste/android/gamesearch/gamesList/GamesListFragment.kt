@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import art.manguste.android.gamesearch.GameDetailActivity
 import art.manguste.android.gamesearch.core.GameBriefly
@@ -48,8 +47,6 @@ class GamesListFragment : Fragment() {
                     changeGamesFavoriteStatus(game)
                 }))
 
-        binding.viewModel = gamesListVM
-
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -71,7 +68,9 @@ class GamesListFragment : Fragment() {
         val snackMessage = if (game.isFavorite) "${game.name} removed from favourites"
         else "${game.name} added to favourites"
 
-        // DB actions
+        // db actions
+
+        // form actions
         when (game.isFavorite) {
             true -> game.isFavorite = false
             false -> game.isFavorite = true
@@ -83,7 +82,7 @@ class GamesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gamesListVM.gamesList.observe(viewLifecycleOwner, Observer { games ->
+        gamesListVM.gamesList.observe(viewLifecycleOwner, { games ->
             Log.d(TAG, "games = ${games.size}")
             (binding.recyclerGames.adapter as GameAdapter).apply {
                 reloadGames(games)

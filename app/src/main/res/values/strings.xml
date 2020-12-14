@@ -30,5 +30,10 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="card_description_text">Genres: %1$s</string>>
+    <string name="card_description_text">Genres: %1$s</string>
+    <string name="label_publisher">Publisher</string>
+    <string name="release_date">Release date:</string>
+    <string name="cut_wifi_img_desc">image of cut wifi connection</string>
+    <string name="image_of_share_icon">image of share icon</string>
+    <string name="image_of_make_favorite_button">image of make favorite button</string>>
 </resources>

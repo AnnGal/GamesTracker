@@ -21,9 +21,6 @@ class GamesListVM(application: Application) : AndroidViewModel(application) {
     private val monthGapBeforeNow = 1       // for "hot games" - range settings
     private val monthGapAfterNow = 1        // for "hot games" - range settings
 
-    private val _response = MutableLiveData<String>()
-    val response: LiveData<String> get() = _response
-
     private var _gamesList = MutableLiveData<List<GameBriefly>>()
     val gamesList: LiveData<List<GameBriefly>> get() = _gamesList
 
@@ -33,25 +30,7 @@ class GamesListVM(application: Application) : AndroidViewModel(application) {
 
     // displays data on init
     init {
-        //getGamesHotList()
         _status.value = LoadStatus.NONE
-    }
-
-    private fun getGamesHotList() {
-        viewModelScope.launch {
-            try {
-                _status.value = LoadStatus.LOADING
-                val resultRequest = GamesApi.retrofitService.getGamesList()
-                _gamesList.value = resultRequest.results
-                //Log.d("GamesList fragment", "games = ${gamesList.value?.size}")
-                _response.value = "Got : ${resultRequest.next}  "//response.body()
-                _status.value = LoadStatus.DONE
-            } catch (e: Exception) {
-                _status.value = LoadStatus.ERROR
-                _response.value = "Not reachable : ${e.message}"
-                _gamesList.value = ArrayList()
-            }
-        }
     }
 
     fun getHotGamesList(){

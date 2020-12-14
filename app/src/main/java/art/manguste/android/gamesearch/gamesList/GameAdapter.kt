@@ -14,7 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import java.text.SimpleDateFormat
 import java.util.*
 
-class GameAdapter(val onClickListener: OnClickListener) : RecyclerView.Adapter<GameViewHolder>() {
+class GameAdapter(private val onClickListener: OnClickListener) : RecyclerView.Adapter<GameViewHolder>() {
     var games = listOf<GameBriefly>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {

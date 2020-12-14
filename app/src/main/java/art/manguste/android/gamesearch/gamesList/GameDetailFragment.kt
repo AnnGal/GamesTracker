@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import art.manguste.android.gamesearch.R
 import art.manguste.android.gamesearch.core.GameDetail
@@ -38,7 +37,6 @@ class GameDetailFragment : Fragment() {
 
         return binding.root
     }
-
 
     private fun reloadData(game: GameDetail?) {
         Log.d(TAG, "Try to load game = ${game?.name}")
@@ -85,21 +83,38 @@ class GameDetailFragment : Fragment() {
                 false -> binding.favorite.setImageResource(R.drawable.ic_action_star_empty)
             }
 
+            binding.favorite.setOnClickListener {
+                // form actions
+                when (gameCurrent.isFavorite) {
+                    true -> {
+                        gameCurrent.isFavorite = false
+                        binding.favorite.setImageResource(R.drawable.ic_action_star_empty)
+                    }
+                    false -> {
+                        gameCurrent.isFavorite = true
+                        binding.favorite.setImageResource(R.drawable.ic_action_star_filled)
+                    }
+                }
+            }
+
+
             //share
-            binding.share.setOnClickListener(View.OnClickListener {
+            binding.share.setOnClickListener {
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "text/plain"
                 intent.putExtra(Intent.EXTRA_TEXT, gameCurrent.name + " - " + gameCurrent.apiLink)
                 startActivity(intent)
-            })
+            }
 
         }
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gameDetailVM.gameDetail.observe(viewLifecycleOwner, Observer { game ->
+        gameDetailVM.gameDetail.observe(viewLifecycleOwner, { game ->
             Log.d(TAG, "games = ${game.name}")
             reloadData(game)
         })
