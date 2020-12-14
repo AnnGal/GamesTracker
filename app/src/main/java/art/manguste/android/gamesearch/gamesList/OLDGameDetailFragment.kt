@@ -16,14 +16,14 @@ import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import art.manguste.android.gamesearch.R
 import art.manguste.android.gamesearch.old_api.URLMaker.formURL
-import art.manguste.android.gamesearch.core.Game
+import art.manguste.android.gamesearch.core.OLD_Game
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.threads.DBUtils
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import kotlinx.android.synthetic.main.fragment_game_detail.*
 import java.util.*
 
-class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayList<Game>?> {
+class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayList<OLD_Game>?> {
     private var gameCode: String? = null
     private var gameName: String? = null
     private var mImageSize = 0
@@ -42,7 +42,7 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
     var mFavoriteButton: ImageButton? = null
     var mShareButton: ImageButton? = null
     var mDisclaimer: TextView? = null
-    lateinit var mGame: Game
+    lateinit var mOLDGame: OLD_Game
     var mToolbarLayout: CollapsingToolbarLayout? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,11 +72,11 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
         mShareButton = view.findViewById(R.id.share)
         mDisclaimer = view.findViewById(R.id.disclaimer)
 
-        //save game as favorite game for tracking
+/*        //save game as favorite game for tracking
         favorite.setOnClickListener(View.OnClickListener {
-            DBUtils.Companion.changeFavoriteStatus(context, mGame)
+            DBUtils.Companion.changeFavoriteStatus(context, mOLDGame)
             var isAddToFavorite = true
-            if (!mGame!!.isFavorite) {
+            if (!mOLDGame!!.isFavorite) {
                 // add to Favorite
                 favorite.setImageDrawable(resources.getDrawable(R.drawable.ic_action_star_filled))
             } else {
@@ -86,14 +86,14 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
             }
             // todo fix
             //mGame.setFavorite(isAddToFavorite)
-        })
+        })*/
 
         //save game as favorite game for tracking
         // todo share
         share.setOnClickListener(View.OnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, mGame.name + " - " + mGame.apiLink)
+            intent.putExtra(Intent.EXTRA_TEXT, mOLDGame.name + " - " + mOLDGame.apiLink)
             startActivity(intent)
         })
 
@@ -114,7 +114,7 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
 
     // Loader begin
     // todo fix
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<ArrayList<Game>?> {
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<ArrayList<OLD_Game>?> {
         TODO("Not yet implemented")
 
         mProgressBar!!.visibility = View.VISIBLE
@@ -122,7 +122,7 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
         // todo fix return GamesApiLoader(context, urlString, SearchType.GAME)
     }
 
-    override fun onLoadFinished(loader: Loader<ArrayList<Game>?>, data: ArrayList<Game>?) {
+    override fun onLoadFinished(loader: Loader<ArrayList<OLD_Game>?>, data: ArrayList<OLD_Game>?) {
         mProgressBar!!.visibility = View.GONE
 
         //TODO if none games found - set text about it
@@ -134,7 +134,7 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
         }
     }
 
-    override fun onLoaderReset(loader: Loader<ArrayList<Game>?>) {
+    override fun onLoaderReset(loader: Loader<ArrayList<OLD_Game>?>) {
         //
     }
 

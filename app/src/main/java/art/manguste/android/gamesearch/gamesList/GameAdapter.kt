@@ -52,10 +52,10 @@ class GameViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
 
         title.text = gameBriefly.name
 
-        if (gameBriefly.genres.isNotEmpty())
+        /*if (gameBriefly.genres.isNotEmpty())
             description.text = itemView.resources.getString(R.string.card_description_text,
                 gameBriefly.genres.joinToString( ", " ) {it.name})
-        else description.text = ""
+        else description.text = ""*/
 
         releaseDate.text = gameBriefly.released.toCardFormat()
         rate.text = gameBriefly.rating

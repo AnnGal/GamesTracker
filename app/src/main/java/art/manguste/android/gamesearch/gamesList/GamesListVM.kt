@@ -1,6 +1,7 @@
 package art.manguste.android.gamesearch.gamesList
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,12 +9,18 @@ import androidx.lifecycle.viewModelScope
 import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.api.GamesApi
 import art.manguste.android.gamesearch.core.LoadStatus
+import art.manguste.android.gamesearch.db.Game
+import art.manguste.android.gamesearch.db.GameDAO
+import art.manguste.android.gamesearch.db.GameDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class GamesListVM(application: Application) : AndroidViewModel(application) {
+class GamesListVM(application: Application, databaseG: GameDAO) : AndroidViewModel(application) {
 
     // retrofit requests fast settings
     private val rowNum = 10                 // how many rows in query
@@ -27,6 +34,9 @@ class GamesListVM(application: Application) : AndroidViewModel(application) {
     private val _status = MutableLiveData<LoadStatus>()
     val status: LiveData<LoadStatus>
         get() = _status
+
+    //private val database: GameDAO by lazy {GameDatabase.getInstance(application).gameDao}
+//    val gamesDB: LiveData<List<Game>> = databaseG.getAll()
 
     // displays data on init
     init {
@@ -71,6 +81,73 @@ class GamesListVM(application: Application) : AndroidViewModel(application) {
                 _gamesList.value = ArrayList()
             }
         }
+    }
+
+   fun getDBGameList(database: GameDAO) {
+        viewModelScope.launch {
+            try {
+                _status.value = LoadStatus.LOADING
+
+                val resultRequest = database.getAll()
+                //val nights = database.getAll()
+
+                //_gamesList.value = database.getAll().value
+                //Log.d("GamesList fragment", "gameDB = ${resultRequest.value?.size}")
+
+                _status.value = LoadStatus.DONE
+            } catch (e: Exception) {
+                _status.value = LoadStatus.ERROR
+                Log.d("GamesList fragment", "Exception = ${e.message}")
+                _gamesList.value = ArrayList()
+            }
+        }
+    }
+
+    fun addGameFavorite(gameBriefly: GameBriefly, database: GameDAO) {
+        val game = Game(name= gameBriefly.name, alias = gameBriefly.alias, json = gameBriefly.name)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            insert(game, database)
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            count(database)
+        }
+
+
+
+        //viewModelScope.launch {
+            // Create a new night, which captures the current time,
+            // and insert it into the database.
+            //database.insert(game)
+            //val resultRequest = database.getAll()
+            //Log.d("GamesList fragment", "gameDB = ${resultRequest.value?.size}")
+            //Log.d("GamesList fragment", "database.count = "+database.count())
+        //}
+    }
+
+    private suspend fun insert(game: Game, database: GameDAO) {
+        withContext(Dispatchers.IO) {
+            database.insert(game)
+        }
+    }
+
+    private suspend fun count(database: GameDAO) {
+        withContext(Dispatchers.IO) {
+            val req = database.getAll()
+            val res = database.count()
+            Log.d("GamesList fragment", "database.count = $res req.size = ${req.joinToString(", \n") { it.name }}")
+        }
+    }
+
+
+
+    fun removeGameFavorite(gameBriefly: GameBriefly, database: GameDAO) {
+      /*  viewModelScope.launch {
+            // Create a new night, which captures the current time,
+            // and insert it into the database.
+            database.delete(gameBriefly)
+        }*/
     }
 }
 

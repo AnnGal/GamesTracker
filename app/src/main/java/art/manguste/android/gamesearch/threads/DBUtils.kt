@@ -7,39 +7,39 @@ import android.util.Log
 import art.manguste.android.gamesearch.old_api.HttpHandler
 import art.manguste.android.gamesearch.old_api.JsonParser.parseGameData
 import art.manguste.android.gamesearch.old_api.URLMaker.formURL
-import art.manguste.android.gamesearch.core.Game
+import art.manguste.android.gamesearch.core.OLD_Game
 import art.manguste.android.gamesearch.core.SearchType
-import art.manguste.android.gamesearch.db.FavoriteGame
-import art.manguste.android.gamesearch.db.GameDatabase
+
 import java.lang.ref.WeakReference
 
 // I really should use Rx or kotlin coroutines next time
 class DBUtils {
+    /*
     private val gameDatabase: GameDatabase? = null
 
-    private class SaveAsyncTask(private val context: Context?, private val game: Game) : AsyncTask<Void?, Void?, Void?>() {
+    private class SaveAsyncTask(private val context: Context?, private val OLDGame: OLD_Game) : AsyncTask<Void?, Void?, Void?>() {
         private val weakActivity: WeakReference<Activity>? = null
 
 
         override fun doInBackground(vararg params: Void?): Void? {
-            if (isGameInFavorite(game.alias)) {
+            if (isGameInFavorite(OLDGame.alias)) {
                 //if (game.isFavorite()){
-                context?.let { GameDatabase.Companion.getInstance(it) }!!.favoriteGameDao()!!.deleteByAlias(game.alias)
-                Log.d(TAG, "DB: removed " + game.alias + " successfully! ")
+                context?.let { GameDatabase.Companion.getInstance(it) }!!.favoriteGameDao()!!.deleteByAlias(OLDGame.alias)
+                Log.d(TAG, "DB: removed " + OLDGame.alias + " successfully! ")
             } else {
-                var fullGameData: Game? = null
-                fullGameData = if (game.jsonString == null) {
+                var fullOLDGameData: OLD_Game? = null
+                fullOLDGameData = if (OLDGame.jsonString == null) {
                     // load full data
-                    val urlString = formURL(SearchType.GAME, game.alias)
+                    val urlString = formURL(SearchType.GAME, OLDGame.alias)
                     val sh = HttpHandler()
                     val jsonStr = sh.makeServiceCall(urlString)
                     // parse response
                     parseGameData(jsonStr, true)
-                } else game
-                Log.d(TAG, "DB: try to save game " + fullGameData?.alias)
-                val favGame = makeFavoriteGame(fullGameData!!)
+                } else OLDGame
+                Log.d(TAG, "DB: try to save game " + fullOLDGameData?.alias)
+                val favGame = makeFavoriteGame(fullOLDGameData!!)
                 context?.let { GameDatabase.Companion.getInstance(it) }!!.favoriteGameDao()?.insert(favGame)
-                Log.d(TAG, "DB: " + fullGameData.alias + " successfully added! ")
+                Log.d(TAG, "DB: " + fullOLDGameData.alias + " successfully added! ")
             }
             return null
         }
@@ -57,17 +57,17 @@ class DBUtils {
 
         companion object {
             // TODO
-            fun makeFavoriteGame(game: Game): FavoriteGame {
+            fun makeFavoriteGame(OLDGame: OLD_Game): FavoriteGame {
                 TODO("Not yet implemented")
                 // TODO fix
-             /*    return FavoriteGame(
+             *//*    return FavoriteGame(
                         game.idgetId(),
                         game.getName(),
                         game.getGameAlias(),
                         Date(),
                         game.getReleaseDate(),
                         Double.valueOf(game.getRating()),
-                        game.getJsonString())*/
+                        game.getJsonString())*//*
             }
         }
 
@@ -78,9 +78,9 @@ class DBUtils {
         private val TAG = DBUtils::class.java.simpleName
 
         // Async save the game in db
-        fun changeFavoriteStatus(context: Context?, game: Game) {
+        fun changeFavoriteStatus(context: Context?, OLDGame: OLD_Game) {
             Log.d(TAG, "DB: saveGameAsFavorite ")
-            SaveAsyncTask(context, game).execute()
+            SaveAsyncTask(context, OLDGame).execute()
         }
-    }
+    }*/
 }

@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.db
+package art.manguste.android.gamesearch.old_db
 
 import android.content.ContentValues
 import android.provider.BaseColumns
@@ -7,7 +7,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import art.manguste.android.gamesearch.db.FavoriteGame
 import java.util.*
 
 @Entity(tableName = FavoriteGame.TABLE_NAME)
@@ -17,7 +16,7 @@ class FavoriteGame(
         var name: String, @field:ColumnInfo(index = true, name = COLUMN_API_ALIAS)
         var apiAlias: String, @field:ColumnInfo(name = "last_update")
         var lastUpdate: Date, @field:ColumnInfo(name = "release")
-        var release: Date, @field:ColumnInfo(name = "rating")
+        var release: Date, @field:ColumnInfo(name= "rating")
         var rating: Double, @field:ColumnInfo(name = "json") var json: String) {
 
     @PrimaryKey(autoGenerate = true)

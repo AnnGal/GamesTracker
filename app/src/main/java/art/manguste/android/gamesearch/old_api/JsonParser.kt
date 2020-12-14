@@ -1,7 +1,7 @@
 package art.manguste.android.gamesearch.old_api
 
 import android.util.Log
-import art.manguste.android.gamesearch.core.Game
+import art.manguste.android.gamesearch.core.OLD_Game
 import art.manguste.android.gamesearch.core.SearchType
 import org.json.JSONException
 import org.json.JSONObject
@@ -12,8 +12,8 @@ import java.util.*
 object JsonParser {
     private val TAG = JsonParser::class.java.simpleName
 
-    fun extractData(jsonStr: String?, searchType: SearchType): ArrayList<Game?> {
-        val game = ArrayList<Game?>()
+    fun extractData(jsonStr: String?, searchType: SearchType): ArrayList<OLD_Game?> {
+        val game = ArrayList<OLD_Game?>()
         if (jsonStr != null) {
             if (SearchType.GAME == searchType) {
                 game.add(parseGameData(jsonStr, false))
@@ -26,8 +26,8 @@ object JsonParser {
         return game
     }
 
-    fun parseGameData(jsonStr: String?, thisIsFavorite: Boolean): Game? {
-        var game: Game? = null
+    fun parseGameData(jsonStr: String?, thisIsFavorite: Boolean): OLD_Game? {
+        var OLDGame: OLD_Game? = null
         try {
             val gameJson = JSONObject(jsonStr)
 
@@ -78,14 +78,14 @@ object JsonParser {
             // todo fix
 /*            game = Game(id, slug, name, description, released, imgHttp, rating, metacritic,
                     website, genres, platforms, developers, publishers, jsonStr, thisIsFavorite)*/
-            Log.d(TAG, "Game: \n$game")
+            Log.d(TAG, "Game: \n$OLDGame")
         } catch (e: JSONException) {
             Log.e(TAG, "Json parsing error: " + e.message)
         }
-        return game
+        return OLDGame
     }
 
-    fun parseDateFromMassiveRequest(jsonStr: String?, game: ArrayList<Game?>) {
+    fun parseDateFromMassiveRequest(jsonStr: String?, OLDGame: ArrayList<OLD_Game?>) {
         try {
             val jsonObj = JSONObject(jsonStr)
             // getting json array node

@@ -4,17 +4,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-data class Game(val alias: String,
-                val name: String,
-                var releaseDate: Date?,
-                val imgHttp: String?,
-                var rating: String?,
-                val metacritic: String?,
-                var genresList: Array<String>,
-                var platformsList: Array<String>,
-                var developersList: Array<String>?,
-                var publishersList: Array<String>?,
-                var isFavorite: Boolean = false) {
+data class OLD_Game(val alias: String,
+                    val name: String,
+                    var releaseDate: Date?,
+                    val imgHttp: String?,
+                    var rating: String?,
+                    val metacritic: String?,
+                    var genresList: Array<String>,
+                    var platformsList: Array<String>,
+                    var developersList: Array<String>?,
+                    var publishersList: Array<String>?,
+                    var isFavorite: Boolean = false) {
     var id: Int? = null
         private set
     var description: String? = null

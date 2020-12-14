@@ -13,6 +13,8 @@ import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.core.LoadStatus
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
+import art.manguste.android.gamesearch.db.GameDatabase
+
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -22,9 +24,10 @@ import com.google.android.material.snackbar.Snackbar
  */
 class GamesListFragment : Fragment() {
 
-    private val gamesListVM: GamesListVM by lazy {
+/*    private val gamesListVM: GamesListVM by lazy {
         ViewModelProvider(this).get(GamesListVM::class.java)
-    }
+    }*/
+    private lateinit var gamesListVM: GamesListVM
 
     private var searchType: SearchType? = null
     private lateinit var binding: FragmentGameSearchBinding
@@ -32,6 +35,10 @@ class GamesListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentGameSearchBinding.inflate(inflater)
+
+        val application = requireNotNull(this.activity).application
+        val dataSource = GameDatabase.getInstance(application).gameDao
+        gamesListVM = GamesListVM(application, dataSource)
 
         // data binding will observe LiveData with the lifecycle of the fragment
         binding.lifecycleOwner = this
@@ -69,11 +76,18 @@ class GamesListFragment : Fragment() {
         else "${game.name} added to favourites"
 
         // db actions
-
+        val application = requireNotNull(this.activity).application
+        val dataSource = GameDatabase.getInstance(application).gameDao
         // form actions
         when (game.isFavorite) {
-            true -> game.isFavorite = false
-            false -> game.isFavorite = true
+            true -> {
+                game.isFavorite = false
+                gamesListVM.removeGameFavorite(game, dataSource)
+            }
+            false -> {
+                game.isFavorite = true
+                gamesListVM.addGameFavorite(game, dataSource)
+            }
         }
 
         Snackbar.make(requireView(), snackMessage, Snackbar.LENGTH_LONG).show()
@@ -82,12 +96,7 @@ class GamesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gamesListVM.gamesList.observe(viewLifecycleOwner, { games ->
-            Log.d(TAG, "games = ${games.size}")
-            (binding.recyclerGames.adapter as GameAdapter).apply {
-                reloadGames(games)
-            }
-        })
+
 
         gamesListVM.status.observe(viewLifecycleOwner, { status ->
             when (status!!) {
@@ -128,8 +137,22 @@ class GamesListFragment : Fragment() {
                     }
                 }
             }
-            SearchType.FAVORITE -> binding.panelSearchGame.visibility = View.GONE
+            SearchType.FAVORITE -> {
+                binding.panelSearchGame.visibility = View.GONE
+                val application = requireNotNull(this.activity).application  // todo del, this madness just for test idea
+                val dataSource = GameDatabase.getInstance(application).gameDao
+                gamesListVM.getDBGameList(dataSource)
+            }
             else -> Log.d(TAG, "Unexpected search type = $searchType")
+        }
+
+        if (searchType != SearchType.FAVORITE){
+            gamesListVM.gamesList.observe(viewLifecycleOwner, { games ->
+                Log.d(TAG, "games = ${games.size}")
+                (binding.recyclerGames.adapter as GameAdapter).apply {
+                    reloadGames(games)
+                }
+            })
         }
     }
 
