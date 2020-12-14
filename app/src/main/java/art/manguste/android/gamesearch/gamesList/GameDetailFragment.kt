@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -127,10 +129,14 @@ class GameDetailFragment : Fragment() {
         val gameAlias = requireArguments().getString(EXTRA_GAME_CODE)
         val gameName = requireArguments().getString(EXTRA_GAME_NAME)
 
-        setHasOptionsMenu(true)
-        toolbar_collapsing.title = gameName
-        toolbar_collapsing.setCollapsedTitleTextColor(resources.getColor(R.color.colorTab))
-        toolbar_collapsing.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
+        (activity as? AppCompatActivity?)?.apply {
+            setSupportActionBar(view.findViewById<View>(R.id.toolbar) as Toolbar)
+            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        }
+
+        binding.toolbarCollapsing.title = gameName
+        toolbarCollapsing.setCollapsedTitleTextColor(resources.getColor(R.color.colorTab))
+        toolbarCollapsing.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
 
         // load data via view model
         gameAlias?.let {

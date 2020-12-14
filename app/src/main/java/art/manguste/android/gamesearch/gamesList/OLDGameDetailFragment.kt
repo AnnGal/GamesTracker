@@ -101,10 +101,10 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
         val mActivity = activity as AppCompatActivity?
         mActivity!!.setSupportActionBar(view.findViewById<View>(R.id.toolbar) as Toolbar)
         mActivity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        mToolbarLayout = view.findViewById(R.id.toolbar_collapsing)
-        toolbar_collapsing.setTitle(gameName)
-        toolbar_collapsing.setCollapsedTitleTextColor(resources.getColor(R.color.colorTab))
-        toolbar_collapsing.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
+        mToolbarLayout = view.findViewById(R.id.toolbarCollapsing)
+        toolbarCollapsing.setTitle(gameName)
+        toolbarCollapsing.setCollapsedTitleTextColor(resources.getColor(R.color.colorTab))
+        toolbarCollapsing.setExpandedTitleColor(resources.getColor(android.R.color.transparent))
 
         // start Loader
         val loaderManager = LoaderManager.getInstance(this)

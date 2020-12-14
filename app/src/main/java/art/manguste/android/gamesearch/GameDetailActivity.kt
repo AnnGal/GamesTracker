@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import art.manguste.android.gamesearch.gamesList.GameDetailFragment
+import kotlinx.android.synthetic.main.fragment_game_detail.*
 
 class GameDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +26,6 @@ class GameDetailActivity : AppCompatActivity() {
         if (intent.hasExtra(EXTRA_GAME_NAME)) {
             gameName = intent.getStringExtra(EXTRA_GAME_NAME)
         }
-
-
 
         Log.d(TAG, "OnClick before Fragment ")
         if (gameCode != null) {
