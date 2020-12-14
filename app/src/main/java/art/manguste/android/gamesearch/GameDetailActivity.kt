@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import art.manguste.android.gamesearch.gamesList.OLDGameDetailFragment
-import art.manguste.android.gamesearch.gamesList.GamesListFragment
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
+import art.manguste.android.gamesearch.gamesList.GameDetailFragment
 
 class GameDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
-        Log.d(GamesListFragment.TAG, "OnClick into activity ")
+        Log.d(TAG, "OnClick into activity ")
         setContentView(R.layout.activity_game_detail)
         var gameCode: String? = null
         var gameName: String? = null
@@ -24,14 +25,20 @@ class GameDetailActivity : AppCompatActivity() {
         if (intent.hasExtra(EXTRA_GAME_NAME)) {
             gameName = intent.getStringExtra(EXTRA_GAME_NAME)
         }
-        Log.d(GamesListFragment.TAG, "OnClick before Fragment ")
-        /*if (gameCode != null) {
-            if (savedInstanceState == null) {
-                supportFragmentManager.beginTransaction()
-                        .add(R.id.container, OLDGameDetailFragment.Companion.createInstance(gameCode, gameName))
-                        .commit()
+
+
+
+        Log.d(TAG, "OnClick before Fragment ")
+        if (gameCode != null) {
+            val bundle = Bundle().apply {
+                putString(EXTRA_GAME_CODE, gameCode)
+                putString(EXTRA_GAME_NAME, gameName)
             }
-        } */
+
+            supportFragmentManager.commit {
+                add<GameDetailFragment>(containerViewId = android.R.id.content, args = bundle)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

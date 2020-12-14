@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="art.manguste.android.gamesearch.gamesList.GamesViewModel" />
+            type="art.manguste.android.gamesearch.gamesList.GamesListVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

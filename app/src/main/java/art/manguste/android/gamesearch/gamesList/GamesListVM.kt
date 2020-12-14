@@ -6,15 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import art.manguste.android.gamesearch.core.GameBriefly
-import art.manguste.android.gamesearch.network.GamesApi
+import art.manguste.android.gamesearch.api.GamesApi
+import art.manguste.android.gamesearch.core.LoadStatus
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-enum class LoadStatus { LOADING, ERROR, DONE }
-
-class GamesViewModel(application: Application) : AndroidViewModel(application) {
+class GamesListVM(application: Application) : AndroidViewModel(application) {
 
     // retrofit requests fast settings
     private val rowNum = 10                 // how many rows in query
@@ -35,6 +34,7 @@ class GamesViewModel(application: Application) : AndroidViewModel(application) {
     // displays data on init
     init {
         //getGamesHotList()
+        _status.value = LoadStatus.NONE
     }
 
     private fun getGamesHotList() {

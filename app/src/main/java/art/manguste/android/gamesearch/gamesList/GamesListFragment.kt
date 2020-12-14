@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import art.manguste.android.gamesearch.GameDetailActivity
 import art.manguste.android.gamesearch.core.GameBriefly
+import art.manguste.android.gamesearch.core.LoadStatus
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
 import com.google.android.material.snackbar.Snackbar
@@ -22,8 +23,8 @@ import com.google.android.material.snackbar.Snackbar
  */
 class GamesListFragment : Fragment() {
 
-    private val viewModel: GamesViewModel by lazy {
-        ViewModelProvider(this).get(GamesViewModel::class.java)
+    private val gamesListVM: GamesListVM by lazy {
+        ViewModelProvider(this).get(GamesListVM::class.java)
     }
 
     private var searchType: SearchType? = null
@@ -47,7 +48,7 @@ class GamesListFragment : Fragment() {
                     changeGamesFavoriteStatus(game)
                 }))
 
-        binding.viewModel = viewModel
+        binding.viewModel = gamesListVM
 
         setHasOptionsMenu(true)
         return binding.root
@@ -76,43 +77,21 @@ class GamesListFragment : Fragment() {
             false -> game.isFavorite = true
         }
 
-        Snackbar.make(view!!, snackMessage, Snackbar.LENGTH_LONG).show()
+        Snackbar.make(requireView(), snackMessage, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchType = requireArguments().getString(SEARCH_TYPE)?.let { SearchType.valueOf(it) }
-        Log.d(TAG, "SEARCH_TYPE = $searchType")
-
-        // hide search panel if it needed
-        when (searchType)  {
-            SearchType.HOT -> {
-                binding.panelSearchGame.visibility = View.GONE
-                viewModel.getHotGamesList()
-            }
-            SearchType.SEARCH -> {
-                binding.panelSearchGame.visibility = View.VISIBLE
-                // search Game by click on button
-                binding.btnStartSearch.setOnClickListener {
-                    binding.searchByTitle.text.isNotEmpty().let {
-                        viewModel.getSearchGameList(binding.searchByTitle.text.toString())
-                    }
-                }
-            }
-            SearchType.FAVORITE -> binding.panelSearchGame.visibility = View.GONE
-            else -> Log.d(TAG, "Unexpected search type = $searchType")
-        }
-
-        viewModel.gamesList.observe(viewLifecycleOwner, Observer { games ->
+        gamesListVM.gamesList.observe(viewLifecycleOwner, Observer { games ->
             Log.d(TAG, "games = ${games.size}")
             (binding.recyclerGames.adapter as GameAdapter).apply {
                 reloadGames(games)
             }
         })
 
-        viewModel.status.observe(viewLifecycleOwner, {status ->
-            when (status) {
+        gamesListVM.status.observe(viewLifecycleOwner, { status ->
+            when (status!!) {
                 LoadStatus.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.netLostImage.visibility = View.GONE
@@ -125,12 +104,38 @@ class GamesListFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     binding.netLostImage.visibility = View.VISIBLE
                 }
+                LoadStatus.NONE -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.netLostImage.visibility = View.GONE
+                }
             }
         })
+
+        searchType = requireArguments().getString(SEARCH_TYPE)?.let { SearchType.valueOf(it) }
+        Log.d(TAG, "SEARCH_TYPE = $searchType")
+
+        // hide search panel if it needed
+        when (searchType)  {
+            SearchType.HOT -> {
+                binding.panelSearchGame.visibility = View.GONE
+                gamesListVM.getHotGamesList()
+            }
+            SearchType.SEARCH -> {
+                binding.panelSearchGame.visibility = View.VISIBLE
+                // search Game by click on button
+                binding.btnStartSearch.setOnClickListener {
+                    binding.searchByTitle.text.isNotEmpty().let {
+                        gamesListVM.getSearchGameList(binding.searchByTitle.text.toString())
+                    }
+                }
+            }
+            SearchType.FAVORITE -> binding.panelSearchGame.visibility = View.GONE
+            else -> Log.d(TAG, "Unexpected search type = $searchType")
+        }
     }
 
     companion object {
-        val TAG = GamesListFragment::class.java.simpleName
+        private val TAG = GamesListFragment::class.java.simpleName
         private const val SEARCH_TYPE = "search_type"
 
         /**

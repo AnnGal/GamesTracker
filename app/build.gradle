@@ -75,6 +75,7 @@ dependencies {
     // moshi
     implementation 'com.squareup.moshi:moshi:1.11.0'
     implementation 'com.squareup.moshi:moshi-kotlin:1.11.0'
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
 
     // multidex - too many libraries
     def multidex_version = "2.0.1"

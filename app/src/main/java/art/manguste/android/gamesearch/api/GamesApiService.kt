@@ -1,5 +1,6 @@
-package art.manguste.android.gamesearch.network
+package art.manguste.android.gamesearch.api
 
+import art.manguste.android.gamesearch.core.GameDetail
 import art.manguste.android.gamesearch.core.ResponseJsonGamesList
 
 
@@ -37,7 +38,7 @@ interface GamesApiService {
 
     @Headers(HEADER)
     @GET("games/{currentGame}")
-    suspend fun getSpecificGame(@Path("currentGame") gameAlias: String): ResponseJsonGamesList
+    suspend fun getSpecificGame(@Path("currentGame") gameAlias: String): GameDetail
     // example: https://api.rawg.io/api/games/cyberpunk-2077
 }
 

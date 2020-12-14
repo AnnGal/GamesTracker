@@ -59,29 +59,29 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
 
         // UI objects
         mProgressBar = view.findViewById(R.id.progressBar)
-        mCoverImageView = view.findViewById(R.id.iv_cover)
-        mTitle = view.findViewById(R.id.tv_title)
-        mRelease = view.findViewById(R.id.tv_release)
-        mDescription = view.findViewById(R.id.tv_description)
-        mGenre = view.findViewById(R.id.tv_genre)
-        mDeveloper = view.findViewById(R.id.tv_developer)
-        mPlatform = view.findViewById(R.id.tv_platform)
-        mPublisher = view.findViewById(R.id.tv_publisher)
-        mWebsite = view.findViewById(R.id.tv_game_website)
-        mFavoriteButton = view.findViewById(R.id.ib_favorite)
-        mShareButton = view.findViewById(R.id.ib_share)
-        mDisclaimer = view.findViewById(R.id.tv_disclaimer)
+        mCoverImageView = view.findViewById(R.id.gameCover)
+        mTitle = view.findViewById(R.id.title)
+        mRelease = view.findViewById(R.id.release)
+        mDescription = view.findViewById(R.id.description)
+        mGenre = view.findViewById(R.id.genre)
+        mDeveloper = view.findViewById(R.id.developer)
+        mPlatform = view.findViewById(R.id.platform)
+        mPublisher = view.findViewById(R.id.publisher)
+        mWebsite = view.findViewById(R.id.gameWebsite)
+        mFavoriteButton = view.findViewById(R.id.favorite)
+        mShareButton = view.findViewById(R.id.share)
+        mDisclaimer = view.findViewById(R.id.disclaimer)
 
         //save game as favorite game for tracking
-        ib_favorite.setOnClickListener(View.OnClickListener {
+        favorite.setOnClickListener(View.OnClickListener {
             DBUtils.Companion.changeFavoriteStatus(context, mGame)
             var isAddToFavorite = true
             if (!mGame!!.isFavorite) {
                 // add to Favorite
-                ib_favorite.setImageDrawable(resources.getDrawable(R.drawable.ic_action_star_filled))
+                favorite.setImageDrawable(resources.getDrawable(R.drawable.ic_action_star_filled))
             } else {
                 // remove from Favorite
-                ib_favorite.setImageDrawable(resources.getDrawable(R.drawable.ic_action_star_empty))
+                favorite.setImageDrawable(resources.getDrawable(R.drawable.ic_action_star_empty))
                 isAddToFavorite = false
             }
             // todo fix
@@ -90,7 +90,7 @@ class OLDGameDetailFragment : Fragment(), LoaderManager.LoaderCallbacks<ArrayLis
 
         //save game as favorite game for tracking
         // todo share
-        ib_share.setOnClickListener(View.OnClickListener {
+        share.setOnClickListener(View.OnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_TEXT, mGame.name + " - " + mGame.apiLink)
