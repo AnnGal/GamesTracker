@@ -35,5 +35,6 @@
     <string name="release_date">Release date:</string>
     <string name="cut_wifi_img_desc">image of cut wifi connection</string>
     <string name="image_of_share_icon">image of share icon</string>
-    <string name="image_of_make_favorite_button">image of make favorite button</string>>
+    <string name="image_of_make_favorite_button">image of make favorite button</string>
+    <string name="make_game_favorite">make game favorite</string>>
 </resources>
