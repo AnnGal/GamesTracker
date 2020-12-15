@@ -1,7 +1,6 @@
 package art.manguste.android.gamesearch.gamesList
 
 import android.app.Application
-import android.provider.SyncStateContract.Helpers.insert
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -11,7 +10,6 @@ import art.manguste.android.gamesearch.api.GamesApi
 import art.manguste.android.gamesearch.core.*
 import art.manguste.android.gamesearch.db.*
 import kotlinx.coroutines.*
-import java.nio.file.Files.delete
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -132,7 +130,6 @@ class GamesListVM(application: Application) : AndroidViewModel(application) {
                     _gamesList.value = data
                 }
             }
-
         }
     }
 
