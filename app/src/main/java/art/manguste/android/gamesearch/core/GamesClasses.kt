@@ -2,7 +2,12 @@ package art.manguste.android.gamesearch.core
 
 import com.squareup.moshi.Json
 
-interface GameBasic
+abstract class GameBasic(
+        @Json(name = "slug")
+        open val alias: String,
+        open val name: String,
+        open val json: String?
+)
 
 data class ResponseJsonGamesList(
         val count: Int,
@@ -13,23 +18,24 @@ data class ResponseJsonGamesList(
 data class GameBriefly(
         val id: Int,
         @Json(name = "slug")
-        val alias: String,
-        val name: String,
+        override val alias: String,
+        override val name: String,
         val released: String,
         @Json(name = "background_image")
         val imgHttp: String,
         val rating: String,
-        val genres: List<Genre>
-) : GameBasic {
+        val genres: List<Genre>,
+        override val json: String? = ""
+) : GameBasic(alias, name, json) {
         var isFavorite: Boolean = false
 }
 
 data class GameDetail(
         val id: Int,
         @Json(name = "slug")
-        val alias: String,
+        override val alias: String,
         val description: String,
-        val name: String,
+        override val name: String,
         val released: String?,
         @Json(name = "background_image")
         val imgHttp: String,
@@ -39,8 +45,9 @@ data class GameDetail(
         val genres: List<Genre>,
         val developers: List<Developer>,
         val publishers: List<Publisher>,
-        val platforms: List<Platforms>
-): GameBasic{
+        val platforms: List<Platforms>,
+        override val json: String? = ""
+) : GameBasic(alias, name, json){
         val apiLink: String
                 get() = API_SITE + alias
         var isFavorite: Boolean = false

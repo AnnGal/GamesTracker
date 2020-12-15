@@ -24,10 +24,9 @@ import com.google.android.material.snackbar.Snackbar
  */
 class GamesListFragment : Fragment() {
 
-/*    private val gamesListVM: GamesListVM by lazy {
+    private val gamesListVM: GamesListVM by lazy {
         ViewModelProvider(this).get(GamesListVM::class.java)
-    }*/
-    private lateinit var gamesListVM: GamesListVM
+    }
 
     private var searchType: SearchType? = null
     private lateinit var binding: FragmentGameSearchBinding
@@ -36,13 +35,8 @@ class GamesListFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         binding = FragmentGameSearchBinding.inflate(inflater)
 
-        val application = requireNotNull(this.activity).application
-        val dataSource = GameDatabase.getInstance(application).gameDao
-        gamesListVM = GamesListVM(application, dataSource)
-
         // data binding will observe LiveData with the lifecycle of the fragment
         binding.lifecycleOwner = this
-        // access to View Model from the layout
 
         binding.recyclerGames.adapter = GameAdapter(OnClickListener(
                 // on click by whole card - going to the detail info about game
@@ -58,48 +52,47 @@ class GamesListFragment : Fragment() {
         return binding.root
     }
 
-    private fun toDetailInfo(game: GameBriefly){
-        Log.d(TAG, "OnClick ${game.name}")
+    private fun toDetailInfo(game: GameBriefly) {
         val intent = Intent(activity, GameDetailActivity::class.java)
                 .putExtra(GameDetailActivity.EXTRA_GAME_CODE, game.alias)
                 .putExtra(GameDetailActivity.EXTRA_GAME_NAME, game.name)
 
-        Log.d(TAG, "OnClick start activity ${game.name}")
         startActivity(intent)
     }
 
-    private fun changeGamesFavoriteStatus(game: GameBriefly)  {
-        Log.d(TAG, "OnClickFavorite ${game.name}")
-
+    private fun changeGamesFavoriteStatus(game: GameBriefly) {
         // form message into snakbar
         val snackMessage = if (game.isFavorite) "${game.name} removed from favourites"
         else "${game.name} added to favourites"
 
-        // db actions
-        val application = requireNotNull(this.activity).application
-        val dataSource = GameDatabase.getInstance(application).gameDao
         // form actions
         when (game.isFavorite) {
             true -> {
                 game.isFavorite = false
-                gamesListVM.removeGameFavorite(game, dataSource)
+                gamesListVM.removeGameFavorite(game)
             }
             false -> {
                 game.isFavorite = true
-                gamesListVM.addGameFavorite(game, dataSource)
+                gamesListVM.addGameFavorite(game)
             }
         }
 
         Snackbar.make(requireView(), snackMessage, Snackbar.LENGTH_LONG).show()
     }
+
     override fun onResume() {
         super.onResume()
-        if (searchType == SearchType.FAVORITE){
-            Log.d(TAG, "OnResume ${SearchType.FAVORITE}")
-            val application = requireNotNull(this.activity).application  // todo - del this madness, its just for test idea
-            val dataSource = GameDatabase.getInstance(application).gameDao
-            gamesListVM.getDBGameList(dataSource)
+        Log.d(TAG, "onResume try ")
+
+        Log.d(TAG, "onResume go")
+        if (searchType == SearchType.FAVORITE) {
+            gamesListVM.getDBGameList()
+        } else {
+            if (gamesListVM.status.value == LoadStatus.DONE) {
+                gamesListVM.reloadGamesFavoriteStatus()
+            }
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -127,10 +120,10 @@ class GamesListFragment : Fragment() {
         })
 
         searchType = requireArguments().getString(SEARCH_TYPE)?.let { SearchType.valueOf(it) }
-        Log.d(TAG, "SEARCH_TYPE = $searchType")
+        //Log.d(TAG, "SEARCH_TYPE = $searchType")
 
         // hide search panel if it needed
-        when (searchType)  {
+        when (searchType) {
             SearchType.HOT -> {
                 binding.panelSearchGame.visibility = View.GONE
                 gamesListVM.getHotGamesList()
@@ -146,21 +139,17 @@ class GamesListFragment : Fragment() {
             }
             SearchType.FAVORITE -> {
                 binding.panelSearchGame.visibility = View.GONE
-                val application = requireNotNull(this.activity).application  // todo - del this madness, its just for test idea
-                val dataSource = GameDatabase.getInstance(application).gameDao
-                gamesListVM.getDBGameList(dataSource)
+                gamesListVM.getDBGameList()
             }
             else -> Log.d(TAG, "Unexpected search type = $searchType")
         }
 
-        //if (searchType != SearchType.FAVORITE){
-            gamesListVM.gamesList.observe(viewLifecycleOwner, { games ->
-                Log.d(TAG, "games = ${games.size}")
-                (binding.recyclerGames.adapter as GameAdapter).apply {
-                    reloadGames(games)
-                }
-            })
-        //}
+        gamesListVM.gamesList.observe(viewLifecycleOwner, { games ->
+            //Log.d(TAG, "games = ${games.size}")
+            (binding.recyclerGames.adapter as GameAdapter).apply {
+                reloadGames(games)
+            }
+        })
     }
 
     companion object {

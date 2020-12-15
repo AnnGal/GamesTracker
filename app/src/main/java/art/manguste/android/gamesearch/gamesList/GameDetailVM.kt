@@ -8,8 +8,7 @@ import androidx.lifecycle.viewModelScope
 import art.manguste.android.gamesearch.api.GamesApi
 import art.manguste.android.gamesearch.core.*
 import art.manguste.android.gamesearch.core.encodeData
-import art.manguste.android.gamesearch.db.Game
-import art.manguste.android.gamesearch.db.GameDAO
+import art.manguste.android.gamesearch.db.*
 import kotlinx.coroutines.*
 
 class GameDetailVM(application: Application) : AndroidViewModel(application)  {
@@ -21,8 +20,12 @@ class GameDetailVM(application: Application) : AndroidViewModel(application)  {
     val status: LiveData<LoadStatus>
         get() = _status
 
+    private val databaseLazy: GameDAO  = GameDatabase.getInstance(application).gameDao
+    private var gamesDB = MutableLiveData<List<GameBriefly>>()
+
     init {
         _status.value = LoadStatus.NONE
+        getDBGamesForViewModel()
     }
 
     fun getGameInfo(gameAlias: String){
@@ -32,9 +35,12 @@ class GameDetailVM(application: Application) : AndroidViewModel(application)  {
 
                 val resultRequest = GamesApi.retrofitService.getSpecificGame(gameAlias = gameAlias)
 
-                _gameDetail.value = resultRequest
-                //Log.d("GamesList fragment", "games = ${gamesList.value?.size}")
+                gamesDB.value?.let {
+                    val gamesAlias: List<String> = gamesDB.value!!.map { it.alias }.toList()
+                    resultRequest.isFavorite = (resultRequest.alias in gamesAlias)
+                }
 
+                _gameDetail.value = resultRequest
                 _status.value = LoadStatus.DONE
             } catch (e: Exception) {
                 _status.value = LoadStatus.ERROR
@@ -43,54 +49,24 @@ class GameDetailVM(application: Application) : AndroidViewModel(application)  {
         }
     }
 
-    private fun intoGame(gameToSave: GameBasic): Deferred<Game?> {
-        return GlobalScope.async {
-            when (gameToSave) {
-                is GameBriefly -> {
-                    Game(
-                            name = gameToSave.name,
-                            alias = gameToSave.alias,
-                            json = encodeData(gameToSave)
-                    )
-                }
-                is GameDetail -> {
-                    Game(
-                            name = gameToSave.name,
-                            alias = gameToSave.alias,
-                            json = encodeData(gameToSave)
-                    )
-                }
-                else -> null
+    private fun getDBGamesForViewModel() {
+        var games: List<GameBriefly> = listOf()
+        CoroutineScope(Dispatchers.IO).launch {
+            val gamesDBList = databaseLazy.getAll()
+            games = gamesDBList.map { parseData(it.json) }
+
+            viewModelScope.launch {
+                gamesDB.value = games
             }
         }
     }
 
-    private suspend fun insert(game: Game, database: GameDAO) {
-        database.insert(game)
+    fun addGameFavorite(gameToSave: GameBasic,) {
+        addToFavorite(gameToSave, databaseLazy)
     }
 
-    private suspend fun delete(game: Game, database: GameDAO) {
-        database.delete(game)
-    }
-
-    fun addGameFavorite(gameToSave: GameBasic, database: GameDAO) {
-        // pack game into class for DB
-        CoroutineScope(Dispatchers.IO).launch {
-            val game = intoGame(gameToSave).await()
-            game?.let { insert(game, database) }
-        }
-    }
-
-    fun removeGameFavorite(gameToDel: GameBasic, database: GameDAO) {
-        CoroutineScope(Dispatchers.IO).launch {
-            // todo change on one class
-            val game = when (gameToDel) {
-                is GameBriefly -> Game(name = gameToDel.name, alias = gameToDel.alias, json = "" )
-                is GameDetail -> Game(name = gameToDel.name, alias = gameToDel.alias, json = "" )
-                else -> Game(name = "", alias = "", json = "" )
-            }
-            delete(game, database)
-        }
+    fun removeGameFavorite(gameToDel: GameBasic) {
+        removeFromFavorite(gameToDel, databaseLazy)
     }
 }
 

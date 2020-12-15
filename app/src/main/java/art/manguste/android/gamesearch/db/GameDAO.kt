@@ -18,6 +18,9 @@ interface GameDAO {
     @Query("SELECT * FROM games ") //ORDER BY gameId DESC
     suspend fun getAll(): List<Game>
 
+    @Query("SELECT * FROM games ") //ORDER BY gameId DESC
+    fun getAllGamesLiveData(): LiveData<List<Game>>
+
     @Query("SELECT COUNT(*) FROM games ")
     fun count(): Int
 

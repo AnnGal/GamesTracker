@@ -57,7 +57,7 @@ class GameDetailFragment : Fragment() {
             binding.publisher.text = gameCurrent.publishers.joinToString (", ") {publisher -> publisher.name }
 
             binding.gameWebsite.apply {
-                text = Html.fromHtml("<u>" + game.website + "</u>")
+                text = Html.fromHtml("<u>" + gameCurrent.website + "</u>")
                 setTextColor(Color.BLUE)
                 setOnClickListener {
                     // click on website
@@ -84,35 +84,21 @@ class GameDetailFragment : Fragment() {
                 false -> binding.favorite.setImageResource(R.drawable.ic_action_star_empty)
             }
 
-            val application = requireNotNull(this.activity).application  // todo - del this madness, its just for test idea
-            val dataSource = GameDatabase.getInstance(application).gameDao
-
-            when (game.isFavorite) {
-                true -> {
-                    game.isFavorite = false
-                    gameDetailVM.removeGameFavorite(game, dataSource)
-                }
-                false -> {
-                    game.isFavorite = true
-                    gameDetailVM.addGameFavorite(game, dataSource)
-                }
-            }
-
             binding.favorite.setOnClickListener {
                 // form actions
                 when (gameCurrent.isFavorite) {
                     true -> {
                         gameCurrent.isFavorite = false
+                        gameDetailVM.removeGameFavorite(gameCurrent)
                         binding.favorite.setImageResource(R.drawable.ic_action_star_empty)
                     }
                     false -> {
                         gameCurrent.isFavorite = true
+                        gameDetailVM.addGameFavorite(gameCurrent)
                         binding.favorite.setImageResource(R.drawable.ic_action_star_filled)
                     }
                 }
             }
-
-
 
             //share
             binding.share.setOnClickListener {

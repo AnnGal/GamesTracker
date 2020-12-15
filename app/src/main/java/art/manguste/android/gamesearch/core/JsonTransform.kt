@@ -1,10 +1,6 @@
 package art.manguste.android.gamesearch.core
 
 import android.util.Log
-import art.manguste.android.gamesearch.db.Game
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -65,7 +61,7 @@ internal fun encodeData(game: GameBasic): String {
 
 internal fun parseData(data: String): GameBriefly {
         val jsonGame = jsonFormat.decodeFromString<JsonGame>(data)
-        val game = GameBriefly(
+        return GameBriefly(
                 id = jsonGame.id,
                 alias = jsonGame.alias,
                 name = jsonGame.name,
@@ -73,11 +69,5 @@ internal fun parseData(data: String): GameBriefly {
                 imgHttp = jsonGame.imgHttp,
                 rating = jsonGame.rating,
                 genres = jsonGame.genres.map { Genre(it.id, it.name) })
-                .also { it.isFavorite = true }
-        Log.d("Json", game.toString())
-        return game
-}
-
-class JsonTransform {
-
+                .also { it.isFavorite = true  }
 }
