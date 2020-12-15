@@ -1,5 +1,6 @@
 # GamesTracker
 Sample. API + MVVM + Coroutines + Json + Rerofit + Room
+
 App for searching and tracking games. API provided by [RAWG](https://rawg.io/) 
 
 <img src="https://user-images.githubusercontent.com/51135284/94704754-ecc82380-0348-11eb-91ef-cbb97cd8d0a7.gif" width="225" height="400" />
