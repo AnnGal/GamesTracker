@@ -2,6 +2,8 @@ package art.manguste.android.gamesearch.core
 
 import com.squareup.moshi.Json
 
+interface GameBasic
+
 data class ResponseJsonGamesList(
         val count: Int,
         val next: String,
@@ -18,7 +20,7 @@ data class GameBriefly(
         val imgHttp: String,
         val rating: String,
         val genres: List<Genre>
-) {
+) : GameBasic {
         var isFavorite: Boolean = false
 }
 
@@ -31,8 +33,8 @@ data class GameDetail(
         val released: String,
         @Json(name = "background_image")
         val imgHttp: String,
-        val rating: String,
-        val metacritic: String,
+        //val rating: String,
+        //val metacritic: String,
         val website: String,
         val genres: List<Genre>,
         val developers: List<Developer>,

@@ -6,7 +6,7 @@ import androidx.room.*
 
 @Dao
 interface GameDAO {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(game: Game)
 
     @Update
@@ -15,7 +15,7 @@ interface GameDAO {
     @Delete
     suspend fun delete(game: Game)
 
-    @Query("SELECT * FROM games") // ORDER BY gameId DESC
+    @Query("SELECT * FROM games ORDER BY gameId DESC") //
     suspend fun getAll(): List<Game>
 
     @Query("SELECT COUNT(*) FROM games ")

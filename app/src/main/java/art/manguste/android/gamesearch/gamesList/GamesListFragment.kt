@@ -139,21 +139,21 @@ class GamesListFragment : Fragment() {
             }
             SearchType.FAVORITE -> {
                 binding.panelSearchGame.visibility = View.GONE
-                val application = requireNotNull(this.activity).application  // todo del, this madness just for test idea
+                val application = requireNotNull(this.activity).application  // todo - del this madness, its just for test idea
                 val dataSource = GameDatabase.getInstance(application).gameDao
                 gamesListVM.getDBGameList(dataSource)
             }
             else -> Log.d(TAG, "Unexpected search type = $searchType")
         }
 
-        if (searchType != SearchType.FAVORITE){
+        //if (searchType != SearchType.FAVORITE){
             gamesListVM.gamesList.observe(viewLifecycleOwner, { games ->
                 Log.d(TAG, "games = ${games.size}")
                 (binding.recyclerGames.adapter as GameAdapter).apply {
                     reloadGames(games)
                 }
             })
-        }
+        //}
     }
 
     companion object {

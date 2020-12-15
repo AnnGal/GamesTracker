@@ -6,21 +6,19 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import art.manguste.android.gamesearch.core.GameBriefly
+import androidx.room.ColumnInfo
 import art.manguste.android.gamesearch.api.GamesApi
-import art.manguste.android.gamesearch.core.LoadStatus
+import art.manguste.android.gamesearch.core.*
+import art.manguste.android.gamesearch.core.encodeData
 import art.manguste.android.gamesearch.db.Game
 import art.manguste.android.gamesearch.db.GameDAO
 import art.manguste.android.gamesearch.db.GameDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class GamesListVM(application: Application, databaseG: GameDAO) : AndroidViewModel(application) {
+class GamesListVM(application: Application, databaseFragment: GameDAO) : AndroidViewModel(application) {
 
     // retrofit requests fast settings
     private val rowNum = 10                 // how many rows in query
@@ -43,13 +41,13 @@ class GamesListVM(application: Application, databaseG: GameDAO) : AndroidViewMod
         _status.value = LoadStatus.NONE
     }
 
-    fun getHotGamesList(){
+    fun getHotGamesList() {
         viewModelScope.launch {
             try {
                 _status.value = LoadStatus.LOADING
 
                 val resultRequest = GamesApi.retrofitService.getGamesHotListSorts(
-                        datesRange = getDatesRange(monthGapBeforeNow,monthGapAfterNow),
+                        datesRange = getDatesRange(monthGapBeforeNow, monthGapAfterNow),
                         ordering = orderBy)
 
                 _gamesList.value = resultRequest.results
@@ -83,56 +81,77 @@ class GamesListVM(application: Application, databaseG: GameDAO) : AndroidViewMod
         }
     }
 
-   fun getDBGameList(database: GameDAO) {
-        viewModelScope.launch {
-            try {
-                _status.value = LoadStatus.LOADING
+    fun getDBGameList(database: GameDAO) {
 
-                val resultRequest = database.getAll()
-                //val nights = database.getAll()
-
-                //_gamesList.value = database.getAll().value
-                //Log.d("GamesList fragment", "gameDB = ${resultRequest.value?.size}")
-
-                _status.value = LoadStatus.DONE
-            } catch (e: Exception) {
-                _status.value = LoadStatus.ERROR
-                Log.d("GamesList fragment", "Exception = ${e.message}")
-                _gamesList.value = ArrayList()
+        var games: List<GameBriefly> = listOf()
+        CoroutineScope(Dispatchers.IO).launch {
+            // get games from DB
+            val gamesDBList = database.getAll()
+            //Log.d("GamesList fragment", "gameDB = ${gamesDBList.size}")
+            games = gamesDBList.map { parseData(it.json) }
+            /*for (game in games) {
+                Log.d("GamesList fragment", "gameDB = ${game}")
+            }*/
+            // transform into _gamesList.value GameBriefly
+            viewModelScope.launch {
+                _gamesList.value = games
             }
         }
     }
 
-    fun addGameFavorite(gameBriefly: GameBriefly, database: GameDAO) {
-        val game = Game(name= gameBriefly.name, alias = gameBriefly.alias, json = gameBriefly.name)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            insert(game, database)
+/*    private suspend fun getGamesDbList(database: GameDAO): Deferred<List<GameBriefly>> {
+        return GlobalScope.async {
+            val gamesDBList = database.getAll()
+            val games = gamesDBList.map { parseData(it.json) }
+            return@async games
         }
+    }*/
 
-        CoroutineScope(Dispatchers.IO).launch {
-            count(database)
+    /* CoroutineScope(Dispatchers.IO).launch {
+         // get games from DB
+         val gamesDBList = database.getAll()
+         Log.d("GamesList fragment", "gameDB = ${gamesDBList.size}")
+         games = gamesDBList.map { parseData(it.json) }
+         for (game in games) {
+             Log.d("GamesList fragment", "gameDB = ${game}")
+         }
+         // transform into _gamesList.value GameBriefly
+
+     }   */
+
+
+    private suspend fun intoGame(gameToSave: GameBasic): Deferred<Game?> {
+        return GlobalScope.async {
+            when (gameToSave) {
+                is GameBriefly -> {
+                    Game(
+                            name = gameToSave.name,
+                            alias = gameToSave.alias,
+                            json = encodeData(gameToSave)
+                    )
+                }
+                else -> null
+            }
         }
-
-
-
-        //viewModelScope.launch {
-            // Create a new night, which captures the current time,
-            // and insert it into the database.
-            //database.insert(game)
-            //val resultRequest = database.getAll()
-            //Log.d("GamesList fragment", "gameDB = ${resultRequest.value?.size}")
-            //Log.d("GamesList fragment", "database.count = "+database.count())
-        //}
     }
 
     private suspend fun insert(game: Game, database: GameDAO) {
-        withContext(Dispatchers.IO) {
-            database.insert(game)
+        database.insert(game)
+    }
+
+    private suspend fun delete(game: Game, database: GameDAO) {
+        database.delete(game)
+    }
+
+    fun addGameFavorite(gameToSave: GameBasic, database: GameDAO) {
+        // pack game into class for DB
+        CoroutineScope(Dispatchers.IO).launch {
+            val game = intoGame(gameToSave).await()
+            game?.let { insert(game, database) }
         }
     }
 
-    private suspend fun count(database: GameDAO) {
+    suspend fun count(database: GameDAO) {
         withContext(Dispatchers.IO) {
             val req = database.getAll()
             val res = database.count()
@@ -141,13 +160,11 @@ class GamesListVM(application: Application, databaseG: GameDAO) : AndroidViewMod
     }
 
 
-
     fun removeGameFavorite(gameBriefly: GameBriefly, database: GameDAO) {
-      /*  viewModelScope.launch {
-            // Create a new night, which captures the current time,
-            // and insert it into the database.
-            database.delete(gameBriefly)
-        }*/
+        CoroutineScope(Dispatchers.IO).launch {
+            val game = Game(name = gameBriefly.name, alias = gameBriefly.alias, json = "" )
+            delete(game, database)
+        }
     }
 }
 

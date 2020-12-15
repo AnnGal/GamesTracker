@@ -39,7 +39,10 @@ class GameViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
     private val title = itemView.findViewById<TextView>(R.id.title)
     private val description = itemView.findViewById<TextView>(R.id.description)
     private val releaseDate = itemView.findViewById<TextView>(R.id.release_date)
+    private val releaseLabel = itemView.findViewById<TextView>(R.id.release_label)
+
     private val rate = itemView.findViewById<TextView>(R.id.rate)
+    private val rateLabel = itemView.findViewById<TextView>(R.id.rate_label)
     private val favorite = itemView.findViewById<ImageButton>(R.id.favorite)
     private val gameIcon = itemView.findViewById<ImageView>(R.id.game_icon)
 
@@ -52,13 +55,31 @@ class GameViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
 
         title.text = gameBriefly.name
 
-        /*if (gameBriefly.genres.isNotEmpty())
+        if (gameBriefly.genres.isNotEmpty())
             description.text = itemView.resources.getString(R.string.card_description_text,
                 gameBriefly.genres.joinToString( ", " ) {it.name})
-        else description.text = ""*/
+        else description.text = ""
 
-        releaseDate.text = gameBriefly.released.toCardFormat()
-        rate.text = gameBriefly.rating
+        when (gameBriefly.released.isNotEmpty()){
+            true -> {
+                releaseDate.visibility = View.VISIBLE
+                releaseLabel.visibility = View.VISIBLE
+                releaseDate.text = gameBriefly.released.toCardFormat()
+            }
+            false -> {
+                releaseDate.visibility = View.INVISIBLE
+                releaseLabel.visibility = View.INVISIBLE
+            }
+        }
+
+        if (gameBriefly.rating == "0.0" || gameBriefly.rating.isEmpty()){
+            rate.visibility = View.INVISIBLE
+            rateLabel.visibility = View.INVISIBLE
+        } else {
+            rate.visibility = View.VISIBLE
+            rateLabel.visibility = View.VISIBLE
+            rate.text = gameBriefly.rating
+        }
 
         when (gameBriefly.isFavorite){
             true -> favorite.setImageResource(R.drawable.ic_action_star_filled)

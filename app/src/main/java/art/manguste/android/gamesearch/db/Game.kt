@@ -15,9 +15,20 @@ data class Game (
     @field:ColumnInfo(index = true)
     var alias: String,
     var json: String
-    // todo
-    //@field:ColumnInfo(name = "last_update") var lastUpdate: Date,
-    //@field:ColumnInfo(name = "release") var release: Date,
-    //@field:ColumnInfo(name = "json") var json: String
-)
+){
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Game
+
+        if (alias != other.alias) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return alias.hashCode()
+    }
+}
 
