@@ -92,11 +92,18 @@ class GamesListFragment : Fragment() {
 
         Snackbar.make(requireView(), snackMessage, Snackbar.LENGTH_LONG).show()
     }
+    override fun onResume() {
+        super.onResume()
+        if (searchType == SearchType.FAVORITE){
+            Log.d(TAG, "OnResume ${SearchType.FAVORITE}")
+            val application = requireNotNull(this.activity).application  // todo - del this madness, its just for test idea
+            val dataSource = GameDatabase.getInstance(application).gameDao
+            gamesListVM.getDBGameList(dataSource)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
 
         gamesListVM.status.observe(viewLifecycleOwner, { status ->
             when (status!!) {

@@ -30,17 +30,17 @@ data class GameDetail(
         val alias: String,
         val description: String,
         val name: String,
-        val released: String,
+        val released: String?,
         @Json(name = "background_image")
         val imgHttp: String,
-        //val rating: String,
-        //val metacritic: String,
+        val rating: String?,
+        val metacritic: String?,
         val website: String,
         val genres: List<Genre>,
         val developers: List<Developer>,
         val publishers: List<Publisher>,
         val platforms: List<Platforms>
-){
+): GameBasic{
         val apiLink: String
                 get() = API_SITE + alias
         var isFavorite: Boolean = false

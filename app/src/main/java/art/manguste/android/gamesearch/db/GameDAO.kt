@@ -15,7 +15,7 @@ interface GameDAO {
     @Delete
     suspend fun delete(game: Game)
 
-    @Query("SELECT * FROM games ORDER BY gameId DESC") //
+    @Query("SELECT * FROM games ") //ORDER BY gameId DESC
     suspend fun getAll(): List<Game>
 
     @Query("SELECT COUNT(*) FROM games ")

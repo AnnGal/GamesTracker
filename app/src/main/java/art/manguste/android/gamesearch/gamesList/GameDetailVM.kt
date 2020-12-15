@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import art.manguste.android.gamesearch.api.GamesApi
-import art.manguste.android.gamesearch.core.GameDetail
-import art.manguste.android.gamesearch.core.LoadStatus
-import kotlinx.coroutines.launch
+import art.manguste.android.gamesearch.core.*
+import art.manguste.android.gamesearch.core.encodeData
+import art.manguste.android.gamesearch.db.Game
+import art.manguste.android.gamesearch.db.GameDAO
+import kotlinx.coroutines.*
 
 class GameDetailVM(application: Application) : AndroidViewModel(application)  {
 
@@ -38,6 +40,56 @@ class GameDetailVM(application: Application) : AndroidViewModel(application)  {
                 _status.value = LoadStatus.ERROR
                 _gameDetail.value = null
             }
+        }
+    }
+
+    private fun intoGame(gameToSave: GameBasic): Deferred<Game?> {
+        return GlobalScope.async {
+            when (gameToSave) {
+                is GameBriefly -> {
+                    Game(
+                            name = gameToSave.name,
+                            alias = gameToSave.alias,
+                            json = encodeData(gameToSave)
+                    )
+                }
+                is GameDetail -> {
+                    Game(
+                            name = gameToSave.name,
+                            alias = gameToSave.alias,
+                            json = encodeData(gameToSave)
+                    )
+                }
+                else -> null
+            }
+        }
+    }
+
+    private suspend fun insert(game: Game, database: GameDAO) {
+        database.insert(game)
+    }
+
+    private suspend fun delete(game: Game, database: GameDAO) {
+        database.delete(game)
+    }
+
+    fun addGameFavorite(gameToSave: GameBasic, database: GameDAO) {
+        // pack game into class for DB
+        CoroutineScope(Dispatchers.IO).launch {
+            val game = intoGame(gameToSave).await()
+            game?.let { insert(game, database) }
+        }
+    }
+
+    fun removeGameFavorite(gameToDel: GameBasic, database: GameDAO) {
+        CoroutineScope(Dispatchers.IO).launch {
+            // todo change on one class
+            val game = when (gameToDel) {
+                is GameBriefly -> Game(name = gameToDel.name, alias = gameToDel.alias, json = "" )
+                is GameDetail -> Game(name = gameToDel.name, alias = gameToDel.alias, json = "" )
+                else -> Game(name = "", alias = "", json = "" )
+            }
+            delete(game, database)
         }
     }
 }

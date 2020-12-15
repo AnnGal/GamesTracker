@@ -17,6 +17,7 @@ import art.manguste.android.gamesearch.R
 import art.manguste.android.gamesearch.core.GameDetail
 import art.manguste.android.gamesearch.core.LoadStatus
 import art.manguste.android.gamesearch.databinding.FragmentGameDetailBinding
+import art.manguste.android.gamesearch.db.GameDatabase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_game_detail.*
@@ -48,7 +49,7 @@ class GameDetailFragment : Fragment() {
                     .into(binding.gameCover)
 
             binding.title.text = gameCurrent.name
-            binding.release.text = gameCurrent.released.toDetailFormat()
+            binding.release.text = gameCurrent.released?.toDetailFormat()
             binding.description.text = Html.fromHtml(gameCurrent.description)
             binding.genre.text = gameCurrent.genres.joinToString( ", " ) { genre -> genre.name}
             binding.developer.text = gameCurrent.developers.joinToString( ", " ) { dev -> dev.name}
@@ -83,6 +84,20 @@ class GameDetailFragment : Fragment() {
                 false -> binding.favorite.setImageResource(R.drawable.ic_action_star_empty)
             }
 
+            val application = requireNotNull(this.activity).application  // todo - del this madness, its just for test idea
+            val dataSource = GameDatabase.getInstance(application).gameDao
+
+            when (game.isFavorite) {
+                true -> {
+                    game.isFavorite = false
+                    gameDetailVM.removeGameFavorite(game, dataSource)
+                }
+                false -> {
+                    game.isFavorite = true
+                    gameDetailVM.addGameFavorite(game, dataSource)
+                }
+            }
+
             binding.favorite.setOnClickListener {
                 // form actions
                 when (gameCurrent.isFavorite) {
@@ -96,6 +111,7 @@ class GameDetailFragment : Fragment() {
                     }
                 }
             }
+
 
 
             //share

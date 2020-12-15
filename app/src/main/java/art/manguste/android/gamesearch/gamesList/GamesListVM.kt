@@ -120,7 +120,7 @@ class GamesListVM(application: Application, databaseFragment: GameDAO) : Android
      }   */
 
 
-    private suspend fun intoGame(gameToSave: GameBasic): Deferred<Game?> {
+    private fun intoGame(gameToSave: GameBasic): Deferred<Game?> {
         return GlobalScope.async {
             when (gameToSave) {
                 is GameBriefly -> {
@@ -150,15 +150,6 @@ class GamesListVM(application: Application, databaseFragment: GameDAO) : Android
             game?.let { insert(game, database) }
         }
     }
-
-    suspend fun count(database: GameDAO) {
-        withContext(Dispatchers.IO) {
-            val req = database.getAll()
-            val res = database.count()
-            Log.d("GamesList fragment", "database.count = $res req.size = ${req.joinToString(", \n") { it.name }}")
-        }
-    }
-
 
     fun removeGameFavorite(gameBriefly: GameBriefly, database: GameDAO) {
         CoroutineScope(Dispatchers.IO).launch {

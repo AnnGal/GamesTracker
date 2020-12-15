@@ -9,10 +9,11 @@ import com.squareup.moshi.Json
 
 @Entity(tableName = "games")
 data class Game (
-    @PrimaryKey(autoGenerate = true)
-    var gameId: Long = 0L,  // this is database Id, not Id from API
+    //@PrimaryKey(autoGenerate = true)
+    //var gameId: Long = 0L,  // this is database Id, not Id from API
     var name: String,
-    @field:ColumnInfo(index = true)
+    //@field:ColumnInfo(index = true)
+    @PrimaryKey(autoGenerate = false)
     var alias: String,
     var json: String
 ){

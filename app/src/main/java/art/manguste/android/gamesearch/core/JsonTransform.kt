@@ -31,9 +31,9 @@ private class JsonGenre(
 )
 
 internal fun encodeData(game: GameBasic): String {
-        when (game) {
+        return when (game) {
                 is GameBriefly -> {
-                        var jsonGame = JsonGame(
+                        val jsonGame = JsonGame(
                                 id = game.id,
                                 alias = game.alias,
                                 name = game.name,
@@ -43,10 +43,24 @@ internal fun encodeData(game: GameBasic): String {
                                 genres = game.genres.map { JsonGenre(id = it.id, name = it.name) }
                         )
                         //Log.d("Json", jsonStr)
-                        return jsonFormat.encodeToString(jsonGame)
+                        jsonFormat.encodeToString(jsonGame)
                 }
+                is GameDetail -> {
+                        val jsonGame = JsonGame(
+                                id = game.id,
+                                alias = game.alias,
+                                name = game.name,
+                                released = game.released ?: "",
+                                imgHttp = game.imgHttp,
+                                rating = game.rating ?: "0.0",
+                                genres = game.genres.map { JsonGenre(id = it.id, name = it.name) }
+                        )
+                        //Log.d("Json", jsonStr)
+                        jsonFormat.encodeToString(jsonGame)
+                }
+                else -> ""
         }
-        return ""
+
 }
 
 internal fun parseData(data: String): GameBriefly {
