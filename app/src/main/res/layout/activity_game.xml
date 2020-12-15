@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<ListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</ListView>-->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".GameActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -22,20 +16,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            app:tabTextColor="@color/colorTab"/>
+            app:tabTextColor="@color/colorTab"
+            app:tabIconTint="@color/colorTab"
+            app:tabIndicatorColor="@color/colorAccent"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,8 +2,8 @@
 <resources>
 
     <item name="ll_search" type="id"/>
-    <item name="btn_start_search" type="id"/>
-    <item name="et_search_by_name" type="id"/>
-    <item name="pb_loading" type="id"/>
-    <item name="rv_games_list" type="id"/>
+    <item name="btnStartSearch" type="id"/>
+    <item name="searchByTitle" type="id"/>
+    <item name="progressBar" type="id"/>
+    <item name="recyclerGames" type="id"/>
 </resources>
