@@ -13,6 +13,7 @@ import retrofit2.http.*
 private const val BASE_URL = "https://api.rawg.io/api/"
 private const val HEADER = "http.agent: GameTrackerApp"
 
+
 private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()

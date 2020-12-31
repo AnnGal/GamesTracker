@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.gamesList
+package art.manguste.android.gamesearch.gameslist
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,6 @@ import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.core.LoadStatus
 import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
-import art.manguste.android.gamesearch.db.GameDatabase
 
 import com.google.android.material.snackbar.Snackbar
 
@@ -24,8 +23,8 @@ import com.google.android.material.snackbar.Snackbar
  */
 class GamesListFragment : Fragment() {
 
-    private val gamesListVM: GamesListVM by lazy {
-        ViewModelProvider(this).get(GamesListVM::class.java)
+    private val gamesListViewModel: GamesListViewModel by lazy {
+        ViewModelProvider(this).get(GamesListViewModel::class.java)
     }
 
     private var searchType: SearchType? = null
@@ -69,11 +68,11 @@ class GamesListFragment : Fragment() {
         when (game.isFavorite) {
             true -> {
                 game.isFavorite = false
-                gamesListVM.removeGameFavorite(game)
+                gamesListViewModel.removeGameFavorite(game)
             }
             false -> {
                 game.isFavorite = true
-                gamesListVM.addGameFavorite(game)
+                gamesListViewModel.addGameFavorite(game)
             }
         }
 
@@ -86,10 +85,10 @@ class GamesListFragment : Fragment() {
 
         Log.d(TAG, "onResume go")
         if (searchType == SearchType.FAVORITE) {
-            gamesListVM.getDBGameList()
+            gamesListViewModel.getDBGameList()
         } else {
-            if (gamesListVM.status.value == LoadStatus.DONE) {
-                gamesListVM.reloadGamesFavoriteStatus()
+            if (gamesListViewModel.status.value == LoadStatus.DONE) {
+                gamesListViewModel.reloadGamesFavoriteStatus()
             }
         }
 
@@ -98,7 +97,7 @@ class GamesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gamesListVM.status.observe(viewLifecycleOwner, { status ->
+        gamesListViewModel.status.observe(viewLifecycleOwner, { status ->
             when (status!!) {
                 LoadStatus.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -126,25 +125,25 @@ class GamesListFragment : Fragment() {
         when (searchType) {
             SearchType.HOT -> {
                 binding.panelSearchGame.visibility = View.GONE
-                gamesListVM.getHotGamesList()
+                gamesListViewModel.getHotGamesList()
             }
             SearchType.SEARCH -> {
                 binding.panelSearchGame.visibility = View.VISIBLE
                 // search Game by click on button
                 binding.btnStartSearch.setOnClickListener {
                     binding.searchByTitle.text.isNotEmpty().let {
-                        gamesListVM.getSearchGameList(binding.searchByTitle.text.toString())
+                        gamesListViewModel.getSearchGameList(binding.searchByTitle.text.toString())
                     }
                 }
             }
             SearchType.FAVORITE -> {
                 binding.panelSearchGame.visibility = View.GONE
-                gamesListVM.getDBGameList()
+                gamesListViewModel.getDBGameList()
             }
             else -> Log.d(TAG, "Unexpected search type = $searchType")
         }
 
-        gamesListVM.gamesList.observe(viewLifecycleOwner, { games ->
+        gamesListViewModel.gamesList.observe(viewLifecycleOwner, { games ->
             //Log.d(TAG, "games = ${games.size}")
             (binding.recyclerGames.adapter as GameAdapter).apply {
                 reloadGames(games)
