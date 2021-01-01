@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.gamesList
+package art.manguste.android.gamesearch.gameslist
 
 import android.app.Application
 import android.util.Log
@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class GamesListVM(application: Application) : AndroidViewModel(application) {
+class GamesListViewModel(application: Application) : AndroidViewModel(application) {
 
     // retrofit requests fast settings
     private val rowNum = 10                 // how many rows in query
@@ -25,7 +25,7 @@ class GamesListVM(application: Application) : AndroidViewModel(application) {
     private var _gamesList = MutableLiveData<List<GameBriefly>>()
     val gamesList: LiveData<List<GameBriefly>> get() = _gamesList
 
-    private val _status = MutableLiveData<LoadStatus>()
+    private val _status = MutableLiveData<LoadStatus>(LoadStatus.NONE)
     val status: LiveData<LoadStatus>
         get() = _status
 
@@ -34,10 +34,8 @@ class GamesListVM(application: Application) : AndroidViewModel(application) {
 
     private var gamesDB = MutableLiveData<List<GameBriefly>>()
 
-
     // displays data on init
     init {
-        _status.value = LoadStatus.NONE
         getDBGamesForViewModel()
     }
 

@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.gamesList
+package art.manguste.android.gamesearch.gamedetail
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -7,11 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import art.manguste.android.gamesearch.api.GamesApi
 import art.manguste.android.gamesearch.core.*
-import art.manguste.android.gamesearch.core.encodeData
 import art.manguste.android.gamesearch.db.*
 import kotlinx.coroutines.*
 
-class GameDetailVM(application: Application) : AndroidViewModel(application)  {
+class GameDetailViewModel(application: Application) : AndroidViewModel(application)  {
 
     private val _gameDetail = MutableLiveData<GameDetail>()
     val gameDetail: LiveData<GameDetail> get() = _gameDetail

@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.gamesList
+package art.manguste.android.gamesearch.gamedetail
 
 import android.content.Intent
 import android.graphics.Color
@@ -17,7 +17,6 @@ import art.manguste.android.gamesearch.R
 import art.manguste.android.gamesearch.core.GameDetail
 import art.manguste.android.gamesearch.core.LoadStatus
 import art.manguste.android.gamesearch.databinding.FragmentGameDetailBinding
-import art.manguste.android.gamesearch.db.GameDatabase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_game_detail.*
@@ -28,8 +27,8 @@ class GameDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentGameDetailBinding
 
-    private val gameDetailVM: GameDetailVM by lazy {
-        ViewModelProvider(this).get(GameDetailVM::class.java)
+    private val gameDetailViewModel: GameDetailViewModel by lazy {
+        ViewModelProvider(this).get(GameDetailViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -89,12 +88,12 @@ class GameDetailFragment : Fragment() {
                 when (gameCurrent.isFavorite) {
                     true -> {
                         gameCurrent.isFavorite = false
-                        gameDetailVM.removeGameFavorite(gameCurrent)
+                        gameDetailViewModel.removeGameFavorite(gameCurrent)
                         binding.favorite.setImageResource(R.drawable.ic_action_star_empty)
                     }
                     false -> {
                         gameCurrent.isFavorite = true
-                        gameDetailVM.addGameFavorite(gameCurrent)
+                        gameDetailViewModel.addGameFavorite(gameCurrent)
                         binding.favorite.setImageResource(R.drawable.ic_action_star_filled)
                     }
                 }
@@ -116,12 +115,12 @@ class GameDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gameDetailVM.gameDetail.observe(viewLifecycleOwner, { game ->
+        gameDetailViewModel.gameDetail.observe(viewLifecycleOwner, { game ->
             Log.d(TAG, "games = ${game.name}")
             reloadData(game)
         })
 
-        gameDetailVM.status.observe(viewLifecycleOwner, { status ->
+        gameDetailViewModel.status.observe(viewLifecycleOwner, { status ->
             when (status!!) {
                 LoadStatus.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -157,7 +156,7 @@ class GameDetailFragment : Fragment() {
 
         // load data via view model
         gameAlias?.let {
-            gameDetailVM.getGameInfo(gameAlias)
+            gameDetailViewModel.getGameInfo(gameAlias)
         }
     }
 

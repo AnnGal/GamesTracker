@@ -6,7 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
-import art.manguste.android.gamesearch.gamesList.GameDetailFragment
+import art.manguste.android.gamesearch.gamedetail.GameDetailFragment
 import kotlinx.android.synthetic.main.fragment_game_detail.*
 
 class GameDetailActivity : AppCompatActivity() {

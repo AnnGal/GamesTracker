@@ -56,7 +56,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-
     //annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
@@ -82,43 +81,13 @@ dependencies {
     // room
     implementation 'androidx.room:room-runtime:2.2.5'
     kapt 'androidx.room:room-compiler:2.2.5'
-    def room_version = "2.2.3"
-    kapt "androidx.room:room-compiler:$room_version"
+
+    kapt "androidx.room:room-compiler:2.2.3"
     implementation 'androidx.room:room-ktx:2.2.5'
 
     /*json and coroutines*/
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
-
-/*
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "android.arch.persistence.room:runtime:1.0.0"
-    kapt "android.arch.persistence.room:compiler:1.0.0"
-    implementation "androidx.room:room-runtime:$room_version"*/
-    //kapt "androidx.room:room-compiler:$room_version"
-
-    /*
-// Extensions = ViewModel + LiveData
-
-// Room
-implementation "android.arch.persistence.room:runtime:1.0.0"
-kapt "android.arch.persistence.room:compiler:1.0.0"
-also remember to add this plugin
-
-apply plugin: 'kotlin-kapt'
-to the top of the app level build.gradle file and do a clean and rebuild (according to https://codelabs.developers.google.com/codelabs/android-room-with-a-view/#6)
-
-In Android Studio, if you get errors when you paste code or during the build process, select Build >Clean Project. Then select Build > Rebuild Project, and then build again.
-
-UPDATE
-If you have migrated to androidx
-
-def room_version = "2.2.3" // check latest version from docs
-
-implementation "androidx.room:room-runtime:$room_version"
-kapt "androidx.room:room-compiler:$room_version"
-    * */
-
 
 }
 repositories {
