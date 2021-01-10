@@ -1,4 +1,4 @@
-package art.manguste.android.gamesearch.gameslist
+package art.manguste.android.gamesearch
 
 import android.view.LayoutInflater
 import android.view.View

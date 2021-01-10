@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import art.manguste.android.gamesearch.core.SearchType
-import art.manguste.android.gamesearch.gameslist.GamesListFragment
+import art.manguste.android.gamesearch.gamesListFavorite.GamesListFavoriteFragments
+import art.manguste.android.gamesearch.gamesListHot.GamesListHotFragments
+import art.manguste.android.gamesearch.gamesListSearch.GamesListSearchFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -31,9 +33,9 @@ class GameActivity : AppCompatActivity() {
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
-                    0 -> GamesListFragment.newInstance(SearchType.HOT)
-                    1 -> GamesListFragment.newInstance(SearchType.SEARCH)
-                    2 -> GamesListFragment.newInstance(SearchType.FAVORITE)
+                    0 -> GamesListHotFragments.newInstance()
+                    1 -> GamesListSearchFragment.newInstance()
+                    2 -> GamesListFavoriteFragments.newInstance()
                     else -> throw Exception("Unknown fragment")
                 }
             }
