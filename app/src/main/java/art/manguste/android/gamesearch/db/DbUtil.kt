@@ -1,9 +1,7 @@
 package art.manguste.android.gamesearch.db
 
-import android.app.Application
 import android.util.Log
 import art.manguste.android.gamesearch.core.GameBasic
-import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.core.encodeData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

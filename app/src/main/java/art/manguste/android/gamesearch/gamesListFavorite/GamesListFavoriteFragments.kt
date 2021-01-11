@@ -1,8 +1,7 @@
-package art.manguste.android.gamesearch.gameslist
+package art.manguste.android.gamesearch.gamesListFavorite
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,23 +10,17 @@ import androidx.lifecycle.ViewModelProvider
 import art.manguste.android.gamesearch.GameDetailActivity
 import art.manguste.android.gamesearch.core.GameBriefly
 import art.manguste.android.gamesearch.core.LoadStatus
-import art.manguste.android.gamesearch.core.SearchType
 import art.manguste.android.gamesearch.databinding.FragmentGameSearchBinding
-
+import art.manguste.android.gamesearch.GameAdapter
+import art.manguste.android.gamesearch.OnClickListener
 import com.google.android.material.snackbar.Snackbar
 
-/**
- * A simple [Fragment] subclass.
- * Use the [GamesListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class GamesListFragment : Fragment() {
+class GamesListFavoriteFragments : Fragment() {
 
-    private val gamesListViewModel: GamesListViewModel by lazy {
-        ViewModelProvider(this).get(GamesListViewModel::class.java)
+    private val gamesListFavoriteViewModel: GamesListFavoriteViewModel by lazy {
+        ViewModelProvider(this).get(GamesListFavoriteViewModel::class.java)
     }
 
-    private var searchType: SearchType? = null
     private lateinit var binding: FragmentGameSearchBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -68,11 +61,11 @@ class GamesListFragment : Fragment() {
         when (game.isFavorite) {
             true -> {
                 game.isFavorite = false
-                gamesListViewModel.removeGameFavorite(game)
+                gamesListFavoriteViewModel.removeGameFavorite(game)
             }
             false -> {
                 game.isFavorite = true
-                gamesListViewModel.addGameFavorite(game)
+                gamesListFavoriteViewModel.addGameFavorite(game)
             }
         }
 
@@ -81,23 +74,14 @@ class GamesListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume try ")
 
-        Log.d(TAG, "onResume go")
-        if (searchType == SearchType.FAVORITE) {
-            gamesListViewModel.getDBGameList()
-        } else {
-            if (gamesListViewModel.status.value == LoadStatus.DONE) {
-                gamesListViewModel.reloadGamesFavoriteStatus()
-            }
-        }
-
+        gamesListFavoriteViewModel.getDBGameList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        gamesListViewModel.status.observe(viewLifecycleOwner, { status ->
+        gamesListFavoriteViewModel.status.observe(viewLifecycleOwner, { status ->
             when (status!!) {
                 LoadStatus.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -118,32 +102,10 @@ class GamesListFragment : Fragment() {
             }
         })
 
-        searchType = requireArguments().getString(SEARCH_TYPE)?.let { SearchType.valueOf(it) }
-        //Log.d(TAG, "SEARCH_TYPE = $searchType")
+        binding.panelSearchGame.visibility = View.GONE
+        gamesListFavoriteViewModel.getDBGameList()
 
-        // hide search panel if it needed
-        when (searchType) {
-            SearchType.HOT -> {
-                binding.panelSearchGame.visibility = View.GONE
-                gamesListViewModel.getHotGamesList()
-            }
-            SearchType.SEARCH -> {
-                binding.panelSearchGame.visibility = View.VISIBLE
-                // search Game by click on button
-                binding.btnStartSearch.setOnClickListener {
-                    binding.searchByTitle.text.isNotEmpty().let {
-                        gamesListViewModel.getSearchGameList(binding.searchByTitle.text.toString())
-                    }
-                }
-            }
-            SearchType.FAVORITE -> {
-                binding.panelSearchGame.visibility = View.GONE
-                gamesListViewModel.getDBGameList()
-            }
-            else -> Log.d(TAG, "Unexpected search type = $searchType")
-        }
-
-        gamesListViewModel.gamesList.observe(viewLifecycleOwner, { games ->
+        gamesListFavoriteViewModel.gamesList.observe(viewLifecycleOwner, { games ->
             //Log.d(TAG, "games = ${games.size}")
             (binding.recyclerGames.adapter as GameAdapter).apply {
                 reloadGames(games)
@@ -152,22 +114,16 @@ class GamesListFragment : Fragment() {
     }
 
     companion object {
-        private val TAG = GamesListFragment::class.java.simpleName
-        private const val SEARCH_TYPE = "search_type"
+        //private val TAG = GamesListFavoriteFragments::class.java.simpleName
 
         /**
          * New instance via factory method
          * this fragment using the provided parameters.
          *
-         * @param searchType - determines what kind of search and API request to use
          * @return new instance of fragment GamesListFragment.
          */
-        fun newInstance(searchType: SearchType): GamesListFragment {
-            val fragment = GamesListFragment()
-            val args = Bundle()
-            args.putString(SEARCH_TYPE, searchType.toString())
-            fragment.arguments = args
-            return fragment
+        fun newInstance(): GamesListFavoriteFragments {
+            return GamesListFavoriteFragments()
         }
     }
 }
